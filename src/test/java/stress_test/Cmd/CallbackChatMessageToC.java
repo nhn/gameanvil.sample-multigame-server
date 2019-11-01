@@ -1,10 +1,10 @@
 package stress_test.Cmd;
 
-import com.nhnent.tardis.sample.protocol.Chat;
 import com.nhnent.tardis.connector.callback.parent.IDispatchPacket;
 import com.nhnent.tardis.connector.callback.parent.IDispatchTimer;
 import com.nhnent.tardis.connector.protocol.Packet;
 import com.nhnent.tardis.connector.tcp.agent.parent.ITimerTask;
+import com.nhnent.tardis.sample.protocol.Sample;
 import stress_test.SampleUserClass;
 
 import java.io.IOException;
@@ -15,9 +15,9 @@ public class CallbackChatMessageToC implements IDispatchPacket<SampleUserClass> 
     @Override
     public void dispatch(Packet packet, SampleUserClass user) {
 
-        Chat.ChatMessageToC messageToC;
+        Sample.ChatMessageToC messageToC;
         try {
-            messageToC = Chat.ChatMessageToC.parseFrom(packet.getStream());
+            messageToC = Sample.ChatMessageToC.parseFrom(packet.getStream());
         } catch (IOException e) {
             e.printStackTrace();
             return;
@@ -46,7 +46,7 @@ public class CallbackChatMessageToC implements IDispatchPacket<SampleUserClass> 
 
             // 이 타이머에서는 패킷을 보내도록 해봅니다.
             SampleUserClass user = (SampleUserClass) fromAddTimer;
-            user.send(Chat.ChatMessageToS.newBuilder().setMessage("Geronimo!!!"));
+            user.send(Sample.ChatMessageToS.newBuilder().setMessage("Geronimo!!!"));
         }
     }
 

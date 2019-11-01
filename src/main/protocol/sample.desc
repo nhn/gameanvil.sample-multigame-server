@@ -1,7 +1,6 @@
 
-÷
-
-chat.proto!com.nhnent.tardis.sample.protocol"1
+ù
+sample.proto!com.nhnent.tardis.sample.protocol"1
 RegisterNickNameReq
 nickName (	RnickName"3
 RegisterNickNameRes

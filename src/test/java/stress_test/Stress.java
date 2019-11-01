@@ -1,10 +1,10 @@
 package stress_test;
 
-import com.nhnent.tardis.sample.protocol.Chat;
 import com.nhnent.tardis.connector.common.Config;
 import com.nhnent.tardis.connector.tcp.ConnectorSession;
 import com.nhnent.tardis.connector.tcp.TardisConnector;
 import com.nhnent.tardis.connector.tcp.agent.parent.IAsyncConnectorUser;
+import com.nhnent.tardis.sample.protocol.Sample;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -49,10 +49,10 @@ public class Stress {
         // 콜백 목록을 등록합니다.
         connector.addPacketCallbackAuthentication(new CallbackAuthenticationRes());
         connector.addPacketCallbackLogin(new CallbackLoginRes());
-        connector.addPacketCallback(Chat.RegisterNickNameRes.class, new CallbackRegisterNickName(), 10, TimeUnit.MILLISECONDS); // 해당 콜백을 딜레이 시켜서 호출하고자 할 경우 파라미터로 옵션값을 지정할 수 있습니다.
+        connector.addPacketCallback(Sample.RegisterNickNameRes.class, new CallbackRegisterNickName(), 10, TimeUnit.MILLISECONDS); // 해당 콜백을 딜레이 시켜서 호출하고자 할 경우 파라미터로 옵션값을 지정할 수 있습니다.
         connector.addPacketCallbackNamedRoom(new CallbackNamedRoomRes());
 
-        connector.addPacketCallback(Chat.ChatMessageToC.class,new CallbackChatMessageToC());
+        connector.addPacketCallback(Sample.ChatMessageToC.class,new CallbackChatMessageToC());
         connector.addPacketCallbackLeaveRoom(new CallbackLeaveRoomRes(), 10); // 해당 콜백을 딜레이 시켜서 호출하고자 할 경우 파라미터로 옵션값을 지정할 수 있습니다.
         connector.addPacketCallbackLogout(new CallbackLogout());
     }

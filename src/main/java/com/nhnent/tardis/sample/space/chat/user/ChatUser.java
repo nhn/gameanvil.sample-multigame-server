@@ -1,7 +1,6 @@
 package com.nhnent.tardis.sample.space.chat.user;
 
 import co.paralleluniverse.fibers.SuspendExecution;
-import com.nhnent.tardis.sample.protocol.Chat;
 import com.nhnent.tardis.common.Packet;
 import com.nhnent.tardis.common.Payload;
 import com.nhnent.tardis.common.internal.ITimerHandler;
@@ -11,6 +10,7 @@ import com.nhnent.tardis.common.serializer.KryoSerializer;
 import com.nhnent.tardis.console.PacketDispatcher;
 import com.nhnent.tardis.console.space.IUser;
 import com.nhnent.tardis.console.space.UserAgent;
+import com.nhnent.tardis.sample.protocol.Sample;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +27,7 @@ public class ChatUser extends UserAgent implements IUser, ITimerHandler {
     static private PacketDispatcher<ChatUser> packetDispatcher = new PacketDispatcher();
 
     static{
-        packetDispatcher.registerMsg(Chat.RegisterNickNameReq.class,CmdRegisterNickNameReq.class);
+        packetDispatcher.registerMsg(Sample.RegisterNickNameReq.class,CmdRegisterNickNameReq.class);
     }
 
 

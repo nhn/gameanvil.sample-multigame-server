@@ -1,9 +1,9 @@
 package com.nhnent.tardis.sample.space.chat.room;
 
 import co.paralleluniverse.fibers.SuspendExecution;
-import com.nhnent.tardis.sample.protocol.Chat;
 import com.nhnent.tardis.common.Packet;
 import com.nhnent.tardis.console.space.IRoomPacketHandler;
+import com.nhnent.tardis.sample.protocol.Sample;
 import com.nhnent.tardis.sample.space.chat.user.ChatUser;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
@@ -18,10 +18,10 @@ public class CmdChatMessageToS implements IRoomPacketHandler<ChatRoom, ChatUser>
 
         try {
             // parse.
-            Chat.ChatMessageToS fromClient = Chat.ChatMessageToS.parseFrom(packet.getStream());
+            Sample.ChatMessageToS fromClient = Sample.ChatMessageToS.parseFrom(packet.getStream());
 
             // make.
-            Chat.ChatMessageToC.Builder toClient = Chat.ChatMessageToC.newBuilder();
+            Sample.ChatMessageToC.Builder toClient = Sample.ChatMessageToC.newBuilder();
             toClient.setMessage(chatUser.getNickName() + " : " + fromClient.getMessage());
 
             // for send.

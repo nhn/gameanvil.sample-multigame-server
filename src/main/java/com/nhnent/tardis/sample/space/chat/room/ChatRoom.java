@@ -1,7 +1,7 @@
 package com.nhnent.tardis.sample.space.chat.room;
 
 import co.paralleluniverse.fibers.SuspendExecution;
-import com.nhnent.tardis.sample.protocol.Chat;
+import com.nhnent.tardis.sample.protocol.Sample;
 import com.nhnent.tardis.sample.space.chat.user.ChatUser;
 import com.nhnent.tardis.common.Packet;
 import com.nhnent.tardis.common.Payload;
@@ -20,7 +20,7 @@ public class ChatRoom extends RoomAgent implements IRoom<ChatUser>, ITimerHandle
     private static RoomPacketDispatcher dispatcher = new RoomPacketDispatcher();
 
     static {
-        dispatcher.registerMsg(Chat.ChatMessageToS.class, CmdChatMessageToS.class);
+        dispatcher.registerMsg(Sample.ChatMessageToS.class, CmdChatMessageToS.class);
     }
 
     private Map<String, ChatUser> users = new HashMap<>();
@@ -45,7 +45,7 @@ public class ChatRoom extends RoomAgent implements IRoom<ChatUser>, ITimerHandle
         users.put(chatUser.getUserId(), chatUser);
 
         String message = String.format("%s is join",chatUser.getNickName());
-        chatUser.send(new Packet(Chat.ChatMessageToC.newBuilder().setMessage(message)));
+        chatUser.send(new Packet(Sample.ChatMessageToC.newBuilder().setMessage(message)));
         return true;
     }
 
@@ -55,7 +55,7 @@ public class ChatRoom extends RoomAgent implements IRoom<ChatUser>, ITimerHandle
 
         String message = String.format("%s is join",chatUser.getNickName());
         for(ChatUser user:users.values()){
-            user.send(new Packet(Chat.ChatMessageToC.newBuilder().setMessage(message)));
+            user.send(new Packet(Sample.ChatMessageToC.newBuilder().setMessage(message)));
         }
         return true;
     }
@@ -65,7 +65,7 @@ public class ChatRoom extends RoomAgent implements IRoom<ChatUser>, ITimerHandle
 
         String message = String.format("%s is leave",chatUser.getNickName());
         for(ChatUser user:users.values()){
-            user.send(new Packet(Chat.ChatMessageToC.newBuilder().setMessage(message)));
+            user.send(new Packet(Sample.ChatMessageToC.newBuilder().setMessage(message)));
         }
         return true;
     }

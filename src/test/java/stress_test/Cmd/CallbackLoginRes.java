@@ -1,9 +1,9 @@
 package stress_test.Cmd;
 
-import com.nhnent.tardis.sample.protocol.Chat;
 import com.nhnent.tardis.connector.callback.parent.IDispatchPacket;
 import com.nhnent.tardis.connector.protocol.Packet;
 import com.nhnent.tardis.connector.protocol.result.LoginResult;
+import com.nhnent.tardis.sample.protocol.Sample;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,8 +26,8 @@ public class CallbackLoginRes implements IDispatchPacket<SampleUserClass> {
 
             //int nicknameRand = (int) Math.random() * 10000;
             //String nickName = String.format("doctor %d",nicknameRand);
-            Chat.RegisterNickNameReq.Builder req = Chat.RegisterNickNameReq.newBuilder().setNickName(user.getUserId());
-            user.request(new Packet(req), Chat.RegisterNickNameRes.class);
+            Sample.RegisterNickNameReq.Builder req = Sample.RegisterNickNameReq.newBuilder().setNickName(user.getUserId());
+            user.request(new Packet(req), Sample.RegisterNickNameRes.class);
 
         } catch (Exception e) {
             logger.error(ExceptionUtils.getStackTrace(e));

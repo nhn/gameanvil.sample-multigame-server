@@ -1,8 +1,8 @@
 package stress_test.Cmd;
 
-import com.nhnent.tardis.sample.protocol.Chat;
 import com.nhnent.tardis.connector.callback.parent.IDispatchPacket;
 import com.nhnent.tardis.connector.protocol.Packet;
+import com.nhnent.tardis.sample.protocol.Sample;
 import stress_test.Stress;
 import stress_test.SampleUserClass;
 
@@ -16,7 +16,7 @@ public class CallbackRegisterNickName implements IDispatchPacket<SampleUserClass
     public void dispatch(Packet packet, SampleUserClass user) {
 
         try {
-            Chat.RegisterNickNameRes res = Chat.RegisterNickNameRes.parseFrom(packet.getStream());
+            Sample.RegisterNickNameRes res = Sample.RegisterNickNameRes.parseFrom(packet.getStream());
             assertEquals(true, res.getIsSuccess());
         } catch (IOException e) {
             e.printStackTrace();

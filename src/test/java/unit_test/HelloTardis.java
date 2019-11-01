@@ -1,6 +1,5 @@
 package unit_test;
 
-import com.nhnent.tardis.sample.protocol.Chat;
 import com.nhnent.tardis.connector.common.Config;
 import com.nhnent.tardis.connector.protocol.Packet;
 import com.nhnent.tardis.connector.protocol.result.AuthenticationResult;
@@ -9,6 +8,7 @@ import com.nhnent.tardis.connector.protocol.result.NamedRoomResult;
 import com.nhnent.tardis.connector.tcp.ConnectorSession;
 import com.nhnent.tardis.connector.tcp.ConnectorUser;
 import com.nhnent.tardis.connector.tcp.TardisConnector;
+import com.nhnent.tardis.sample.protocol.Sample;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -41,7 +41,7 @@ public class HelloTardis {
         connector = TardisConnector.getInstance();
 
         // 컨텐츠 프로토콜 등록.
-        connector.addProtoBufClass(0, Chat.class);
+        connector.addProtoBufClass(0, Sample.class);
 
         // 컨텐츠 서비스 등록.
         connector.addService(0, "ChatService");
@@ -89,9 +89,9 @@ public class HelloTardis {
 
         ConnectorUser doctor = users.get(0);
 
-        Chat.RegisterNickNameReq.Builder registerNickNameReq = Chat.RegisterNickNameReq.newBuilder().setNickName("doctor");
+        Sample.RegisterNickNameReq.Builder registerNickNameReq = Sample.RegisterNickNameReq.newBuilder().setNickName("doctor");
 
-        Chat.RegisterNickNameRes registerNickNameRes = doctor.requestProto(registerNickNameReq,Chat.RegisterNickNameRes.class);
+        Sample.RegisterNickNameRes registerNickNameRes = doctor.requestProto(registerNickNameReq,Sample.RegisterNickNameRes.class);
 
         assertTrue(registerNickNameRes.getIsSuccess());
     }
@@ -108,23 +108,23 @@ public class HelloTardis {
         NamedRoomResult namedRoomResult1 = doctor.namedRoom("ChatRoom","Gallifrey");
         assertTrue(namedRoomResult1.isSuccess());
 
-        Chat.ChatMessageToC doctorJoinMsg = doctor.waitProtoPacket(1, TimeUnit.SECONDS, Chat.ChatMessageToC.class);
+        Sample.ChatMessageToC doctorJoinMsg = doctor.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
         assertTrue(doctorJoinMsg.getMessage().contains("join"));
 
         NamedRoomResult namedRoomResult2 = dalek.namedRoom("ChatRoom","Gallifrey");
         assertTrue(namedRoomResult2.isSuccess());
 
-        Chat.ChatMessageToC dalekJoinMsg = doctor.waitProtoPacket(1, TimeUnit.SECONDS, Chat.ChatMessageToC.class);
+        Sample.ChatMessageToC dalekJoinMsg = doctor.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
         assertTrue(dalekJoinMsg.getMessage().contains("join"));
 
-        Chat.ChatMessageToC doctorGetDalekJoinMsg = dalek.waitProtoPacket(1, TimeUnit.SECONDS, Chat.ChatMessageToC.class);
+        Sample.ChatMessageToC doctorGetDalekJoinMsg = dalek.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
         assertTrue(doctorGetDalekJoinMsg.getMessage().contains("join"));
 
         // 채팅 메시지 전송.
-        doctor.send(new Packet(Chat.ChatMessageToS.newBuilder().setMessage("Hello Tardis!")));
+        doctor.send(new Packet(Sample.ChatMessageToS.newBuilder().setMessage("Hello Tardis!")));
 
         // 다른 유저에게도 응답이 왔는지 확인.
-        Chat.ChatMessageToC chatMessageToC = dalek.waitProtoPacket(1, TimeUnit.SECONDS, Chat.ChatMessageToC.class);
+        Sample.ChatMessageToC chatMessageToC = dalek.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
         assertEquals("doctor : Hello Tardis!",chatMessageToC.getMessage());
     }
 
