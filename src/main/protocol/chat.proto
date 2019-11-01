@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package com.nhnent.tardis.chat.protocol;
+
+
+message RegisterNickNameReq{
+    string nickName = 1;
+}
+
+message RegisterNickNameRes{
+    bool isSuccess = 1;
+}
+
+message ChatMessageToS
+{
+    string message = 1;
+}
+message ChatMessageToC
+{
+    string message = 1;
+}
+

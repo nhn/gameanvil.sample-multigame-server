@@ -1,0 +1,37 @@
+package stress_test.Cmd;
+
+import com.nhnent.tardis.chat.protocol.Chat;
+import com.nhnent.tardis.connector.callback.parent.IDispatchPacket;
+import com.nhnent.tardis.connector.protocol.Packet;
+import com.nhnent.tardis.connector.protocol.result.LoginResult;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import stress_test.SampleUserClass;
+
+import static org.junit.Assert.assertEquals;
+
+public class CallbackLoginRes implements IDispatchPacket<SampleUserClass> {
+
+    private Logger logger = LoggerFactory.getLogger(getClass());
+
+    @Override
+    public void dispatch(Packet packet, SampleUserClass user) {
+
+        LoginResult result = user.parseLoginResult(packet);
+        assertEquals(true,result.isSuccess());
+
+        try {
+            user.setSendCount(0);
+
+            //int nicknameRand = (int) Math.random() * 10000;
+            //String nickName = String.format("doctor %d",nicknameRand);
+            Chat.RegisterNickNameReq.Builder req = Chat.RegisterNickNameReq.newBuilder().setNickName(user.getUserId());
+            user.request(new Packet(req), Chat.RegisterNickNameRes.class);
+
+        } catch (Exception e) {
+            logger.error(ExceptionUtils.getStackTrace(e));
+        }
+    }
+
+}

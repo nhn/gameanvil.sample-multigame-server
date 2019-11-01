@@ -1,0 +1,12 @@
+
+õ
+
+chat.protocom.nhnent.tardis.chat.protocol"1
+RegisterNickNameReq
+nickName (	RnickName"3
+RegisterNickNameRes
+	isSuccess (R	isSuccess"*
+ChatMessageToS
+message (	Rmessage"*
+ChatMessageToC
+message (	Rmessagebproto3
