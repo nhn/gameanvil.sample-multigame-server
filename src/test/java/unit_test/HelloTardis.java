@@ -1,6 +1,6 @@
 package unit_test;
 
-import com.nhnent.tardis.chat.protocol.Chat;
+import com.nhnent.tardis.sample.protocol.Chat;
 import com.nhnent.tardis.connector.common.Config;
 import com.nhnent.tardis.connector.protocol.Packet;
 import com.nhnent.tardis.connector.protocol.result.AuthenticationResult;

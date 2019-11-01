@@ -1,10 +1,10 @@
-package com.nhnent.tardis.chat;
+package com.nhnent.tardis.sample;
 
-import com.nhnent.tardis.chat.protocol.Chat;
+import com.nhnent.tardis.sample.protocol.Chat;
 import com.nhnent.tardis.console.TardisBootstrap;
-import com.nhnent.tardis.chat.space.ChatNode;
-import com.nhnent.tardis.chat.space.room.ChatRoom;
-import com.nhnent.tardis.chat.space.user.ChatUser;
+import com.nhnent.tardis.sample.space.chat.ChatNode;
+import com.nhnent.tardis.sample.space.chat.room.ChatRoom;
+import com.nhnent.tardis.sample.space.chat.user.ChatUser;
 
 public class Main {
 

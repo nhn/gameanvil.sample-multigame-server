@@ -1,7 +1,7 @@
-package com.nhnent.tardis.chat.space.user;
+package com.nhnent.tardis.sample.space.chat.user;
 
 import co.paralleluniverse.fibers.SuspendExecution;
-import com.nhnent.tardis.chat.protocol.Chat;
+import com.nhnent.tardis.sample.protocol.Chat;
 import com.nhnent.tardis.common.Packet;
 import com.nhnent.tardis.console.IPacketHandler;
 import org.apache.commons.lang3.exception.ExceptionUtils;

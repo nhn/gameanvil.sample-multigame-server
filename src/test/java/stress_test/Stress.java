@@ -1,6 +1,6 @@
 package stress_test;
 
-import com.nhnent.tardis.chat.protocol.Chat;
+import com.nhnent.tardis.sample.protocol.Chat;
 import com.nhnent.tardis.connector.common.Config;
 import com.nhnent.tardis.connector.tcp.ConnectorSession;
 import com.nhnent.tardis.connector.tcp.TardisConnector;

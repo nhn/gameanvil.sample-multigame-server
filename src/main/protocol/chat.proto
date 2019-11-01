@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package com.nhnent.tardis.chat.protocol;
+package com.nhnent.tardis.sample.protocol;
 
 
 message RegisterNickNameReq{

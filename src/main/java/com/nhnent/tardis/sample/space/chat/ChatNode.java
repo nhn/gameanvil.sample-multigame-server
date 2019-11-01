@@ -1,4 +1,4 @@
-package com.nhnent.tardis.chat.space;
+package com.nhnent.tardis.sample.space.chat;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import com.nhnent.tardis.common.Packet;

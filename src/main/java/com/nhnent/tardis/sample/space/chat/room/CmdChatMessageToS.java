@@ -1,10 +1,10 @@
-package com.nhnent.tardis.chat.space.room;
+package com.nhnent.tardis.sample.space.chat.room;
 
 import co.paralleluniverse.fibers.SuspendExecution;
-import com.nhnent.tardis.chat.protocol.Chat;
+import com.nhnent.tardis.sample.protocol.Chat;
 import com.nhnent.tardis.common.Packet;
 import com.nhnent.tardis.console.space.IRoomPacketHandler;
-import com.nhnent.tardis.chat.space.user.ChatUser;
+import com.nhnent.tardis.sample.space.chat.user.ChatUser;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

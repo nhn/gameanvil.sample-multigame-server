@@ -66,7 +66,7 @@
                     <archive>
                         <manifest>
                             <!-- executable jar 에서 main 으로 실행 될 클래스 -->
-                            <mainClass>com.nhnent.tardis.chat.Main</mainClass>
+                            <mainClass>com.nhnent.tardis.sample.Main</mainClass>
                             <!-- jar 파일 안의 META-INF/MANIFEST.MF 에 classpath 정보가 추가됨 -->
                             <addClasspath>true</addClasspath>
                             <!-- library path (root/lib) -->
@@ -123,7 +123,7 @@
                         <!-- quasar -->
                         <argument>-javaagent:${project.basedir}${file.separator}src${file.separator}main${file.separator}resources${file.separator}META-INF${file.separator}quasar-core-0.7.6.jar=b</argument>
                         <!-- Main class -->
-                        <argument>com.nhnent.tardis.chat.Main</argument>
+                        <argument>com.nhnent.tardis.sample.Main</argument>
                     </arguments>
                 </configuration>
             </plugin>

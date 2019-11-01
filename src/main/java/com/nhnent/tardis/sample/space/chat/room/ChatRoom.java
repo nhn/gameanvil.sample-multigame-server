@@ -1,8 +1,8 @@
-package com.nhnent.tardis.chat.space.room;
+package com.nhnent.tardis.sample.space.chat.room;
 
 import co.paralleluniverse.fibers.SuspendExecution;
-import com.nhnent.tardis.chat.protocol.Chat;
-import com.nhnent.tardis.chat.space.user.ChatUser;
+import com.nhnent.tardis.sample.protocol.Chat;
+import com.nhnent.tardis.sample.space.chat.user.ChatUser;
 import com.nhnent.tardis.common.Packet;
 import com.nhnent.tardis.common.Payload;
 import com.nhnent.tardis.common.internal.ITimerHandler;

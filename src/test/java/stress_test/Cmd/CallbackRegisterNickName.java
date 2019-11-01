@@ -1,6 +1,6 @@
 package stress_test.Cmd;
 
-import com.nhnent.tardis.chat.protocol.Chat;
+import com.nhnent.tardis.sample.protocol.Chat;
 import com.nhnent.tardis.connector.callback.parent.IDispatchPacket;
 import com.nhnent.tardis.connector.protocol.Packet;
 import stress_test.Stress;
