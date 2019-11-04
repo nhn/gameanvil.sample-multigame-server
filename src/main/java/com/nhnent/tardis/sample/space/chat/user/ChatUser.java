@@ -33,22 +33,24 @@ public class ChatUser extends UserAgent implements IUser, ITimerHandler {
 
     @Override
     public boolean onLogin(Payload payload, Payload payload1, Payload payload2) throws SuspendExecution {
+        logger.info("onPreLogin");
         return true;
     }
 
     @Override
     public void onPostLogin() throws SuspendExecution {
-
+        logger.info("onPostLogin");
     }
 
     @Override
     public boolean onReLogin(Payload payload, Payload payload1, Payload payload2) throws SuspendExecution {
+        logger.info("onReLogin");
         return true;
     }
 
     @Override
     public void onDisconnect() throws SuspendExecution {
-
+        logger.info("onDisconnect");
     }
 
     @Override
@@ -58,12 +60,12 @@ public class ChatUser extends UserAgent implements IUser, ITimerHandler {
 
     @Override
     public void onPause(PauseType pauseType) throws SuspendExecution {
-
+        logger.info("onPause");
     }
 
     @Override
     public void onResume() throws SuspendExecution {
-
+        logger.info("onResume");
     }
 
     @Override
@@ -83,16 +85,18 @@ public class ChatUser extends UserAgent implements IUser, ITimerHandler {
 
     @Override
     public void onTimer(ITimerObject iTimerObject, Object o) throws SuspendExecution {
-
+        logger.info("onTimer");
     }
 
     @Override
     public ByteBuffer onTransferOut() throws SuspendExecution {
+        logger.info("onTransferOut");
         return KryoSerializer.write(nickName);
     }
 
     @Override
     public void onTransferIn(final InputStream inputStream) throws SuspendExecution {
+        logger.info("onTransferIn");
         try {
             nickName = (String) KryoSerializer.read(inputStream);
         } catch (Exception e) {

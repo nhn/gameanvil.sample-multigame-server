@@ -1,5 +1,5 @@
 
-ù
+¡
 sample.proto!com.nhnent.tardis.sample.protocol"1
 RegisterNickNameReq
 nickName (	RnickName"3
@@ -8,4 +8,7 @@
 ChatMessageToS
 message (	Rmessage"*
 ChatMessageToC
+message (	Rmessage"&
+
+SampleData
 message (	Rmessagebproto3
