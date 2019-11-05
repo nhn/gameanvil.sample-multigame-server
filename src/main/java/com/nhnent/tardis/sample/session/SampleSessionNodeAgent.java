@@ -18,7 +18,6 @@ public class SampleSessionNodeAgent extends SessionNodeAgent implements ISession
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     private PacketDispatcher packetDispatcher = new PacketDispatcher();
-    private RestPacketDispatcher restDispatcher = new RestPacketDispatcher();
 
     @Override
     public void onInit() throws SuspendExecution {

@@ -58,15 +58,15 @@ public class ChatTest {
             ConnectorSession session = connector.addSession(connector.getIncrementedValue("account_"), connector.makeUniqueId());
 
             // 인증을 진행.
-            AuthenticationResult authResult = session.authentication();
-            assertTrue(authResult.isSuccess());
+            AuthenticationResult authResult = session.authentication(session.getAccountId());
+            assertTrue("Authentication fail", authResult.isSuccess());
 
             // 세션에 유저를 등록하고, 각종 ID 정보가 담긴 유저 객체를 리턴.
             ConnectorUser user = session.addUser("ChatService");
 
             // 로그인을 진행.
             LoginResult loginResult = user.login("ChatUser");
-            assertTrue(loginResult.isSuccess());
+            assertTrue("Login fail", loginResult.isSuccess());
 
             // Test 단계에서 활용하도록 준비합니다.
             users.add(user);
