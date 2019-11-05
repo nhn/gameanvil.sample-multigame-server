@@ -34,6 +34,16 @@ message SampleRes
     string message = 1;
 }
 
+message SampleToS
+{
+    string message = 1;
+}
+
+message SampleToC
+{
+    string message = 1;
+}
+
 message BeforeAuthenticateReq
 {
     string message = 1;

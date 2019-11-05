@@ -57,7 +57,7 @@ public class SessionAgentTest {
 
         AuthenticationResult authResult = session.authentication(session.getAccountId());
         assertTrue(authResult.isSuccess());
-        //assertNull(authResult.getPayload(Sample.SampleData.class));
+        assertNull(authResult.getPayload(Sample.SampleData.class));
     }
 
     @Test
@@ -102,8 +102,7 @@ public class SessionAgentTest {
     @Test
     public void SampleReqToSession() throws IOException, TimeoutException {
 
-        AuthenticationResult authResult = session.authentication(session.getAccountId());
-        assertTrue(authResult.isSuccess());
+        authenticateSuccess();
 
         String message = "SampleReq";
         try{
@@ -113,7 +112,6 @@ public class SessionAgentTest {
         } catch(Exception e){
             fail(e.toString());
         }
-
     }
 
     @Test
@@ -126,6 +124,21 @@ public class SessionAgentTest {
             assertEquals(msg.getMessage(), message);
         } catch (IOException e) {
             fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void SampleToSToSession() throws IOException, TimeoutException {
+
+        authenticateSuccess();
+
+        String message = "SampleToS";
+        try{
+            Packet packetRes = session.requestToSession(new Packet(Sample.SampleToS.newBuilder().setMessage(message)), Sample.SampleToC.class);
+            Sample.SampleToC msg = Sample.SampleToC.parseFrom(packetRes.getStream());
+            assertEquals(msg.getMessage(), message);
+        } catch(Exception e){
+            fail(e.toString());
         }
     }
 }
