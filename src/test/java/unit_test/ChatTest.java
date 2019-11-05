@@ -23,7 +23,7 @@ import java.util.concurrent.TimeoutException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class HelloTardis {
+public class ChatTest {
 
     private static TardisConnector connector;
     private List<ConnectorUser> users = new ArrayList<>();

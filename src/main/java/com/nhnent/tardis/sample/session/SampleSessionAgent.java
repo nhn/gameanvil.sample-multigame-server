@@ -11,6 +11,8 @@ import com.nhnent.tardis.console.session.ISession;
 import com.nhnent.tardis.console.session.SessionAgent;
 import com.nhnent.tardis.sample.protocol.Sample;
 import com.nhnent.tardis.sample.Defines.Messages;
+import com.nhnent.tardis.sample.session.handlers.BeforeAuthenticateReqSessionAgentHandler;
+import com.nhnent.tardis.sample.session.handlers.SampleReqSessionAgentPacketHandler;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,8 +24,17 @@ import java.io.IOException;
 public class SampleSessionAgent extends SessionAgent implements ISession<SampleSessionUserAgent>, ITimerHandler {
 
     private static PacketDispatcher dispatcher = new PacketDispatcher();
+    static{
+        dispatcher.registerMsg(Sample.BeforeAuthenticateReq.class, BeforeAuthenticateReqSessionAgentHandler.class);
+        dispatcher.registerMsg(Sample.SampleReq.class, SampleReqSessionAgentPacketHandler.class);
+    }
 
     private Logger logger = LoggerFactory.getLogger(getClass());
+
+    @Override
+    public boolean checkPreAccess(final Packet packet) throws SuspendExecution {
+        return packet.msgEquals(Sample.BeforeAuthenticateReq.getDescriptor().getFullName());
+    }
 
     @Override
     public boolean onAuthenticate(String accoutId, String password, String deviceId, Payload payload, Payload outPayload) throws SuspendExecution {

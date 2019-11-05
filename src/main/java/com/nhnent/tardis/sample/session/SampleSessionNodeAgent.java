@@ -6,7 +6,6 @@ import com.nhnent.tardis.common.Payload;
 import com.nhnent.tardis.common.internal.ITimerHandler;
 import com.nhnent.tardis.common.internal.ITimerObject;
 import com.nhnent.tardis.common.internal.PauseType;
-import com.nhnent.tardis.common.internal.RestObject;
 import com.nhnent.tardis.console.PacketDispatcher;
 import com.nhnent.tardis.console.RestPacketDispatcher;
 import com.nhnent.tardis.console.session.ISessionNode;
@@ -39,11 +38,6 @@ public class SampleSessionNodeAgent extends SessionNodeAgent implements ISession
     @Override
     public void onDispatch(Packet packet) throws SuspendExecution {
         packetDispatcher.dispatch(this, packet);
-    }
-
-    @Override
-    public boolean onDispatch(RestObject restObject) throws SuspendExecution {
-        return false;
     }
 
     @Override

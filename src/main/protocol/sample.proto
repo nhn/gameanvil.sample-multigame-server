@@ -23,3 +23,23 @@ message SampleData
 {
     string message = 1;
 }
+
+message SampleReq
+{
+    string message = 1;
+}
+
+message SampleRes
+{
+    string message = 1;
+}
+
+message BeforeAuthenticateReq
+{
+    string message = 1;
+}
+
+message BeforeAuthenticateRes
+{
+    string message = 1;
+}

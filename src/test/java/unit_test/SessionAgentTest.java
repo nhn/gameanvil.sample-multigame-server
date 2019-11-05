@@ -79,7 +79,6 @@ public class SessionAgentTest {
         }else{
             fail("Payload contains no Sample.SampleData.");
         }
-
     }
 
     @Test
@@ -100,5 +99,33 @@ public class SessionAgentTest {
         }
     }
 
+    @Test
+    public void SampleReqToSession() throws IOException, TimeoutException {
 
+        AuthenticationResult authResult = session.authentication(session.getAccountId());
+        assertTrue(authResult.isSuccess());
+
+        String message = "SampleReq";
+        try{
+            Packet packetRes = session.requestToSession(new Packet(Sample.SampleReq.newBuilder().setMessage(message)), Sample.SampleRes.class);
+            Sample.SampleRes msg = Sample.SampleRes.parseFrom(packetRes.getStream());
+            assertEquals(msg.getMessage(), message);
+        } catch(Exception e){
+            fail(e.toString());
+        }
+
+    }
+
+    @Test
+    public void BeforeAuthenticateReqToSessionBeforeAuthenticate() throws IOException, TimeoutException {
+
+        String message = "BeforeAuthenticateReq";
+        try {
+            Packet packetRes = session.requestToSession(new Packet(Sample.BeforeAuthenticateReq.newBuilder().setMessage(message)), Sample.BeforeAuthenticateRes.class);
+            Sample.BeforeAuthenticateRes msg = Sample.BeforeAuthenticateRes.parseFrom(packetRes.getStream());
+            assertEquals(msg.getMessage(), message);
+        } catch (IOException e) {
+            fail(e.getMessage());
+        }
+    }
 }
