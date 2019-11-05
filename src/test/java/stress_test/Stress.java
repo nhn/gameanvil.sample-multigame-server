@@ -40,11 +40,19 @@ public class Stress {
         // Ping 주기를 설정합니다. (밀리초)
         Config.PING_INTERVAL_MSEC = 3000; // [default 3000]
 
+        Config.CONCURRENT_USER = 1000;
+
         // 부하 테스트 시작시, Bot 유저들에 딜레이를 두고 런칭 시킬 수 있습니다.
         //Config.RAMP_UP_DELAY_MSEC = 5; // [default 0]
 
         // 커넥터를 생성합니다.
         connector = TardisConnector.getInstance();
+
+        // 컨텐츠 프로토콜 등록.
+        connector.addProtoBufClass(0, Sample.class);
+
+        // 컨텐츠 서비스 등록.
+        connector.addService(0, "ChatService");
 
         // 콜백 목록을 등록합니다.
         connector.addPacketCallbackAuthentication(new CallbackAuthenticationRes());
@@ -62,9 +70,7 @@ public class Stress {
     @Test
     public void runMultiUser() throws TimeoutException {
 
-        final int userCount = 1000;
-
-        for (int i=0; i<userCount; ++i) {
+        for (int i=0; i<Config.CONCURRENT_USER; ++i) {
 
             // 커넥션을 생성하고 세션 정보가 담긴 객체를 리턴 받습니다.
 
@@ -81,7 +87,7 @@ public class Stress {
         connector.repeatByIndividual(new TardisConnector.InitialProtocol() {
             @Override
             public void send(IAsyncConnectorUser iUser) {
-                iUser.authentication();
+                iUser.authentication(iUser.getAccountId());
             }
         }, 3);
     }
