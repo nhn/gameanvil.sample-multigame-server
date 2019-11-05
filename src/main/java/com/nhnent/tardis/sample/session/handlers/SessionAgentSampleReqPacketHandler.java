@@ -9,18 +9,17 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class BeforeAuthenticateReqSessionAgentHandler implements IPacketHandler<SampleSessionAgent> {
+public class SessionAgentSampleReqPacketHandler implements IPacketHandler<SampleSessionAgent>{
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
     public void execute(SampleSessionAgent sessionAgent, Packet packet) throws SuspendExecution {
         try{
-            String message = Sample.BeforeAuthenticateReq.parseFrom(packet.getStream()).getMessage();
-            logger.info("BeforeAuthenticateReqSessionAgentHandler : {}", message);
-            sessionAgent.reply(new Packet(Sample.BeforeAuthenticateRes.newBuilder().setMessage(message)));
+            String message = Sample.SampleReq.parseFrom(packet.getStream()).getMessage();
+            logger.info("SessionAgentSampleReqPacketHandler : {}", message);
+            sessionAgent.reply(new Packet(Sample.SampleRes.newBuilder().setMessage(message)));
         }catch (Exception e){
             logger.error(ExceptionUtils.getStackTrace(e));
         }
     }
 }
-

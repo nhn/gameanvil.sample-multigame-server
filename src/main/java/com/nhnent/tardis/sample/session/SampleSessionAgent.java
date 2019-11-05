@@ -11,8 +11,8 @@ import com.nhnent.tardis.console.session.ISession;
 import com.nhnent.tardis.console.session.SessionAgent;
 import com.nhnent.tardis.sample.protocol.Sample;
 import com.nhnent.tardis.sample.Defines.Messages;
-import com.nhnent.tardis.sample.session.handlers.BeforeAuthenticateReqSessionAgentHandler;
-import com.nhnent.tardis.sample.session.handlers.SampleReqSessionAgentPacketHandler;
+import com.nhnent.tardis.sample.session.handlers.SessionAgentBeforeAuthenticateReqHandler;
+import com.nhnent.tardis.sample.session.handlers.SessionAgentSampleReqPacketHandler;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,22 +25,26 @@ public class SampleSessionAgent extends SessionAgent implements ISession<SampleS
 
     private static PacketDispatcher dispatcher = new PacketDispatcher();
     static{
-        dispatcher.registerMsg(Sample.BeforeAuthenticateReq.class, BeforeAuthenticateReqSessionAgentHandler.class);
-        dispatcher.registerMsg(Sample.SampleReq.class, SampleReqSessionAgentPacketHandler.class);
+        dispatcher.registerMsg(Sample.BeforeAuthenticateReq.class, SessionAgentBeforeAuthenticateReqHandler.class);
+        dispatcher.registerMsg(Sample.SampleReq.class, SessionAgentSampleReqPacketHandler.class);
     }
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
     public boolean checkPreAccess(final Packet packet) throws SuspendExecution {
-        return packet.msgEquals(Sample.BeforeAuthenticateReq.getDescriptor().getFullName());
+        // authenticate 이전에 들어온 패킷은 이 함수에서 처리 여부를 결정.
+        // 여기에서는 BeforeAuthenticateReq 인 경우 처리.
+        if(packet.msgEquals(Sample.BeforeAuthenticateReq.getDescriptor().getFullName()))
+            return true;
+        return false;
     }
 
     @Override
-    public boolean onAuthenticate(String accoutId, String password, String deviceId, Payload payload, Payload outPayload) throws SuspendExecution {
+    public boolean onAuthenticate(String accountId, String password, String deviceId, Payload payload, Payload outPayload) throws SuspendExecution {
         // 인증 로직 구현부. 여기서는 accountId와 password가 일치 할 경우 인증 성공.
-        if(accoutId.equals(password)){
-            logger.info("onAuthenticate success. id:{}, pw:{}, device:{}", accoutId, password, deviceId);
+        if(accountId.equals(password)){
+            logger.info("onAuthenticate success. id:{}, pw:{}, device:{}", accountId, password, deviceId);
 
             // payload 로부터 원하는 Packet 가져오기.
             Packet packetSampleData = payload.getPacket(Sample.SampleData.getDescriptor());
@@ -60,7 +64,7 @@ public class SampleSessionAgent extends SessionAgent implements ISession<SampleS
 
             return true;
         }else{
-            logger.info("onAuthenticate fail. password must be same as accountId. id:{}, pw:{}, device:{}", accoutId, password, deviceId);
+            logger.info("onAuthenticate fail. password must be same as accountId. id:{}, pw:{}, device:{}", accountId, password, deviceId);
 
             // client로 Packet 전달.
             Packet packetToClient = new Packet(Sample.SampleData.newBuilder().setMessage(Messages.AuthenticateFail));
@@ -77,22 +81,22 @@ public class SampleSessionAgent extends SessionAgent implements ISession<SampleS
 
     @Override
     public void onPreLogin(Payload outPayload) throws SuspendExecution {
-        logger.info("onPreLogin");
+        outPayload.add(new Packet(Sample.SampleData.newBuilder().setMessage("onPreLogin")));
     }
 
     @Override
     public void onPostLogin(SampleSessionUserAgent session) throws SuspendExecution {
-        logger.info("onPostLogin");
+        logger.info("onPostLogin : {}", session.getUserId());
     }
 
     @Override
     public void onPostLogout(SampleSessionUserAgent session) throws SuspendExecution {
-        logger.info("onPostLogout");
+        logger.info("onPostLogout : {}", session.getUserId());
     }
 
     @Override
     public void onPause(PauseType type) throws SuspendExecution {
-        logger.info("onPause");
+        logger.info("onPause : {}", type);
     }
 
     @Override
