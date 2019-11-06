@@ -17,7 +17,7 @@ public class SessionAgentSampleToSPacketHandler implements IPacketHandler<Sample
         try{
             String message = Sample.SampleToS.parseFrom(packet.getStream()).getMessage();
             logger.info("SessionAgentSampleToSPacketHandler : {}", message);
-            sessionAgent.reply(new Packet(Sample.SampleToC.newBuilder().setMessage(message)));
+            sessionAgent.sendToClient(new Packet(Sample.SampleToC.newBuilder().setMessage(message)));
         }catch (Exception e){
             logger.error(ExceptionUtils.getStackTrace(e));
         }

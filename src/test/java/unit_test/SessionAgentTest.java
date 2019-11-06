@@ -7,6 +7,7 @@ import com.nhnent.tardis.connector.tcp.ConnectorSession;
 import com.nhnent.tardis.connector.tcp.TardisConnector;
 import com.nhnent.tardis.sample.Defines.Messages;
 import com.nhnent.tardis.sample.protocol.Sample;
+import java.util.concurrent.TimeUnit;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -54,7 +55,7 @@ public class SessionAgentTest {
     //-------------------------------------------------------------------------------------
     @Test
     public void authenticateSuccess() throws IOException, TimeoutException {
-
+        // accountId와 password가 일치할 때 성공
         AuthenticationResult authResult = session.authentication(session.getAccountId());
         assertTrue(authResult.isSuccess());
         assertNull(authResult.getPayload(Sample.SampleData.class));
@@ -62,17 +63,18 @@ public class SessionAgentTest {
 
     @Test
     public void authenticateSuccessWithPayload() throws IOException, TimeoutException {
+        // payload를 보낼 경우, 보낸 값을 그대로 되돌려 받아야함.
+        Sample.SampleData.Builder payloadSnd = Sample.SampleData.newBuilder();
+        payloadSnd.setMessage(Messages.AuthenticatePayload);
 
-        Sample.SampleData.Builder msgSnd = Sample.SampleData.newBuilder();
-        msgSnd.setMessage(Messages.AuthenticatePayload);
-        AuthenticationResult authResult = session.authentication(session.getAccountId(), msgSnd);
+        AuthenticationResult authResult = session.authentication(session.getAccountId(), payloadSnd);
         assertTrue(authResult.isSuccess());
 
         Packet packet = authResult.getPayload(Sample.SampleData.class);
         if (null != packet) {
             try {
-                Sample.SampleData msgRcv = Sample.SampleData.parseFrom(packet.getStream());
-                assertEquals(Messages.AuthenticatePayload, msgRcv.getMessage());
+                Sample.SampleData payloadRcv = Sample.SampleData.parseFrom(packet.getStream());
+                assertEquals(Messages.AuthenticatePayload, payloadRcv.getMessage());
             } catch (IOException e) {
                 fail(e.getMessage());
             }
@@ -83,12 +85,13 @@ public class SessionAgentTest {
 
     @Test
     public void authenticateFail() throws IOException, TimeoutException {
-
+        // accountId와 password가 일치하지 않으면 실패.
         AuthenticationResult authResult = session.authentication();
         assertTrue(authResult.isFailure());
         Packet packet= authResult.getPayload(Sample.SampleData.class);
         if (null != packet) {
             try {
+                // 실패일 경우 payload에 실패 메시지를 보냄
                 Sample.SampleData msg = Sample.SampleData.parseFrom(packet.getStream());
                 assertEquals(msg.getMessage(), Messages.AuthenticateFail);
             } catch (IOException e) {
@@ -106,6 +109,7 @@ public class SessionAgentTest {
 
         String message = "SampleReq";
         try{
+            //SampleReq 를 보낼 경우 보낸 값을 그대로 돌려 받음.
             Packet packetRes = session.requestToSession(new Packet(Sample.SampleReq.newBuilder().setMessage(message)), Sample.SampleRes.class);
             Sample.SampleRes msg = Sample.SampleRes.parseFrom(packetRes.getStream());
             assertEquals(msg.getMessage(), message);
@@ -119,6 +123,8 @@ public class SessionAgentTest {
 
         String message = "BeforeAuthenticateReq";
         try {
+            // authenticate 하기 전에도 BeforeAuthenticateReq를 보내고 BeforeAuthenticateRes 응답을 받을 수 있음.
+            // BeforeAuthenticateReq 를 보낼 경우 보낸 값을 그대로 돌려 받음.
             Packet packetRes = session.requestToSession(new Packet(Sample.BeforeAuthenticateReq.newBuilder().setMessage(message)), Sample.BeforeAuthenticateRes.class);
             Sample.BeforeAuthenticateRes msg = Sample.BeforeAuthenticateRes.parseFrom(packetRes.getStream());
             assertEquals(msg.getMessage(), message);
@@ -134,8 +140,10 @@ public class SessionAgentTest {
 
         String message = "SampleToS";
         try{
-            Packet packetRes = session.requestToSession(new Packet(Sample.SampleToS.newBuilder().setMessage(message)), Sample.SampleToC.class);
-            Sample.SampleToC msg = Sample.SampleToC.parseFrom(packetRes.getStream());
+            //SampleToS 를 보낼 경우 보낸 값을 그대로 돌려 받음.
+            session.sendToSession(new Packet(Sample.SampleToS.newBuilder().setMessage(message)));
+            Packet packetSampleToC = session.waitPacket(1, TimeUnit.SECONDS, Sample.SampleToC.class);
+            Sample.SampleToC msg = Sample.SampleToC.parseFrom(packetSampleToC.getStream());
             assertEquals(msg.getMessage(), message);
         } catch(Exception e){
             fail(e.toString());
