@@ -14,6 +14,13 @@ import static org.junit.Assert.assertTrue;
 public class CallbackAuthenticationRes implements IDispatchPacket<SampleUserClass> {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
+    private static int channel = 1;
+    private static String getChannel(){
+        String ret = String.valueOf(channel++);
+        if(channel > 4)
+            channel = 1;
+        return ret;
+    }
 
     @Override
     public void dispatch(Packet packet, SampleUserClass user) {
@@ -23,7 +30,7 @@ public class CallbackAuthenticationRes implements IDispatchPacket<SampleUserClas
         assertTrue(result.isSuccess());
 
         try {
-            user.login(Stress.UserType);
+            user.login(Stress.UserType, getChannel());
         } catch (Exception e) {
             logger.error(ExceptionUtils.getStackTrace(e));
         }
