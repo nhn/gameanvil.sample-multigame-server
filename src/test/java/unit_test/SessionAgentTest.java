@@ -3,10 +3,12 @@ package unit_test;
 import com.nhnent.tardis.connector.common.Config;
 import com.nhnent.tardis.connector.protocol.Packet;
 import com.nhnent.tardis.connector.protocol.result.AuthenticationResult;
+import com.nhnent.tardis.connector.protocol.result.ChannelListResult;
 import com.nhnent.tardis.connector.tcp.ConnectorSession;
 import com.nhnent.tardis.connector.tcp.TardisConnector;
 import com.nhnent.tardis.sample.Defines.Messages;
 import com.nhnent.tardis.sample.protocol.Sample;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import org.junit.After;
 import org.junit.Before;
@@ -148,5 +150,31 @@ public class SessionAgentTest {
         } catch(Exception e){
             fail(e.toString());
         }
+    }
+
+    @Test
+    public void getChannelList() throws IOException, TimeoutException {
+
+        authenticateSuccess();
+
+        ChannelListResult result = session.channelList("ChatService");
+        assertTrue(result.isSuccess());
+
+        // TardisConfig에 설정된 체널 정보는 ["1","2","3","4","1","2","3","4"]
+        // 응답에서는 중복제거, 정렬된 ["1","2","3","4"]로 내려와야함.
+        List<String> list = result.getChannelList();
+        assertEquals(4, list.size());
+        assertEquals("1", list.get(0));
+        assertEquals("2", list.get(1));
+        assertEquals("3", list.get(2));
+        assertEquals("4", list.get(3));
+    }
+
+    @Test
+    public void getChannelInfo() throws IOException, TimeoutException {
+
+        authenticateSuccess();
+
+        // channelInfo를 얻어올 수 있는 api가 없음
     }
 }

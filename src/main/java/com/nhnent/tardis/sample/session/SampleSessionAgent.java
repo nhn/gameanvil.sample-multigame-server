@@ -3,8 +3,6 @@ package com.nhnent.tardis.sample.session;
 import co.paralleluniverse.fibers.SuspendExecution;
 import com.nhnent.tardis.common.Packet;
 import com.nhnent.tardis.common.Payload;
-import com.nhnent.tardis.common.internal.ITimerHandler;
-import com.nhnent.tardis.common.internal.ITimerObject;
 import com.nhnent.tardis.common.internal.PauseType;
 import com.nhnent.tardis.console.PacketDispatcher;
 import com.nhnent.tardis.console.session.ISession;
@@ -22,7 +20,7 @@ import java.io.IOException;
 
 
 
-public class SampleSessionAgent extends SessionAgent implements ISession<SampleSessionUserAgent>, ITimerHandler {
+public class SampleSessionAgent extends SessionAgent implements ISession<SampleSessionUserAgent> {
 
     private static PacketDispatcher dispatcher = new PacketDispatcher();
     static{
@@ -109,10 +107,5 @@ public class SampleSessionAgent extends SessionAgent implements ISession<SampleS
     @Override
     public void onDisconnect() throws SuspendExecution {
         logger.info("onDisconnect");
-    }
-
-    @Override
-    public void onTimer(ITimerObject timerObject, Object arg) throws SuspendExecution {
-        logger.info("onTimer");
     }
 }
