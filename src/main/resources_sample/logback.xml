@@ -85,7 +85,7 @@
 
 
     <root>
-        <level value="TRACE"/>
+        <level value="INFO"/>
         <appender-ref ref="ASYNC"/>
         <appender-ref ref="STDOUT"/>
         <!--<appender-ref ref="ELASTIC"/> &lt;!&ndash;엘라스틱에 로그 쓸지 말지 on off&ndash;&gt;-->

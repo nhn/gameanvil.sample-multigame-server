@@ -17,7 +17,7 @@ public class CallbackAuthenticationRes implements IDispatchPacket<SampleUserClas
     private static int channel = 1;
     private static String getChannel(){
         String ret = String.valueOf(channel++);
-        if(channel > 4)
+        if(channel > 2)
             channel = 1;
         return ret;
     }
@@ -30,7 +30,8 @@ public class CallbackAuthenticationRes implements IDispatchPacket<SampleUserClas
         assertTrue(result.isSuccess());
 
         try {
-            user.login(Stress.UserType, getChannel());
+            //user.login(Stress.UserType, getChannel());
+            user.login(Stress.UserType, "1");
         } catch (Exception e) {
             logger.error(ExceptionUtils.getStackTrace(e));
         }
