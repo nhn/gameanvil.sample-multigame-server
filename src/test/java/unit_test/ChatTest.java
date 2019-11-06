@@ -65,7 +65,7 @@ public class ChatTest {
             ConnectorUser user = session.addUser("ChatService");
 
             // 로그인을 진행.
-            LoginResult loginResult = user.login("ChatUser");
+            LoginResult loginResult = user.login("ChatUser", "1");
             assertTrue("Login fail", loginResult.isSuccess());
 
             // Test 단계에서 활용하도록 준비합니다.
