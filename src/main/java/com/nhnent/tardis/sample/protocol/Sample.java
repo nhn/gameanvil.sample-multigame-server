@@ -5992,7 +5992,7 @@ public final class Sample {
   }
 
   public interface SetTimerOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:com.nhnent.tardis.sample.protocol.SetTimer)
+      // @@protoc_insertion_point(interface_extends:com.nhnent.tardis.sample.protocol.setTimer)
       com.google.protobuf.MessageOrBuilder {
 
     /**
@@ -6026,14 +6026,14 @@ public final class Sample {
         getMessageBytes();
   }
   /**
-   * Protobuf type {@code com.nhnent.tardis.sample.protocol.SetTimer}
+   * Protobuf type {@code com.nhnent.tardis.sample.protocol.setTimer}
    */
   public  static final class SetTimer extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:com.nhnent.tardis.sample.protocol.SetTimer)
+      // @@protoc_insertion_point(message_implements:com.nhnent.tardis.sample.protocol.setTimer)
       SetTimerOrBuilder {
   private static final long serialVersionUID = 0L;
-    // Use SetTimer.newBuilder() to construct.
+    // Use setTimer.newBuilder() to construct.
     private SetTimer(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
@@ -6396,11 +6396,11 @@ public final class Sample {
       return builder;
     }
     /**
-     * Protobuf type {@code com.nhnent.tardis.sample.protocol.SetTimer}
+     * Protobuf type {@code com.nhnent.tardis.sample.protocol.setTimer}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:com.nhnent.tardis.sample.protocol.SetTimer)
+        // @@protoc_insertion_point(builder_implements:com.nhnent.tardis.sample.protocol.setTimer)
         com.nhnent.tardis.sample.protocol.Sample.SetTimerOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
@@ -6415,7 +6415,7 @@ public final class Sample {
                 com.nhnent.tardis.sample.protocol.Sample.SetTimer.class, com.nhnent.tardis.sample.protocol.Sample.SetTimer.Builder.class);
       }
 
-      // Construct using com.nhnent.tardis.sample.protocol.Sample.SetTimer.newBuilder()
+      // Construct using com.nhnent.tardis.sample.protocol.Sample.setTimer.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -6764,10 +6764,10 @@ public final class Sample {
       }
 
 
-      // @@protoc_insertion_point(builder_scope:com.nhnent.tardis.sample.protocol.SetTimer)
+      // @@protoc_insertion_point(builder_scope:com.nhnent.tardis.sample.protocol.setTimer)
     }
 
-    // @@protoc_insertion_point(class_scope:com.nhnent.tardis.sample.protocol.SetTimer)
+    // @@protoc_insertion_point(class_scope:com.nhnent.tardis.sample.protocol.setTimer)
     private static final com.nhnent.tardis.sample.protocol.Sample.SetTimer DEFAULT_INSTANCE;
     static {
       DEFAULT_INSTANCE = new com.nhnent.tardis.sample.protocol.Sample.SetTimer();

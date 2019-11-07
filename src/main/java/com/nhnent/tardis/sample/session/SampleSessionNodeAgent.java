@@ -10,10 +10,6 @@ import com.nhnent.tardis.console.PacketDispatcher;
 import com.nhnent.tardis.console.TardisIndexer;
 import com.nhnent.tardis.console.session.ISessionNode;
 import com.nhnent.tardis.console.session.SessionNodeAgent;
-import com.nhnent.tardis.sample.protocol.Sample;
-import com.nhnent.tardis.sample.session.handlers.SessionNodeAgentSetTimerPacketHandler;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,48 +21,48 @@ public class SampleSessionNodeAgent extends SessionNodeAgent implements ISession
 
     private PacketDispatcher packetDispatcher = new PacketDispatcher();
 
-    private Map<String, ITimerObject> mapTimers = new HashMap();
+    private ITimerObject timerObject = null;
 
-    public boolean AddTimer(String timerId, int interval, int repeatCount, String message) {
-        if (mapTimers.containsKey(timerId)) {
+    public boolean setTimer(int interval, String message) {
+        if (timerObject != null) {
             return false;
         }
 
-        ITimerObject timerObject = addTimer(
+        timerObject = addTimer(
             interval,
-            TimeUnit.MILLISECONDS,
-            repeatCount,
+            TimeUnit.SECONDS,
+            0,
             this,
             message
         );
 
-        mapTimers.put(timerId, timerObject);
         return true;
     }
 
-    public boolean RemoveTimer(String timerId) {
-        if (!mapTimers.containsKey(timerId)) {
+    public boolean removeTimer() {
+        if (timerObject == null) {
             return false;
         }
-        ITimerObject timerObject = mapTimers.remove(timerId);
         removeTimer(timerObject);
+        timerObject = null;
         return true;
     }
 
     @Override
     public void onInit() throws SuspendExecution {
         logger.info("SampleSessionNodeAgent.onInit");
-        packetDispatcher.registerMsg(Sample.SetTimer.class, SessionNodeAgentSetTimerPacketHandler.class);
     }
 
     @Override
     public void onPrepare() throws SuspendExecution {
         logger.info("SampleSessionNodeAgent.onPrepare");
+        setReady();
     }
 
     @Override
     public void onReady() throws SuspendExecution {
         logger.info("SampleSessionNodeAgent.onReady");
+        setTimer(5, "Timer Event");
     }
 
     @Override
@@ -89,11 +85,11 @@ public class SampleSessionNodeAgent extends SessionNodeAgent implements ISession
     @Override
     public void onShutdown() throws SuspendExecution {
         logger.info("SampleSessionNodeAgent.onShutdown");
+        removeTimer();
     }
 
     @Override
     public void onTimer(ITimerObject timerObject, Object arg) throws SuspendExecution {
-        logger.info("SampleSessionNodeAgent.onTimer");
-
+        logger.info("SampleSessionNodeAgent.onTimer - message : {}", arg);
     }
 }
