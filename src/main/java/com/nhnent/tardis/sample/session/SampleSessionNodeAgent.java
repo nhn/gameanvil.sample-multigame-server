@@ -10,6 +10,9 @@ import com.nhnent.tardis.console.PacketDispatcher;
 import com.nhnent.tardis.console.TardisIndexer;
 import com.nhnent.tardis.console.session.ISessionNode;
 import com.nhnent.tardis.console.session.SessionNodeAgent;
+import com.nhnent.tardis.sample.protocol.Sample;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +24,20 @@ public class SampleSessionNodeAgent extends SessionNodeAgent implements ISession
 
     private PacketDispatcher packetDispatcher = new PacketDispatcher();
 
-    private ITimerObject timerObject = null;
+    private List<SampleSessionAgent> sampleSessionAgents= new LinkedList();
 
+
+    public void addSampleSessionAgent(SampleSessionAgent sampleSessionAgent){
+        logger.info("SampleSessionNodeAgent.addSampleSessionAgent : {}", sampleSessionAgent.getAccountId());
+        sampleSessionAgents.add(sampleSessionAgent);
+    }
+
+    public void removeSampleSessionAgent(SampleSessionAgent sampleSessionAgent){
+        logger.info("SampleSessionNodeAgent.removeSampleSessionAgent : {}", sampleSessionAgent.getAccountId());
+        sampleSessionAgents.remove(sampleSessionAgent);
+    }
+
+    private ITimerObject timerObject = null;
     public boolean setTimer(int interval, String message) {
         if (timerObject != null) {
             return false;
@@ -62,7 +77,6 @@ public class SampleSessionNodeAgent extends SessionNodeAgent implements ISession
     @Override
     public void onReady() throws SuspendExecution {
         logger.info("SampleSessionNodeAgent.onReady");
-        setTimer(5, "Timer Event");
     }
 
     @Override
@@ -85,11 +99,13 @@ public class SampleSessionNodeAgent extends SessionNodeAgent implements ISession
     @Override
     public void onShutdown() throws SuspendExecution {
         logger.info("SampleSessionNodeAgent.onShutdown");
-        removeTimer();
     }
 
     @Override
     public void onTimer(ITimerObject timerObject, Object arg) throws SuspendExecution {
         logger.info("SampleSessionNodeAgent.onTimer - message : {}", arg);
+        for (SampleSessionAgent sampleSessionAgent: sampleSessionAgents) {
+            sampleSessionAgent.sendToClient(new Packet(Sample.SampleToC.newBuilder().setMessage((String)arg)));
+        }
     }
 }

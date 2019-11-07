@@ -5992,7 +5992,7 @@ public final class Sample {
   }
 
   public interface SetTimerOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:com.nhnent.tardis.sample.protocol.setTimer)
+      // @@protoc_insertion_point(interface_extends:com.nhnent.tardis.sample.protocol.SetTimer)
       com.google.protobuf.MessageOrBuilder {
 
     /**
@@ -6001,46 +6001,29 @@ public final class Sample {
     int getInterval();
 
     /**
-     * <code>int32 repeatCount = 2;</code>
-     */
-    int getRepeatCount();
-
-    /**
-     * <code>string timerId = 3;</code>
-     */
-    java.lang.String getTimerId();
-    /**
-     * <code>string timerId = 3;</code>
-     */
-    com.google.protobuf.ByteString
-        getTimerIdBytes();
-
-    /**
-     * <code>string message = 4;</code>
+     * <code>string message = 2;</code>
      */
     java.lang.String getMessage();
     /**
-     * <code>string message = 4;</code>
+     * <code>string message = 2;</code>
      */
     com.google.protobuf.ByteString
         getMessageBytes();
   }
   /**
-   * Protobuf type {@code com.nhnent.tardis.sample.protocol.setTimer}
+   * Protobuf type {@code com.nhnent.tardis.sample.protocol.SetTimer}
    */
   public  static final class SetTimer extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:com.nhnent.tardis.sample.protocol.setTimer)
+      // @@protoc_insertion_point(message_implements:com.nhnent.tardis.sample.protocol.SetTimer)
       SetTimerOrBuilder {
   private static final long serialVersionUID = 0L;
-    // Use setTimer.newBuilder() to construct.
+    // Use SetTimer.newBuilder() to construct.
     private SetTimer(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
     private SetTimer() {
       interval_ = 0;
-      repeatCount_ = 0;
-      timerId_ = "";
       message_ = "";
     }
 
@@ -6073,18 +6056,7 @@ public final class Sample {
               interval_ = input.readInt32();
               break;
             }
-            case 16: {
-
-              repeatCount_ = input.readInt32();
-              break;
-            }
-            case 26: {
-              java.lang.String s = input.readStringRequireUtf8();
-
-              timerId_ = s;
-              break;
-            }
-            case 34: {
+            case 18: {
               java.lang.String s = input.readStringRequireUtf8();
 
               message_ = s;
@@ -6131,53 +6103,10 @@ public final class Sample {
       return interval_;
     }
 
-    public static final int REPEATCOUNT_FIELD_NUMBER = 2;
-    private int repeatCount_;
-    /**
-     * <code>int32 repeatCount = 2;</code>
-     */
-    public int getRepeatCount() {
-      return repeatCount_;
-    }
-
-    public static final int TIMERID_FIELD_NUMBER = 3;
-    private volatile java.lang.Object timerId_;
-    /**
-     * <code>string timerId = 3;</code>
-     */
-    public java.lang.String getTimerId() {
-      java.lang.Object ref = timerId_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        timerId_ = s;
-        return s;
-      }
-    }
-    /**
-     * <code>string timerId = 3;</code>
-     */
-    public com.google.protobuf.ByteString
-        getTimerIdBytes() {
-      java.lang.Object ref = timerId_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        timerId_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    public static final int MESSAGE_FIELD_NUMBER = 4;
+    public static final int MESSAGE_FIELD_NUMBER = 2;
     private volatile java.lang.Object message_;
     /**
-     * <code>string message = 4;</code>
+     * <code>string message = 2;</code>
      */
     public java.lang.String getMessage() {
       java.lang.Object ref = message_;
@@ -6192,7 +6121,7 @@ public final class Sample {
       }
     }
     /**
-     * <code>string message = 4;</code>
+     * <code>string message = 2;</code>
      */
     public com.google.protobuf.ByteString
         getMessageBytes() {
@@ -6225,14 +6154,8 @@ public final class Sample {
       if (interval_ != 0) {
         output.writeInt32(1, interval_);
       }
-      if (repeatCount_ != 0) {
-        output.writeInt32(2, repeatCount_);
-      }
-      if (!getTimerIdBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, timerId_);
-      }
       if (!getMessageBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, message_);
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, message_);
       }
       unknownFields.writeTo(output);
     }
@@ -6247,15 +6170,8 @@ public final class Sample {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(1, interval_);
       }
-      if (repeatCount_ != 0) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, repeatCount_);
-      }
-      if (!getTimerIdBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, timerId_);
-      }
       if (!getMessageBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, message_);
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, message_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -6275,10 +6191,6 @@ public final class Sample {
       boolean result = true;
       result = result && (getInterval()
           == other.getInterval());
-      result = result && (getRepeatCount()
-          == other.getRepeatCount());
-      result = result && getTimerId()
-          .equals(other.getTimerId());
       result = result && getMessage()
           .equals(other.getMessage());
       result = result && unknownFields.equals(other.unknownFields);
@@ -6294,10 +6206,6 @@ public final class Sample {
       hash = (19 * hash) + getDescriptor().hashCode();
       hash = (37 * hash) + INTERVAL_FIELD_NUMBER;
       hash = (53 * hash) + getInterval();
-      hash = (37 * hash) + REPEATCOUNT_FIELD_NUMBER;
-      hash = (53 * hash) + getRepeatCount();
-      hash = (37 * hash) + TIMERID_FIELD_NUMBER;
-      hash = (53 * hash) + getTimerId().hashCode();
       hash = (37 * hash) + MESSAGE_FIELD_NUMBER;
       hash = (53 * hash) + getMessage().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
@@ -6396,11 +6304,11 @@ public final class Sample {
       return builder;
     }
     /**
-     * Protobuf type {@code com.nhnent.tardis.sample.protocol.setTimer}
+     * Protobuf type {@code com.nhnent.tardis.sample.protocol.SetTimer}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:com.nhnent.tardis.sample.protocol.setTimer)
+        // @@protoc_insertion_point(builder_implements:com.nhnent.tardis.sample.protocol.SetTimer)
         com.nhnent.tardis.sample.protocol.Sample.SetTimerOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
@@ -6415,7 +6323,7 @@ public final class Sample {
                 com.nhnent.tardis.sample.protocol.Sample.SetTimer.class, com.nhnent.tardis.sample.protocol.Sample.SetTimer.Builder.class);
       }
 
-      // Construct using com.nhnent.tardis.sample.protocol.Sample.setTimer.newBuilder()
+      // Construct using com.nhnent.tardis.sample.protocol.Sample.SetTimer.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -6434,10 +6342,6 @@ public final class Sample {
       public Builder clear() {
         super.clear();
         interval_ = 0;
-
-        repeatCount_ = 0;
-
-        timerId_ = "";
 
         message_ = "";
 
@@ -6468,8 +6372,6 @@ public final class Sample {
       public com.nhnent.tardis.sample.protocol.Sample.SetTimer buildPartial() {
         com.nhnent.tardis.sample.protocol.Sample.SetTimer result = new com.nhnent.tardis.sample.protocol.Sample.SetTimer(this);
         result.interval_ = interval_;
-        result.repeatCount_ = repeatCount_;
-        result.timerId_ = timerId_;
         result.message_ = message_;
         onBuilt();
         return result;
@@ -6521,13 +6423,6 @@ public final class Sample {
         if (other == com.nhnent.tardis.sample.protocol.Sample.SetTimer.getDefaultInstance()) return this;
         if (other.getInterval() != 0) {
           setInterval(other.getInterval());
-        }
-        if (other.getRepeatCount() != 0) {
-          setRepeatCount(other.getRepeatCount());
-        }
-        if (!other.getTimerId().isEmpty()) {
-          timerId_ = other.timerId_;
-          onChanged();
         }
         if (!other.getMessage().isEmpty()) {
           message_ = other.message_;
@@ -6588,104 +6483,9 @@ public final class Sample {
         return this;
       }
 
-      private int repeatCount_ ;
-      /**
-       * <code>int32 repeatCount = 2;</code>
-       */
-      public int getRepeatCount() {
-        return repeatCount_;
-      }
-      /**
-       * <code>int32 repeatCount = 2;</code>
-       */
-      public Builder setRepeatCount(int value) {
-        
-        repeatCount_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>int32 repeatCount = 2;</code>
-       */
-      public Builder clearRepeatCount() {
-        
-        repeatCount_ = 0;
-        onChanged();
-        return this;
-      }
-
-      private java.lang.Object timerId_ = "";
-      /**
-       * <code>string timerId = 3;</code>
-       */
-      public java.lang.String getTimerId() {
-        java.lang.Object ref = timerId_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          timerId_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>string timerId = 3;</code>
-       */
-      public com.google.protobuf.ByteString
-          getTimerIdBytes() {
-        java.lang.Object ref = timerId_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          timerId_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>string timerId = 3;</code>
-       */
-      public Builder setTimerId(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  
-        timerId_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>string timerId = 3;</code>
-       */
-      public Builder clearTimerId() {
-        
-        timerId_ = getDefaultInstance().getTimerId();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>string timerId = 3;</code>
-       */
-      public Builder setTimerIdBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
-        timerId_ = value;
-        onChanged();
-        return this;
-      }
-
       private java.lang.Object message_ = "";
       /**
-       * <code>string message = 4;</code>
+       * <code>string message = 2;</code>
        */
       public java.lang.String getMessage() {
         java.lang.Object ref = message_;
@@ -6700,7 +6500,7 @@ public final class Sample {
         }
       }
       /**
-       * <code>string message = 4;</code>
+       * <code>string message = 2;</code>
        */
       public com.google.protobuf.ByteString
           getMessageBytes() {
@@ -6716,7 +6516,7 @@ public final class Sample {
         }
       }
       /**
-       * <code>string message = 4;</code>
+       * <code>string message = 2;</code>
        */
       public Builder setMessage(
           java.lang.String value) {
@@ -6729,7 +6529,7 @@ public final class Sample {
         return this;
       }
       /**
-       * <code>string message = 4;</code>
+       * <code>string message = 2;</code>
        */
       public Builder clearMessage() {
         
@@ -6738,7 +6538,7 @@ public final class Sample {
         return this;
       }
       /**
-       * <code>string message = 4;</code>
+       * <code>string message = 2;</code>
        */
       public Builder setMessageBytes(
           com.google.protobuf.ByteString value) {
@@ -6764,10 +6564,10 @@ public final class Sample {
       }
 
 
-      // @@protoc_insertion_point(builder_scope:com.nhnent.tardis.sample.protocol.setTimer)
+      // @@protoc_insertion_point(builder_scope:com.nhnent.tardis.sample.protocol.SetTimer)
     }
 
-    // @@protoc_insertion_point(class_scope:com.nhnent.tardis.sample.protocol.setTimer)
+    // @@protoc_insertion_point(class_scope:com.nhnent.tardis.sample.protocol.SetTimer)
     private static final com.nhnent.tardis.sample.protocol.Sample.SetTimer DEFAULT_INSTANCE;
     static {
       DEFAULT_INSTANCE = new com.nhnent.tardis.sample.protocol.Sample.SetTimer();
@@ -6807,16 +6607,6 @@ public final class Sample {
   public interface RemoveTimerOrBuilder extends
       // @@protoc_insertion_point(interface_extends:com.nhnent.tardis.sample.protocol.RemoveTimer)
       com.google.protobuf.MessageOrBuilder {
-
-    /**
-     * <code>string timerId = 1;</code>
-     */
-    java.lang.String getTimerId();
-    /**
-     * <code>string timerId = 1;</code>
-     */
-    com.google.protobuf.ByteString
-        getTimerIdBytes();
   }
   /**
    * Protobuf type {@code com.nhnent.tardis.sample.protocol.RemoveTimer}
@@ -6831,7 +6621,6 @@ public final class Sample {
       super(builder);
     }
     private RemoveTimer() {
-      timerId_ = "";
     }
 
     @java.lang.Override
@@ -6847,7 +6636,6 @@ public final class Sample {
       if (extensionRegistry == null) {
         throw new java.lang.NullPointerException();
       }
-      int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
@@ -6858,12 +6646,6 @@ public final class Sample {
             case 0:
               done = true;
               break;
-            case 10: {
-              java.lang.String s = input.readStringRequireUtf8();
-
-              timerId_ = s;
-              break;
-            }
             default: {
               if (!parseUnknownFieldProto3(
                   input, unknownFields, extensionRegistry, tag)) {
@@ -6896,40 +6678,6 @@ public final class Sample {
               com.nhnent.tardis.sample.protocol.Sample.RemoveTimer.class, com.nhnent.tardis.sample.protocol.Sample.RemoveTimer.Builder.class);
     }
 
-    public static final int TIMERID_FIELD_NUMBER = 1;
-    private volatile java.lang.Object timerId_;
-    /**
-     * <code>string timerId = 1;</code>
-     */
-    public java.lang.String getTimerId() {
-      java.lang.Object ref = timerId_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        timerId_ = s;
-        return s;
-      }
-    }
-    /**
-     * <code>string timerId = 1;</code>
-     */
-    public com.google.protobuf.ByteString
-        getTimerIdBytes() {
-      java.lang.Object ref = timerId_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        timerId_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -6944,9 +6692,6 @@ public final class Sample {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (!getTimerIdBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, timerId_);
-      }
       unknownFields.writeTo(output);
     }
 
@@ -6956,9 +6701,6 @@ public final class Sample {
       if (size != -1) return size;
 
       size = 0;
-      if (!getTimerIdBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, timerId_);
-      }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
@@ -6975,8 +6717,6 @@ public final class Sample {
       com.nhnent.tardis.sample.protocol.Sample.RemoveTimer other = (com.nhnent.tardis.sample.protocol.Sample.RemoveTimer) obj;
 
       boolean result = true;
-      result = result && getTimerId()
-          .equals(other.getTimerId());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -6988,8 +6728,6 @@ public final class Sample {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + TIMERID_FIELD_NUMBER;
-      hash = (53 * hash) + getTimerId().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -7123,8 +6861,6 @@ public final class Sample {
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        timerId_ = "";
-
         return this;
       }
 
@@ -7151,7 +6887,6 @@ public final class Sample {
       @java.lang.Override
       public com.nhnent.tardis.sample.protocol.Sample.RemoveTimer buildPartial() {
         com.nhnent.tardis.sample.protocol.Sample.RemoveTimer result = new com.nhnent.tardis.sample.protocol.Sample.RemoveTimer(this);
-        result.timerId_ = timerId_;
         onBuilt();
         return result;
       }
@@ -7200,10 +6935,6 @@ public final class Sample {
 
       public Builder mergeFrom(com.nhnent.tardis.sample.protocol.Sample.RemoveTimer other) {
         if (other == com.nhnent.tardis.sample.protocol.Sample.RemoveTimer.getDefaultInstance()) return this;
-        if (!other.getTimerId().isEmpty()) {
-          timerId_ = other.timerId_;
-          onChanged();
-        }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
@@ -7230,75 +6961,6 @@ public final class Sample {
             mergeFrom(parsedMessage);
           }
         }
-        return this;
-      }
-
-      private java.lang.Object timerId_ = "";
-      /**
-       * <code>string timerId = 1;</code>
-       */
-      public java.lang.String getTimerId() {
-        java.lang.Object ref = timerId_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          timerId_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>string timerId = 1;</code>
-       */
-      public com.google.protobuf.ByteString
-          getTimerIdBytes() {
-        java.lang.Object ref = timerId_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          timerId_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>string timerId = 1;</code>
-       */
-      public Builder setTimerId(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  
-        timerId_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>string timerId = 1;</code>
-       */
-      public Builder clearTimerId() {
-        
-        timerId_ = getDefaultInstance().getTimerId();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>string timerId = 1;</code>
-       */
-      public Builder setTimerIdBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
-        timerId_ = value;
-        onChanged();
         return this;
       }
       @java.lang.Override
@@ -7438,11 +7100,9 @@ public final class Sample {
       "message\030\001 \001(\t\"\034\n\tSampleToS\022\017\n\007message\030\001 " +
       "\001(\t\"\034\n\tSampleToC\022\017\n\007message\030\001 \001(\t\"(\n\025Bef" +
       "oreAuthenticateReq\022\017\n\007message\030\001 \001(\t\"(\n\025B" +
-      "eforeAuthenticateRes\022\017\n\007message\030\001 \001(\t\"S\n" +
-      "\010SetTimer\022\020\n\010interval\030\001 \001(\005\022\023\n\013repeatCou" +
-      "nt\030\002 \001(\005\022\017\n\007timerId\030\003 \001(\t\022\017\n\007message\030\004 \001" +
-      "(\t\"\036\n\013RemoveTimer\022\017\n\007timerId\030\001 \001(\tb\006prot" +
-      "o3"
+      "eforeAuthenticateRes\022\017\n\007message\030\001 \001(\t\"-\n" +
+      "\010SetTimer\022\020\n\010interval\030\001 \001(\005\022\017\n\007message\030\002" +
+      " \001(\t\"\r\n\013RemoveTimerb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -7527,13 +7187,13 @@ public final class Sample {
     internal_static_com_nhnent_tardis_sample_protocol_SetTimer_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_nhnent_tardis_sample_protocol_SetTimer_descriptor,
-        new java.lang.String[] { "Interval", "RepeatCount", "TimerId", "Message", });
+        new java.lang.String[] { "Interval", "Message", });
     internal_static_com_nhnent_tardis_sample_protocol_RemoveTimer_descriptor =
       getDescriptor().getMessageTypes().get(12);
     internal_static_com_nhnent_tardis_sample_protocol_RemoveTimer_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_nhnent_tardis_sample_protocol_RemoveTimer_descriptor,
-        new java.lang.String[] { "TimerId", });
+        new java.lang.String[] { });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

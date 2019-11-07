@@ -4,7 +4,9 @@ import com.nhnent.tardis.connector.common.Config;
 import com.nhnent.tardis.connector.protocol.Packet;
 import com.nhnent.tardis.connector.protocol.result.AuthenticationResult;
 import com.nhnent.tardis.connector.protocol.result.ChannelListResult;
+import com.nhnent.tardis.connector.protocol.result.LoginResult;
 import com.nhnent.tardis.connector.tcp.ConnectorSession;
+import com.nhnent.tardis.connector.tcp.ConnectorUser;
 import com.nhnent.tardis.connector.tcp.TardisConnector;
 import com.nhnent.tardis.sample.Defines.Messages;
 import com.nhnent.tardis.sample.protocol.Sample;
@@ -153,6 +155,25 @@ public class SessionAgentTest {
     }
 
     @Test
+    public void SampleReqToSessionUser() throws IOException, TimeoutException {
+
+        authenticateSuccess();
+        ConnectorUser user = session.addUser("ChatService");
+        LoginResult result = user.login("ChatUser", "1");
+        assertTrue(result.isSuccess());
+
+        String message = "SampleReqToSessionUser";
+        try{
+            //SampleReq 를 보낼 경우 보낸 값을 그대로 돌려 받음.
+            Packet packetRes = user.requestToSessionActor(new Packet(Sample.SampleReq.newBuilder().setMessage(message)), Sample.SampleRes.class);
+            Sample.SampleRes msg = Sample.SampleRes.parseFrom(packetRes.getStream());
+            assertEquals(msg.getMessage(), message);
+        } catch(Exception e){
+            fail(e.toString());
+        }
+    }
+
+    @Test
     public void getChannelList() throws IOException, TimeoutException {
 
         authenticateSuccess();
@@ -173,5 +194,33 @@ public class SessionAgentTest {
         authenticateSuccess();
 
         // channelInfo를 얻어올 수 있는 api가 없음
+    }
+
+    @Test
+    public void SetRemoveTimerToSession() throws IOException, TimeoutException {
+
+        authenticateSuccess();
+
+        String message = "SetTimer";
+        try{
+            //SetTimer 를 보낼 경우 SampleSessionNodeAgent에 Timer가 동작.
+            session.sendToSession(new Packet(Sample.SetTimer.newBuilder().setInterval(1).setMessage(message)));
+            Packet packet = session.waitPacket(2, TimeUnit.SECONDS, Sample.SampleToC.class);
+            Sample.SampleToC msg = Sample.SampleToC.parseFrom(packet.getStream());
+            assertEquals(msg.getMessage(), message);
+        } catch(Exception e){
+            fail(e.toString());
+        }
+
+        try{
+            //RemoveTimer 를 보낼 경우 SampleSessionNodeAgent에 Timer가 해제.
+            session.sendToSession(new Packet(Sample.RemoveTimer.newBuilder()));
+            session.waitPacket(2, TimeUnit.SECONDS, Sample.SampleToC.class);
+            fail("RemoveTimer fail");
+        }catch(TimeoutException e){
+            // Timer가 해제 되었기 때문에 SampleToC가 오지 않는다.
+        }catch(Exception e){
+            fail(e.toString());
+        }
     }
 }

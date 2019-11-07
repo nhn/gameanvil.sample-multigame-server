@@ -11,8 +11,10 @@ import com.nhnent.tardis.console.session.SessionAgent;
 import com.nhnent.tardis.sample.protocol.Sample;
 import com.nhnent.tardis.sample.Defines.Messages;
 import com.nhnent.tardis.sample.session.handlers.SessionAgentBeforeAuthenticateReqHandler;
+import com.nhnent.tardis.sample.session.handlers.SessionAgentRemoveTimerPacketHandler;
 import com.nhnent.tardis.sample.session.handlers.SessionAgentSampleReqPacketHandler;
 import com.nhnent.tardis.sample.session.handlers.SessionAgentSampleToSPacketHandler;
+import com.nhnent.tardis.sample.session.handlers.SessionAgentSetTimerPacketHandler;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,10 +27,11 @@ public class SampleSessionAgent extends SessionAgent implements ISession<SampleS
     private static PacketDispatcher dispatcher = new PacketDispatcher();
 
     static {
-        dispatcher.registerMsg(Sample.BeforeAuthenticateReq.class,
-            SessionAgentBeforeAuthenticateReqHandler.class);
+        dispatcher.registerMsg(Sample.BeforeAuthenticateReq.class, SessionAgentBeforeAuthenticateReqHandler.class);
         dispatcher.registerMsg(Sample.SampleReq.class, SessionAgentSampleReqPacketHandler.class);
         dispatcher.registerMsg(Sample.SampleToS.class, SessionAgentSampleToSPacketHandler.class);
+        dispatcher.registerMsg(Sample.SetTimer.class, SessionAgentSetTimerPacketHandler.class);
+        dispatcher.registerMsg(Sample.RemoveTimer.class, SessionAgentRemoveTimerPacketHandler.class);
     }
 
     private Logger logger = LoggerFactory.getLogger(getClass());
@@ -73,6 +76,9 @@ public class SampleSessionAgent extends SessionAgent implements ISession<SampleS
                     logger.error(ExceptionUtils.getStackTrace(e));
                 }
             }
+
+            SampleSessionNodeAgent nodeAgent = SampleSessionNodeAgent.getInstance();
+            nodeAgent.addSampleSessionAgent(this);
 
             return true;
         } else {
@@ -125,5 +131,7 @@ public class SampleSessionAgent extends SessionAgent implements ISession<SampleS
     @Override
     public void onDisconnect() throws SuspendExecution {
         logger.info("SampleSessionAgent.onDisconnect");
+        SampleSessionNodeAgent nodeAgent = SampleSessionNodeAgent.getInstance();
+        nodeAgent.removeSampleSessionAgent(this);
     }
 }

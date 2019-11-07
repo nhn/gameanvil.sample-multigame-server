@@ -57,12 +57,9 @@ message BeforeAuthenticateRes
 message SetTimer
 {
     int32 interval = 1;
-    int32 repeatCount = 2;
-    string timerId = 3;
-    string message = 4;
+    string message = 2;
 }
 
 message RemoveTimer
 {
-    string timerId = 1;
 }
