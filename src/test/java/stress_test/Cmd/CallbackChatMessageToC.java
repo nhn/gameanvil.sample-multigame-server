@@ -1,5 +1,7 @@
 package stress_test.Cmd;
 
+import static org.junit.Assert.fail;
+
 import com.nhnent.tardis.connector.callback.parent.IDispatchPacket;
 import com.nhnent.tardis.connector.callback.parent.IDispatchTimer;
 import com.nhnent.tardis.connector.protocol.Packet;
@@ -20,6 +22,7 @@ public class CallbackChatMessageToC implements IDispatchPacket<SampleUserClass> 
             messageToC = Sample.ChatMessageToC.parseFrom(packet.getStream());
         } catch (IOException e) {
             e.printStackTrace();
+            fail(e.toString());
             return;
         }
 

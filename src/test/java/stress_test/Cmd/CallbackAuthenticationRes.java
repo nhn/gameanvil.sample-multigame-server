@@ -28,13 +28,8 @@ public class CallbackAuthenticationRes implements IDispatchPacket<SampleUserClas
         //응답확인
         AuthenticationResult result = user.parseAuthenticationResult(packet);
         assertTrue(result.isSuccess());
-
-        try {
-            //user.login(Stress.UserType, getChannel());
-            user.login(Stress.UserType, "1");
-        } catch (Exception e) {
-            logger.error(ExceptionUtils.getStackTrace(e));
-        }
+        //user.login(Stress.UserType, getChannel());
+        user.login(Stress.UserType, "1");
     }
 
 }

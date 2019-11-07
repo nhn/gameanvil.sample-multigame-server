@@ -9,6 +9,7 @@ import stress_test.SampleUserClass;
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class CallbackRegisterNickName implements IDispatchPacket<SampleUserClass> {
 
@@ -20,6 +21,7 @@ public class CallbackRegisterNickName implements IDispatchPacket<SampleUserClass
             assertEquals(true, res.getIsSuccess());
         } catch (IOException e) {
             e.printStackTrace();
+            fail(e.toString());
             return;
         }
 
