@@ -25,6 +25,10 @@ import static org.junit.Assert.assertTrue;
 
 public class ChatTest {
 
+    public static String ServiceName = "ChatService";
+    public static String UserType = "ChatUser";
+    public static String RoomType = "ChatRoom";
+
     private static TardisConnector connector;
     private List<ConnectorUser> users = new ArrayList<>();
 
@@ -44,7 +48,7 @@ public class ChatTest {
         connector.addProtoBufClass(0, Sample.class);
 
         // 컨텐츠 서비스 등록.
-        connector.addService(0, "ChatService");
+        connector.addService(0, ServiceName);
     }
 
     //-------------------------------------------------------------------------------------
@@ -62,10 +66,10 @@ public class ChatTest {
             assertTrue("Authentication fail", authResult.isSuccess());
 
             // 세션에 유저를 등록하고, 각종 ID 정보가 담긴 유저 객체를 리턴.
-            ConnectorUser user = session.addUser("ChatService");
+            ConnectorUser user = session.addUser(ServiceName);
 
             // 로그인을 진행.
-            LoginResult loginResult = user.login("ChatUser", "1");
+            LoginResult loginResult = user.login(UserType, "1");
             assertTrue("Login fail", loginResult.isSuccess());
 
             // Test 단계에서 활용하도록 준비합니다.
@@ -105,13 +109,13 @@ public class ChatTest {
         registerNickName();
 
         // 채팅방 입장
-        NamedRoomResult namedRoomResult1 = doctor.namedRoom("ChatRoom","Gallifrey");
+        NamedRoomResult namedRoomResult1 = doctor.namedRoom(RoomType,"Gallifrey");
         assertTrue(namedRoomResult1.isSuccess());
 
         Sample.ChatMessageToC doctorJoinMsg = doctor.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
         assertTrue(doctorJoinMsg.getMessage().contains("join"));
 
-        NamedRoomResult namedRoomResult2 = dalek.namedRoom("ChatRoom","Gallifrey");
+        NamedRoomResult namedRoomResult2 = dalek.namedRoom(RoomType,"Gallifrey");
         assertTrue(namedRoomResult2.isSuccess());
 
         Sample.ChatMessageToC dalekJoinMsg = doctor.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);

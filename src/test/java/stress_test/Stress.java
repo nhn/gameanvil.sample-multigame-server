@@ -16,7 +16,7 @@ import java.util.concurrent.TimeoutException;
 
 public class Stress {
 
-    public static String ServiceId = "ChatService";
+    public static String ServiceName = "ChatService";
     public static String UserType = "ChatUser";
     public static String RoomType = "ChatRoom";
 
@@ -52,7 +52,7 @@ public class Stress {
         connector.addProtoBufClass(0, Sample.class);
 
         // 컨텐츠 서비스 등록.
-        connector.addService(0, "ChatService");
+        connector.addService(0, ServiceName);
 
         // 콜백 목록을 등록합니다.
         connector.addPacketCallbackAuthentication(new CallbackAuthenticationRes());
@@ -80,7 +80,7 @@ public class Stress {
             // 하나의 세션에 여러 유저를 등록할 수 있습니다.
 
             // 여기서는 커스텀 클래스를 지정하여, 등록한 콜백에서 쉽게 활용할 수 있도록 합니다.
-            SampleUserClass sampleUser = session.addUser(ServiceId, SampleUserClass.class);
+            SampleUserClass sampleUser = session.addUser(ServiceName, SampleUserClass.class);
         }
 
         //connector.repeatByEntire(/* ... */);

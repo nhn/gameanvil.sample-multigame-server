@@ -1,6 +1,11 @@
 package com.nhnent.tardis.sample.Defines;
 
-public class Messages {
+public class StringValues {
+    public static final String ChatServiceName = "ChatService";
+    public static final String ChatUserType = "ChatUser";
+    public static final String ChatRoomType = "ChatRoom";
+
     public static final String AuthenticatePayload = "Authenticate Payload Message";
     public static final String AuthenticateFail = "Account or password is incorrect";
+
 }

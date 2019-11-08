@@ -8,7 +8,7 @@ import com.nhnent.tardis.connector.protocol.result.LoginResult;
 import com.nhnent.tardis.connector.tcp.ConnectorSession;
 import com.nhnent.tardis.connector.tcp.ConnectorUser;
 import com.nhnent.tardis.connector.tcp.TardisConnector;
-import com.nhnent.tardis.sample.Defines.Messages;
+import com.nhnent.tardis.sample.Defines.StringValues;
 import com.nhnent.tardis.sample.protocol.Sample;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -23,6 +23,10 @@ import java.util.concurrent.TimeoutException;
 import static org.junit.Assert.*;
 
 public class SessionAgentTest {
+
+    public static String ServiceName = "ChatService";
+    public static String UserType = "ChatUser";
+    public static String RoomType = "ChatRoom";
 
     private static TardisConnector connector;
     private ConnectorSession session = null;
@@ -41,7 +45,7 @@ public class SessionAgentTest {
         connector.addProtoBufClass(0, Sample.class);
 
         // 컨텐츠 서비스 등록.
-        connector.addService(0, "ChatService");
+        connector.addService(0, ServiceName);
     }
 
     @Before
@@ -69,7 +73,7 @@ public class SessionAgentTest {
     public void authenticateSuccessWithPayload() throws IOException, TimeoutException {
         // payload를 보낼 경우, 보낸 값을 그대로 되돌려 받아야함.
         Sample.SampleData.Builder payloadSnd = Sample.SampleData.newBuilder();
-        payloadSnd.setMessage(Messages.AuthenticatePayload);
+        payloadSnd.setMessage(StringValues.AuthenticatePayload);
 
         AuthenticationResult authResult = session.authentication(session.getAccountId(), payloadSnd);
         assertTrue(authResult.isSuccess());
@@ -78,7 +82,7 @@ public class SessionAgentTest {
         if (null != packet) {
             try {
                 Sample.SampleData payloadRcv = Sample.SampleData.parseFrom(packet.getStream());
-                assertEquals(Messages.AuthenticatePayload, payloadRcv.getMessage());
+                assertEquals(StringValues.AuthenticatePayload, payloadRcv.getMessage());
             } catch (IOException e) {
                 fail(e.getMessage());
             }
@@ -97,7 +101,7 @@ public class SessionAgentTest {
             try {
                 // 실패일 경우 payload에 실패 메시지를 보냄
                 Sample.SampleData msg = Sample.SampleData.parseFrom(packet.getStream());
-                assertEquals(msg.getMessage(), Messages.AuthenticateFail);
+                assertEquals(msg.getMessage(), StringValues.AuthenticateFail);
             } catch (IOException e) {
                 fail(e.getMessage());
             }
@@ -158,8 +162,8 @@ public class SessionAgentTest {
     public void SampleReqToSessionUser() throws IOException, TimeoutException {
 
         authenticateSuccess();
-        ConnectorUser user = session.addUser("ChatService");
-        LoginResult result = user.login("ChatUser", "1");
+        ConnectorUser user = session.addUser(ServiceName);
+        LoginResult result = user.login(UserType, "1");
         assertTrue(result.isSuccess());
 
         String message = "SampleReqToSessionUser";
@@ -178,7 +182,7 @@ public class SessionAgentTest {
 
         authenticateSuccess();
 
-        ChannelListResult result = session.channelList("ChatService");
+        ChannelListResult result = session.channelList(ServiceName);
         assertTrue(result.isSuccess());
 
         // TardisConfig에 설정된 체널 정보는 ["1","1","1","1","1","1","1","1"]

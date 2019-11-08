@@ -8,8 +8,8 @@ import com.nhnent.tardis.console.PacketDispatcher;
 import com.nhnent.tardis.console.TardisIndexer;
 import com.nhnent.tardis.console.session.ISession;
 import com.nhnent.tardis.console.session.SessionAgent;
+import com.nhnent.tardis.sample.Defines.StringValues;
 import com.nhnent.tardis.sample.protocol.Sample;
-import com.nhnent.tardis.sample.Defines.Messages;
 import com.nhnent.tardis.sample.session.handlers.SessionAgentBeforeAuthenticateReqHandler;
 import com.nhnent.tardis.sample.session.handlers.SessionAgentRemoveTimerPacketHandler;
 import com.nhnent.tardis.sample.session.handlers.SessionAgentSampleReqPacketHandler;
@@ -88,7 +88,7 @@ public class SampleSessionAgent extends SessionAgent implements ISession<SampleS
 
             // client로 Packet 전달.
             Packet packetToClient = new Packet(
-                Sample.SampleData.newBuilder().setMessage(Messages.AuthenticateFail));
+                Sample.SampleData.newBuilder().setMessage(StringValues.AuthenticateFail));
             outPayload.add(packetToClient);
 
             return false;

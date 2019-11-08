@@ -1,6 +1,7 @@
 package com.nhnent.tardis.sample;
 
 import com.nhnent.tardis.console.TardisBootstrap;
+import com.nhnent.tardis.sample.Defines.StringValues;
 import com.nhnent.tardis.sample.protocol.Sample;
 import com.nhnent.tardis.sample.session.SampleSessionAgent;
 import com.nhnent.tardis.sample.session.SampleSessionNodeAgent;
@@ -23,10 +24,10 @@ public class Main {
                 .node(SampleSessionNodeAgent.class)
                 .enableWhiteModules();
 
-        bootstrap.setSpace("ChatService")
+        bootstrap.setSpace(StringValues.ChatServiceName)
                 .node(ChatNode.class)
-                .user("ChatUser",ChatUser.class)
-                .room("ChatRoom",ChatRoom.class);
+                .user(StringValues.ChatUserType, ChatUser.class)
+                .room(StringValues.ChatRoomType, ChatRoom.class);
 
         bootstrap.run();
     }
