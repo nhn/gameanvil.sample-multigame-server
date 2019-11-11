@@ -93,25 +93,30 @@ public class ChatTest {
 
     //-------------------------------------------------------------------------------------
 
-    @Test
-    public void registerNickName() throws IOException, TimeoutException {
+    void registerNickName(ConnectorUser user, String nickName) throws IOException, TimeoutException {
 
-        ConnectorUser doctor = users.get(0);
+        Sample.RegisterNickNameReq.Builder registerNickNameReq = Sample.RegisterNickNameReq.newBuilder().setNickName(nickName);
 
-        Sample.RegisterNickNameReq.Builder registerNickNameReq = Sample.RegisterNickNameReq.newBuilder().setNickName("doctor");
-
-        Sample.RegisterNickNameRes registerNickNameRes = doctor.requestProto(registerNickNameReq,Sample.RegisterNickNameRes.class);
+        Sample.RegisterNickNameRes registerNickNameRes = user.requestProto(registerNickNameReq,Sample.RegisterNickNameRes.class);
 
         assertTrue(registerNickNameRes.getIsSuccess());
     }
 
     @Test
-    public void helloTardis() throws TimeoutException, IOException, InterruptedException {
+    public void registerNickName() throws IOException, TimeoutException {
+
+        ConnectorUser doctor = users.get(0);
+        registerNickName(doctor, "doctor");
+    }
+
+    @Test
+    public void NamedRoomAndChat() throws TimeoutException, IOException, InterruptedException {
 
         ConnectorUser doctor = users.get(0);
         ConnectorUser dalek = users.get(1);
 
-        registerNickName();
+        registerNickName(doctor, "doctor");
+        registerNickName(dalek, "dalek");
 
         // 채팅방 입장
         NamedRoomResult namedRoomResult1 = doctor.namedRoom(RoomType,"Gallifrey");
@@ -134,7 +139,7 @@ public class ChatTest {
 
         // 다른 유저에게도 응답이 왔는지 확인.
         Sample.ChatMessageToC chatMessageToC = dalek.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
-        assertEquals("doctor : Hello Tardis!",chatMessageToC.getMessage());
+        assertEquals("[doctor] Hello Tardis!",chatMessageToC.getMessage());
     }
 
     @Test
@@ -143,7 +148,8 @@ public class ChatTest {
         ConnectorUser doctor = users.get(0);
         ConnectorUser dalek = users.get(1);
 
-        registerNickName();
+        registerNickName(doctor, "doctor");
+        registerNickName(dalek, "dalek");
 
         // 채팅방 입장
         MatchRoomResult matchRoomResult1 = doctor.matchRoom(RoomType);
@@ -166,7 +172,7 @@ public class ChatTest {
 
         // 다른 유저에게도 응답이 왔는지 확인.
         Sample.ChatMessageToC chatMessageToC = dalek.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
-        assertEquals("doctor : Hello Tardis!",chatMessageToC.getMessage());
+        assertEquals("[doctor] Hello Tardis!",chatMessageToC.getMessage());
     }
 
     @Test
@@ -175,7 +181,8 @@ public class ChatTest {
         ConnectorUser doctor = users.get(0);
         ConnectorUser dalek = users.get(1);
 
-        registerNickName();
+        registerNickName(doctor, "doctor");
+        registerNickName(dalek, "dalek");
 
         // 채팅방 입장
         MatchUserStartResult matchUserStartResult1 = doctor.matchUserStart(RoomType);
@@ -198,7 +205,7 @@ public class ChatTest {
 
         // 다른 유저에게도 응답이 왔는지 확인.
         Sample.ChatMessageToC chatMessageToC = dalek.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
-        assertEquals("doctor : Hello Tardis!",chatMessageToC.getMessage());
+        assertEquals("[doctor] Hello Tardis!",chatMessageToC.getMessage());
     }
 
     @Test
@@ -207,7 +214,8 @@ public class ChatTest {
         ConnectorUser doctor = users.get(0);
         ConnectorUser dalek = users.get(1);
 
-        registerNickName();
+        registerNickName(doctor, "doctor");
+        registerNickName(dalek, "dalek");
 
         // 채팅방 입장
         MatchUserStartResult matchUserStartResult1 = doctor.matchUserStart(RoomType);
@@ -246,7 +254,7 @@ public class ChatTest {
 
         // 다른 유저에게도 응답이 왔는지 확인.
         Sample.ChatMessageToC chatMessageToC = dalek.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
-        assertEquals("doctor : Hello Tardis!",chatMessageToC.getMessage());
+        assertEquals("[doctor] Hello Tardis!",chatMessageToC.getMessage());
     }
 
     @Test
@@ -255,7 +263,8 @@ public class ChatTest {
         ConnectorUser doctor = users.get(0);
         ConnectorUser dalek = users.get(1);
 
-        registerNickName();
+        registerNickName(doctor, "doctor");
+        registerNickName(dalek, "dalek");
 
         // 채팅방 입장
         MatchUserStartResult matchUserStartResult1 = doctor.matchUserStart(RoomType);
