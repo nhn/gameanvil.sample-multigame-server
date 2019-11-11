@@ -22,7 +22,7 @@ public class CmdChatMessageToS implements IRoomPacketHandler<ChatRoom, ChatUser>
 
             // make.
             Sample.ChatMessageToC.Builder toClient = Sample.ChatMessageToC.newBuilder();
-            toClient.setMessage(chatUser.getNickName() + " : " + fromClient.getMessage());
+            toClient.setMessage("["+chatUser.getNickName() + "] " + fromClient.getMessage());
 
             // for send.
             for (ChatUser user : chatRoom.getUsers()) {

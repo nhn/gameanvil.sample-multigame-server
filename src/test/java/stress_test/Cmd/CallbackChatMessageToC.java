@@ -7,13 +7,15 @@ import com.nhnent.tardis.connector.callback.parent.IDispatchTimer;
 import com.nhnent.tardis.connector.protocol.Packet;
 import com.nhnent.tardis.connector.tcp.agent.parent.ITimerTask;
 import com.nhnent.tardis.sample.protocol.Sample;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import stress_test.SampleUserClass;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 public class CallbackChatMessageToC implements IDispatchPacket<SampleUserClass> {
-
+    private Logger logger = LoggerFactory.getLogger(getClass());
     @Override
     public void dispatch(Packet packet, SampleUserClass user) {
 
@@ -26,7 +28,8 @@ public class CallbackChatMessageToC implements IDispatchPacket<SampleUserClass> 
             return;
         }
 
-        if(messageToC.getMessage().contains(user.getUserId())){
+        if(messageToC.getMessage().contains("[" + user.getUserId() + "]") &&
+            messageToC.getMessage().contains("Geronimo!!!")){
 
             if(user.getSendCount() < 3){
                 user.incSendCount();
@@ -34,8 +37,11 @@ public class CallbackChatMessageToC implements IDispatchPacket<SampleUserClass> 
                 // 타이머를 등록하여 무언가 작동하도록 해봅니다.
                 user.addTimer(10, TimeUnit.MILLISECONDS, 1, new ChatTimer(), user); // 시간 간격, 호출 횟수를 지정.
 
-            }else{
+            }else if(user.getSendCount() == 3){
+                user.incSendCount();
                 user.leaveRoom();
+            }else{
+                fail(user.getUserId() + " SendCount is over 3 : " + user.getSendCount());
             }
         }
     }
