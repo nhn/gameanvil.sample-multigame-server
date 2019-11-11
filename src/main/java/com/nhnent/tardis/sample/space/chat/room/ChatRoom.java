@@ -1,8 +1,11 @@
 package com.nhnent.tardis.sample.space.chat.room;
 
 import co.paralleluniverse.fibers.SuspendExecution;
+import com.google.protobuf.Message;
 import com.nhnent.tardis.console.TardisIndexer;
 import com.nhnent.tardis.sample.protocol.Sample;
+import com.nhnent.tardis.sample.space.chat.match.ChatRoomMatchInfo;
+import com.nhnent.tardis.sample.space.chat.match.ChatUserMatchInfo;
 import com.nhnent.tardis.sample.space.chat.user.ChatUser;
 import com.nhnent.tardis.common.Packet;
 import com.nhnent.tardis.common.Payload;
@@ -15,20 +18,22 @@ import com.nhnent.tardis.console.space.RoomPacketDispatcher;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ChatRoom extends RoomAgent implements IRoom<ChatUser>, ITimerHandler {
     private Logger logger = LoggerFactory.getLogger(getClass());
-    private static RoomPacketDispatcher dispatcher = new RoomPacketDispatcher();
 
+    private static RoomPacketDispatcher dispatcher = new RoomPacketDispatcher();
     static {
         dispatcher.registerMsg(Sample.ChatMessageToS.class, CmdChatMessageToS.class);
     }
 
+    private ChatRoomMatchInfo gameRoomMatchInfo = new ChatRoomMatchInfo();
+
     private Map<String, ChatUser> users = new HashMap<>();
 
-    //-------------------------------------------------------------------------
 
     @Override
     public void onInit() throws SuspendExecution {
@@ -50,45 +55,90 @@ public class ChatRoom extends RoomAgent implements IRoom<ChatUser>, ITimerHandle
     @Override
     public boolean onCreateRoom(ChatUser chatUser, Payload inPayload, Payload outPayload) throws SuspendExecution {
         logger.info("ChatRoom.onCreateRoom");
-        users.put(chatUser.getUserId(), chatUser);
+        try{
+            users.put(chatUser.getUserId(), chatUser);
 
-        String message = String.format("%s is join",chatUser.getNickName());
-        chatUser.send(new Packet(Sample.ChatMessageToC.newBuilder().setMessage(message)));
-        return true;
+            gameRoomMatchInfo.setRoomId(getId());
+            gameRoomMatchInfo.setUserCountCurr(users.size());
+            updateRoomMatchInfo(gameRoomMatchInfo);
+
+            String message = String.format("%s is join",chatUser.getNickName());
+            chatUser.send(new Packet(Sample.ChatMessageToC.newBuilder().setMessage(message)));
+            logger.info("ChatRoom.onCreateRoom - to {} : {}", chatUser.getNickName(), message);
+            return true;
+        }catch (Exception e){
+            logger.error(ExceptionUtils.getStackTrace(e));
+            return false;
+        }
     }
 
     @Override
     public boolean onJoinRoom(ChatUser chatUser, Payload inPayload, Payload outPayload) throws SuspendExecution {
         logger.info("ChatRoom.onJoinRoom");
-        users.put(chatUser.getUserId(), chatUser);
+        try{
+            users.put(chatUser.getUserId(), chatUser);
+            gameRoomMatchInfo.setUserCountCurr(users.size());
+            updateRoomMatchInfo(gameRoomMatchInfo);
 
-        String message = String.format("%s is join",chatUser.getNickName());
-        for(ChatUser user:users.values()){
-            user.send(new Packet(Sample.ChatMessageToC.newBuilder().setMessage(message)));
+            String message = String.format("%s is join",chatUser.getNickName());
+            for(ChatUser user:users.values()){
+                user.send(new Packet(Sample.ChatMessageToC.newBuilder().setMessage(message)));
+                logger.info("ChatRoom.onJoinRoom - to {} : {}",user.getNickName(), message);
+            }
+
+            return true;
+        }catch (Exception e){
+            users.remove(chatUser.getUserId());
+            gameRoomMatchInfo.setUserCountCurr(users.size());
+            logger.error(ExceptionUtils.getStackTrace(e));
+            return false;
         }
-        return true;
     }
 
     @Override
     public boolean onLeaveRoom(ChatUser chatUser, Payload inPayload, Payload outPayload) throws SuspendExecution {
         logger.info("ChatRoom.onLeaveRoom");
-        String message = String.format("%s is leave",chatUser.getNickName());
-        for(ChatUser user:users.values()){
-            user.send(new Packet(Sample.ChatMessageToC.newBuilder().setMessage(message)));
+        try{
+            users.remove(chatUser.getUserId());
+            gameRoomMatchInfo.setUserCountCurr(users.size());
+            updateRoomMatchInfo(gameRoomMatchInfo);
+
+            // MatchUser로 생성된 방인경우 matchRefill()을 사용해 결원을 채울 수 있음.
+            if (isMadeByUserMatchMaker()) {
+
+                try {
+                    // Refill() 정보 등록
+                    if (!matchRefill(new ChatUserMatchInfo("Refill", 100))) {
+                        logger.warn("MatchRefill for the room({}) failure!", getId());
+                    }
+                } catch (Exception e) {
+                    logger.error(ExceptionUtils.getStackTrace(e));
+                }
+            }
+            return true;
+        }catch(Exception e){
+            users.put(chatUser.getUserId(), chatUser);
+            gameRoomMatchInfo.setUserCountCurr(users.size());
+            return false;
         }
-        return true;
     }
 
     @Override
     public void onPostLeaveRoom(ChatUser chatUser) throws SuspendExecution {
         logger.info("ChatRoom.onPostLeaveRoom");
-        users.remove(chatUser.getUserId());
+        String message = String.format("%s is leave",chatUser.getNickName());
+        for(ChatUser user:users.values()){
+            user.send(new Packet(Sample.ChatMessageToC.newBuilder().setMessage(message)));
+        }
     }
 
     @Override
     public void onRejoinRoom(ChatUser chatUser, Payload outPayload) throws SuspendExecution {
         logger.info("ChatRoom.onRejoinRoom");
-        users.put(chatUser.getUserId(), chatUser);
+        String message = String.format("%s is back",chatUser.getNickName());
+        for(ChatUser user:users.values()){
+            user.send(new Packet(Sample.ChatMessageToC.newBuilder().setMessage(message)));
+        }
     }
 
     @Override

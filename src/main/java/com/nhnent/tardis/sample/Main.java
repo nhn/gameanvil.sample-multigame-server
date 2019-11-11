@@ -7,6 +7,10 @@ import com.nhnent.tardis.sample.session.SampleSessionAgent;
 import com.nhnent.tardis.sample.session.SampleSessionNodeAgent;
 import com.nhnent.tardis.sample.session.SampleSessionUserAgent;
 import com.nhnent.tardis.sample.space.chat.ChatNode;
+import com.nhnent.tardis.sample.space.chat.match.ChatRoomMatchInfo;
+import com.nhnent.tardis.sample.space.chat.match.ChatRoomMatchMaker;
+import com.nhnent.tardis.sample.space.chat.match.ChatUserMatchInfo;
+import com.nhnent.tardis.sample.space.chat.match.ChatUserMatchMaker;
 import com.nhnent.tardis.sample.space.chat.room.ChatRoom;
 import com.nhnent.tardis.sample.space.chat.user.ChatUser;
 
@@ -27,7 +31,9 @@ public class Main {
         bootstrap.setSpace(StringValues.ChatServiceName)
                 .node(ChatNode.class)
                 .user(StringValues.ChatUserType, ChatUser.class)
-                .room(StringValues.ChatRoomType, ChatRoom.class);
+                .room(StringValues.ChatRoomType, ChatRoom.class)
+                .roomMatchMaker(StringValues.ChatRoomType, ChatRoomMatchMaker.class, ChatRoomMatchInfo.class)
+                .userMatchMaker(StringValues.ChatRoomType, ChatUserMatchMaker.class, ChatUserMatchInfo.class);
 
         bootstrap.run();
     }
