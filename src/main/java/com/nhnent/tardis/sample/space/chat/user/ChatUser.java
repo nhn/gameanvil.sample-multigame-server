@@ -1,6 +1,7 @@
 package com.nhnent.tardis.sample.space.chat.user;
 
 import co.paralleluniverse.fibers.SuspendExecution;
+import com.nhnent.tardis.common.Exceptions.NodeNotFoundException;
 import com.nhnent.tardis.common.Packet;
 import com.nhnent.tardis.common.Payload;
 import com.nhnent.tardis.common.internal.ITimerHandler;
@@ -58,6 +59,15 @@ public class ChatUser extends UserAgent implements IUser, ITimerHandler {
     @Override
     public void onDisconnect() throws SuspendExecution {
         logger.info("ChatUser.onDisconnect");
+
+        try {
+            String message = "["+getNickName()+"] is disconnected.";
+            this.sendToRoom(getServiceId(), getRoomId(), new Packet(Sample.ChatMessageToS.newBuilder().setMessage(message)));
+        } catch (NodeNotFoundException e) {
+            e.printStackTrace();
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

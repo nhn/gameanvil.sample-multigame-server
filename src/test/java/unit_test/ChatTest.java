@@ -10,6 +10,7 @@ import com.nhnent.tardis.connector.protocol.result.MatchRoomResult;
 import com.nhnent.tardis.connector.protocol.result.MatchUserCancelResult;
 import com.nhnent.tardis.connector.protocol.result.MatchUserStartResult;
 import com.nhnent.tardis.connector.protocol.result.NamedRoomResult;
+import com.nhnent.tardis.connector.protocol.result.ReconnectResult;
 import com.nhnent.tardis.connector.tcp.ConnectorSession;
 import com.nhnent.tardis.connector.tcp.ConnectorUser;
 import com.nhnent.tardis.connector.tcp.TardisConnector;
@@ -173,6 +174,43 @@ public class ChatTest {
         // 다른 유저에게도 응답이 왔는지 확인.
         Sample.ChatMessageToC chatMessageToC = dalek.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
         assertEquals("[doctor] Hello Tardis!",chatMessageToC.getMessage());
+    }
+
+    @Test
+    public void MatchRoomAndDisconnect() throws TimeoutException, IOException, InterruptedException {
+
+        ConnectorUser doctor = users.get(0);
+        ConnectorUser dalek = users.get(1);
+
+        registerNickName(doctor, "doctor");
+        registerNickName(dalek, "dalek");
+
+        // 채팅방 입장
+        MatchRoomResult matchRoomResult1 = doctor.matchRoom(RoomType);
+        assertTrue(matchRoomResult1.isSuccess());
+
+        Sample.ChatMessageToC doctorJoinMsg = doctor.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
+        assertTrue(doctorJoinMsg.getMessage().contains("join"));
+
+        MatchRoomResult matchRoomResult2 = dalek.matchRoom(RoomType);
+        assertTrue(matchRoomResult2.isSuccess());
+
+        Sample.ChatMessageToC dalekJoinMsg = doctor.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
+        assertTrue(dalekJoinMsg.getMessage().contains("join"));
+
+        Sample.ChatMessageToC doctorGetDalekJoinMsg = dalek.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
+        assertTrue(doctorGetDalekJoinMsg.getMessage().contains("join"));
+
+        String accountId = doctor.getSession().getAccountId();
+        String deviceId = doctor.getSession().getDeviceId();
+        doctor.getSession().disconnect();
+
+        // TearDown에서 제외하기 위해 users에서 제외
+        users.remove(doctor);
+
+        // 다른 유저에게도 응답이 왔는지 확인.
+        Sample.ChatMessageToC chatMessageToC = dalek.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
+        assertEquals("[doctor] is disconnected.",chatMessageToC.getMessage());
     }
 
     @Test
