@@ -31,6 +31,8 @@ public class Stress {
         // 테스트 하려는 서버의 IP 와 Port 를 지정합니다.
         Config.addRemoteInfo("127.0.0.1", 11200);
 
+        Config.SHOW_UI = true;
+
         // 패킷 수신에 대한 타임아웃 시간을 지정합니다. (밀리초)
         Config.WAIT_RECV_TIMEOUT_MSEC = 3000; // [default 3000]
 
@@ -63,6 +65,8 @@ public class Stress {
         connector.addPacketCallback(Sample.ChatMessageToC.class,new CallbackChatMessageToC());
         connector.addPacketCallbackLeaveRoom(new CallbackLeaveRoomRes(), 10); // 해당 콜백을 딜레이 시켜서 호출하고자 할 경우 파라미터로 옵션값을 지정할 수 있습니다.
         connector.addPacketCallbackLogout(new CallbackLogout());
+
+        connector.addPacketTimeoutCallback(new SampleTimeout());
     }
 
     //-------------------------------------------------------------------------------------

@@ -21,6 +21,18 @@
     // 고유한 shard의 총 개수 (master 샤드의 개수) = clusterSize x shardFactor
   },
 
+  "match": {
+    "nodeCnt": 1,
+
+    "scaleOutLimit": { // OPTINAL
+      "cycleSec": 300,		// 평균값을 측정하기 위한 주기
+      "cpuPct": 90, 		// 프로세스의 CPU 사용량이 이 값을 초과할 경우
+      "queueSize": 500000,	// UserMatchMaker의 평균 매칭큐 사이즈가 50만개를 초과할 경우
+      "roomSize": 1000000,	// RoomMatchMaker의 평균 전체방의 개수가 100만개를 초과할 경우
+      "cpuWarningPct": 75 // 프로세스의 CPU 사용량이 이 값을 초과할 경우 워닝 로그를 출력
+    }
+  },
+
   //-------------------------------------------------------------------------------------
   // 클라이언트와의 커넥션을 관리하는 노드.
   "session": {
@@ -51,8 +63,8 @@
     },
 
     "duplicateLoginServices": {
-//      "RPSGame": ["GroupChatting"],
-//      "GroupChatting": ["RPSGame"]
+      //      "RPSGame": ["GroupChatting"],
+      //      "GroupChatting": ["RPSGame"]
     }
   },
 
@@ -64,8 +76,18 @@
       "nodeCnt": 8,
       "serviceId": 0,
       "serviceName": "ChatService",
-      "channelIDs": ["1","1","1","1","1","1","1","1"], // 노드마다 부여할 채널 ID. (유니크하지 않아도 됨. "" 문자열로 채널 구분없이 중복사용도 가능)
+      "channelIDs": ["1","2","3","4","1","2","3","4"], // 노드마다 부여할 채널 ID. (유니크하지 않아도 됨. "" 문자열로 채널 구분없이 중복사용도 가능)
       "userTimeout": 5000 // disconnect 이후의 유저객체 제거 타임아웃.
+    }
+  ],
+
+  "service": [
+    {
+      "nodeCnt": 1,
+      "serviceId": 10,
+      "serviceName": "SampleService",
+      "restIp": "127.0.0.1",
+      "restPort": 17260
     }
   ],
 
