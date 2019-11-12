@@ -3,6 +3,7 @@ package com.nhnent.tardis.sample;
 import com.nhnent.tardis.console.TardisBootstrap;
 import com.nhnent.tardis.sample.Defines.StringValues;
 import com.nhnent.tardis.sample.protocol.Sample;
+import com.nhnent.tardis.sample.service.SampleServiceNodeAgent;
 import com.nhnent.tardis.sample.session.SampleSessionAgent;
 import com.nhnent.tardis.sample.session.SampleSessionNodeAgent;
 import com.nhnent.tardis.sample.session.SampleSessionUserAgent;
@@ -35,6 +36,8 @@ public class Main {
                 .roomMatchMaker(StringValues.ChatRoomType, ChatRoomMatchMaker.class, ChatRoomMatchInfo.class)
                 .userMatchMaker(StringValues.ChatRoomType, ChatUserMatchMaker.class, ChatUserMatchInfo.class);
 
+        bootstrap.setService(StringValues.SampleServiceName)
+            .node(SampleServiceNodeAgent.class);
         bootstrap.run();
     }
 
