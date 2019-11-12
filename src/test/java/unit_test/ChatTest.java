@@ -27,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 public class ChatTest {
@@ -62,7 +63,7 @@ public class ChatTest {
     @Before
     public void setUp() throws TimeoutException {
 
-        for (int i=0; i<2; ++i) {
+        for (int i=0; i<4; ++i) {
 
             // 커넥션을 생성하고 세션 정보가 담긴 객체를 리턴.
             ConnectorSession session = connector.addSession(connector.getIncrementedValue("account_"), connector.makeUniqueId());
@@ -75,7 +76,7 @@ public class ChatTest {
             ConnectorUser user = session.addUser(ServiceName);
 
             // 로그인을 진행.
-            LoginResult loginResult = user.login(UserType, "1");
+            LoginResult loginResult = user.login(UserType, String.valueOf(i+1));
             assertTrue("Login fail", loginResult.isSuccess());
 
             // Test 단계에서 활용하도록 준비합니다.
@@ -124,16 +125,16 @@ public class ChatTest {
         assertTrue(namedRoomResult1.isSuccess());
 
         Sample.ChatMessageToC doctorJoinMsg = doctor.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
-        assertTrue(doctorJoinMsg.getMessage().contains("join"));
+        assertEquals("doctor create room", doctorJoinMsg.getMessage());
 
         NamedRoomResult namedRoomResult2 = dalek.namedRoom(RoomType,"Gallifrey");
         assertTrue(namedRoomResult2.isSuccess());
 
-        Sample.ChatMessageToC dalekJoinMsg = doctor.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
-        assertTrue(dalekJoinMsg.getMessage().contains("join"));
+        Sample.ChatMessageToC doctorGetDalekJoinMsg = doctor.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
+        assertEquals("dalek is join", doctorGetDalekJoinMsg.getMessage());
 
-        Sample.ChatMessageToC doctorGetDalekJoinMsg = dalek.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
-        assertTrue(doctorGetDalekJoinMsg.getMessage().contains("join"));
+        Sample.ChatMessageToC dalekJoinMsg = dalek.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
+        assertEquals("dalek is join", dalekJoinMsg.getMessage());
 
         // 채팅 메시지 전송.
         doctor.send(new Packet(Sample.ChatMessageToS.newBuilder().setMessage("Hello Tardis!")));
@@ -157,16 +158,16 @@ public class ChatTest {
         assertTrue(matchRoomResult1.isSuccess());
 
         Sample.ChatMessageToC doctorJoinMsg = doctor.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
-        assertTrue(doctorJoinMsg.getMessage().contains("join"));
+        assertEquals("doctor create room", doctorJoinMsg.getMessage());
 
         MatchRoomResult matchRoomResult2 = dalek.matchRoom(RoomType);
         assertTrue(matchRoomResult2.isSuccess());
 
-        Sample.ChatMessageToC dalekJoinMsg = doctor.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
-        assertTrue(dalekJoinMsg.getMessage().contains("join"));
+        Sample.ChatMessageToC doctorGetDalekJoinMsg = doctor.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
+        assertEquals("dalek is join", doctorGetDalekJoinMsg.getMessage());
 
-        Sample.ChatMessageToC doctorGetDalekJoinMsg = dalek.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
-        assertTrue(doctorGetDalekJoinMsg.getMessage().contains("join"));
+        Sample.ChatMessageToC dalekJoinMsg = dalek.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
+        assertEquals("dalek is join", dalekJoinMsg.getMessage());
 
         // 채팅 메시지 전송.
         doctor.send(new Packet(Sample.ChatMessageToS.newBuilder().setMessage("Hello Tardis!")));
@@ -190,16 +191,16 @@ public class ChatTest {
         assertTrue(matchRoomResult1.isSuccess());
 
         Sample.ChatMessageToC doctorJoinMsg = doctor.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
-        assertTrue(doctorJoinMsg.getMessage().contains("join"));
+        assertEquals("doctor create room", doctorJoinMsg.getMessage());
 
         MatchRoomResult matchRoomResult2 = dalek.matchRoom(RoomType);
         assertTrue(matchRoomResult2.isSuccess());
 
-        Sample.ChatMessageToC dalekJoinMsg = doctor.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
-        assertTrue(dalekJoinMsg.getMessage().contains("join"));
+        Sample.ChatMessageToC doctorGetDalekJoinMsg = doctor.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
+        assertEquals("dalek is join", doctorGetDalekJoinMsg.getMessage());
 
-        Sample.ChatMessageToC doctorGetDalekJoinMsg = dalek.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
-        assertTrue(doctorGetDalekJoinMsg.getMessage().contains("join"));
+        Sample.ChatMessageToC  dalekJoinMsg = dalek.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
+        assertEquals("dalek is join", dalekJoinMsg.getMessage());
 
         String accountId = doctor.getSession().getAccountId();
         String deviceId = doctor.getSession().getDeviceId();
@@ -229,14 +230,16 @@ public class ChatTest {
         MatchUserStartResult matchUserStartResult2 = dalek.matchUserStart(RoomType);
         assertTrue(matchUserStartResult2.isSuccess());
 
-        Base.MatchUserDone matchUserDone1 = doctor.waitProtoPacket(5, TimeUnit.SECONDS, Base.MatchUserDone.class);
-        Base.MatchUserDone matchUserDone2 = dalek.waitProtoPacket(5, TimeUnit.SECONDS, Base.MatchUserDone.class);
+        //Base.MatchUserDone matchUserDone1 = doctor.waitProtoPacket(5, TimeUnit.SECONDS, Base.MatchUserDone.class);
+        Sample.ChatMessageToC doctorJoinMsg = doctor.waitProtoPacket(5, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
+        assertEquals("doctor create room", doctorJoinMsg.getMessage());
 
-        Sample.ChatMessageToC dalekJoinMsg = doctor.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
-        assertTrue(dalekJoinMsg.getMessage().contains("join"));
+        //Base.MatchUserDone matchUserDone2 = dalek.waitProtoPacket(5, TimeUnit.SECONDS, Base.MatchUserDone.class);
+        doctorJoinMsg = doctor.waitProtoPacket(5, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
+        assertEquals("dalek is join", doctorJoinMsg.getMessage());
 
-        Sample.ChatMessageToC doctorGetDalekJoinMsg = dalek.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
-        assertTrue(doctorGetDalekJoinMsg.getMessage().contains("join"));
+        Sample.ChatMessageToC dalekJoinMsg = dalek.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
+        assertEquals("dalek is join", doctorJoinMsg.getMessage());
 
         // 채팅 메시지 전송.
         doctor.send(new Packet(Sample.ChatMessageToS.newBuilder().setMessage("Hello Tardis!")));
@@ -262,17 +265,16 @@ public class ChatTest {
         MatchUserStartResult matchUserStartResult2 = dalek.matchUserStart(RoomType);
         assertTrue(matchUserStartResult2.isSuccess());
 
-        Base.MatchUserDone matchUserDone1 = doctor.waitProtoPacket(5, TimeUnit.SECONDS, Base.MatchUserDone.class);
-        Sample.ChatMessageToC dalekJoinMsg = doctor.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
-        assertTrue(dalekJoinMsg.getMessage().contains("join"));
+        Base.MatchUserDone matchUserDone1 = doctor.waitProtoPacket(10, TimeUnit.SECONDS, Base.MatchUserDone.class);
+        Sample.ChatMessageToC doctorJoinMsg = doctor.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
+        assertEquals("doctor create room", doctorJoinMsg.getMessage());
 
         Base.MatchUserDone matchUserDone2 = dalek.waitProtoPacket(1, TimeUnit.SECONDS, Base.MatchUserDone.class);
+        Sample.ChatMessageToC doctorGetDalekJoinMsg = doctor.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
+        assertEquals("dalek is join", doctorGetDalekJoinMsg.getMessage());
 
-        dalekJoinMsg = doctor.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
-        assertTrue(dalekJoinMsg.getMessage().contains("join"));
-
-        Sample.ChatMessageToC doctorGetDalekJoinMsg = dalek.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
-        assertTrue(doctorGetDalekJoinMsg.getMessage().contains("join"));
+        Sample.ChatMessageToC dalekJoinMsg = dalek.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
+        assertEquals("dalek is join", dalekJoinMsg.getMessage());
 
         LeaveRoomResult leaveRoomResult = dalek.leaveRoom();
         assertTrue(leaveRoomResult.isSuccess());
@@ -282,10 +284,10 @@ public class ChatTest {
 
         Base.MatchUserDone matchUserDone3 = dalek.waitProtoPacket(5, TimeUnit.SECONDS, Base.MatchUserDone.class);
         dalekJoinMsg = doctor.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
-        assertTrue(dalekJoinMsg.getMessage().contains("join"));
+        assertEquals("dalek is join", dalekJoinMsg.getMessage());
 
         doctorGetDalekJoinMsg = dalek.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
-        assertTrue(doctorGetDalekJoinMsg.getMessage().contains("join"));
+        assertEquals("dalek is join", doctorGetDalekJoinMsg.getMessage());
 
         // 채팅 메시지 전송.
         doctor.send(new Packet(Sample.ChatMessageToS.newBuilder().setMessage("Hello Tardis!")));
@@ -315,6 +317,29 @@ public class ChatTest {
         assertTrue(matchUserCancelResult.isSuccess());
 
         Base.MatchUserTimeout matchUserTimeout = doctor.waitProtoPacket(6, TimeUnit.SECONDS, Base.MatchUserTimeout.class);
+    }
+
+    @Test
+    public void MessageFromServiceNodeAgent() throws TimeoutException, IOException, InterruptedException {
+
+        ConnectorUser doctor = users.get(0);
+        ConnectorUser dalek = users.get(1);
+        ConnectorUser bobby = users.get(2);
+        ConnectorUser jhone = users.get(3);
+
+        Sample.SampleToC sampleToC1 = doctor.waitProtoPacket(5, TimeUnit.SECONDS, Sample.SampleToC.class);
+        Sample.SampleToC sampleToC2 = dalek.waitProtoPacket(5, TimeUnit.SECONDS, Sample.SampleToC.class);
+        Sample.SampleToC sampleToC3 = bobby.waitProtoPacket(5, TimeUnit.SECONDS, Sample.SampleToC.class);
+        Sample.SampleToC sampleToC4 = jhone.waitProtoPacket(5, TimeUnit.SECONDS, Sample.SampleToC.class);
+
+        assertNotEquals(doctor.getChannelId(), dalek.getChannelId());
+        assertNotEquals(doctor.getChannelId(), bobby.getChannelId());
+        assertNotEquals(doctor.getChannelId(), jhone.getChannelId());
+
+
+        assertEquals(sampleToC1.getMessage(), sampleToC2.getMessage());
+        assertEquals(sampleToC1.getMessage(), sampleToC3.getMessage());
+        assertEquals(sampleToC1.getMessage(), sampleToC4.getMessage());
     }
 
 }
