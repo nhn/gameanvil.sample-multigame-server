@@ -62,7 +62,7 @@ public class ChatRoom extends RoomAgent implements IRoom<ChatUser>, ITimerHandle
             gameRoomMatchInfo.setUserCountCurr(users.size());
             updateRoomMatchInfo(gameRoomMatchInfo);
 
-            String message = String.format("%s is join",chatUser.getNickName());
+            String message = String.format("%s create room",chatUser.getNickName());
             chatUser.send(new Packet(Sample.ChatMessageToC.newBuilder().setMessage(message)));
             logger.info("ChatRoom.onCreateRoom - to {} : {}", chatUser.getNickName(), message);
             return true;
