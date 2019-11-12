@@ -15,9 +15,12 @@ import com.nhnent.tardis.console.space.MatchCancelReason;
 import com.nhnent.tardis.console.space.MatchRoomResult;
 import com.nhnent.tardis.console.space.RoomMode;
 import com.nhnent.tardis.console.space.UserAgent;
+import com.nhnent.tardis.sample.Defines.StringValues;
 import com.nhnent.tardis.sample.protocol.Sample;
 import com.nhnent.tardis.sample.space.chat.match.ChatRoomMatchInfo;
 import com.nhnent.tardis.sample.space.chat.match.ChatUserMatchInfo;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeoutException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
@@ -41,24 +44,25 @@ public class ChatUser extends UserAgent implements IUser, ITimerHandler {
 
     @Override
     public boolean onLogin(Payload payload, Payload payload1, Payload payload2) throws SuspendExecution {
-        logger.info("ChatUser.onLogin");
+        logger.info("ChatUser.onLogin : {}", getUserId());
+        addClientTopics(Arrays.asList(StringValues.ChatServiceName));
         return true;
     }
 
     @Override
     public void onPostLogin() throws SuspendExecution {
-        logger.info("ChatUser.onPostLogin");
+        logger.info("ChatUser.onPostLogin : {}", getUserId());
     }
 
     @Override
     public boolean onReLogin(Payload payload, Payload payload1, Payload payload2) throws SuspendExecution {
-        logger.info("ChatUser.onReLogin");
+        logger.info("ChatUser.onReLogin : {}", getUserId());
         return true;
     }
 
     @Override
     public void onDisconnect() throws SuspendExecution {
-        logger.info("ChatUser.onDisconnect");
+        logger.info("ChatUser.onDisconnect : {}", getUserId());
 
         try {
             String message = "["+getNickName()+"] is disconnected.";
@@ -72,29 +76,29 @@ public class ChatUser extends UserAgent implements IUser, ITimerHandler {
 
     @Override
     public void onDispatch(Packet packet) throws SuspendExecution {
-        logger.info("ChatUser.onDispatch : {}",
-            TardisIndexer.getMsgName(packet.getDescId(), packet.getMsgIndex()));
+        logger.info("ChatUser.onDispatch : {} , {}",
+            TardisIndexer.getMsgName(packet.getDescId(), packet.getMsgIndex()), getUserId());
         packetDispatcher.dispatch(this,packet);
     }
 
     @Override
     public void onPause(PauseType pauseType) throws SuspendExecution {
-        logger.info("ChatUser.onPause");
+        logger.info("ChatUser.onPause : {}", getUserId());
     }
 
     @Override
     public void onResume() throws SuspendExecution {
-        logger.info("ChatUser.onResume");
+        logger.info("ChatUser.onResume : {}", getUserId());
     }
 
     @Override
     public void onLogout(Payload payload, Payload outPayload) throws SuspendExecution {
-        logger.info("ChatUser.onLogout");
+        logger.info("ChatUser.onLogout : {}", getUserId());
     }
 
     @Override
     public boolean canLogout() throws SuspendExecution {
-        logger.info("ChatUser.canLogout");
+        logger.info("ChatUser.canLogout : {}", getUserId());
         return true;
     }
 
@@ -107,7 +111,7 @@ public class ChatUser extends UserAgent implements IUser, ITimerHandler {
      */
     @Override
     public MatchRoomResult onMatchRoom(final String roomType, final Payload payload) throws SuspendExecution {
-        logger.info("ChatUser.onMatchRoom");
+        logger.info("ChatUser.onMatchRoom : {}", getUserId());
         try {
 
             ChatRoomMatchInfo terms = new ChatRoomMatchInfo();
@@ -134,7 +138,7 @@ public class ChatUser extends UserAgent implements IUser, ITimerHandler {
      * @throws SuspendExecution
      */
     public boolean onMatchUser(final String roomType, final Payload payload, Payload outPayload) throws SuspendExecution {
-        logger.info("ChatUser.onMatchUser");
+        logger.info("ChatUser.onMatchUser : {}", getUserId());
         try {
 
             String matchingGroup = getMatchingGroup();
@@ -151,30 +155,30 @@ public class ChatUser extends UserAgent implements IUser, ITimerHandler {
     }
 
     public boolean onMatchUserCancel(final MatchCancelReason reason) throws SuspendExecution {
-        logger.info("ChatUser.onMatchUserCancel");
+        logger.info("ChatUser.onMatchUserCancel : {}", getUserId());
         return false;
     }
 
     @Override
     public boolean canTransfer() throws SuspendExecution {
-        logger.info("ChatUser.canTransfer");
+        logger.info("ChatUser.canTransfer : {}", getUserId());
         return false;
     }
 
     @Override
     public void onTimer(ITimerObject iTimerObject, Object o) throws SuspendExecution {
-        logger.info("ChatUser.onTimer");
+        logger.info("ChatUser.onTimer : {}", getUserId());
     }
 
     @Override
     public ByteBuffer onTransferOut() throws SuspendExecution {
-        logger.info("ChatUser.onTransferOut");
+        logger.info("ChatUser.onTransferOut : {}", getUserId());
         return KryoSerializer.write(nickName);
     }
 
     @Override
     public void onTransferIn(final InputStream inputStream) throws SuspendExecution {
-        logger.info("ChatUser.onTransferIn");
+        logger.info("ChatUser.onTransferIn : {}", getUserId());
         try {
             nickName = (String) KryoSerializer.read(inputStream);
         } catch (Exception e) {
