@@ -6,7 +6,7 @@ import java.io.Serializable;
 public class ChatRoomMatchInfo implements Serializable, IRoomMatchInfo, Comparable<ChatRoomMatchInfo> {
     private String roomId = "";
     private int userCountCurr = 0;
-    private int userCountMax = 4;
+    private int userCountMax = 2;
     public void setRoomId(String id){
         roomId = id;
     }

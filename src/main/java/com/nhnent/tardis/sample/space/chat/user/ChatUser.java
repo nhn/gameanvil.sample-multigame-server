@@ -64,14 +64,14 @@ public class ChatUser extends UserAgent implements IUser, ITimerHandler {
     public void onDisconnect() throws SuspendExecution {
         logger.info("ChatUser.onDisconnect : {}", getUserId());
 
-        try {
-            String message = "["+getNickName()+"] is disconnected.";
-            this.sendToRoom(getServiceId(), getRoomId(), new Packet(Sample.ChatMessageToS.newBuilder().setMessage(message)));
-        } catch (NodeNotFoundException e) {
-            e.printStackTrace();
-        } catch (TimeoutException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            String message = "["+getNickName()+"] is disconnected.";
+//            this.sendToRoom(getServiceId(), getRoomId(), new Packet(Sample.ChatMessageToS.newBuilder().setMessage(message)));
+//        } catch (NodeNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (TimeoutException e) {
+//            e.printStackTrace();
+//        }
     }
 
     @Override
@@ -141,7 +141,7 @@ public class ChatUser extends UserAgent implements IUser, ITimerHandler {
         logger.info("ChatUser.onMatchUser : {}", getUserId());
         try {
 
-            String matchingGroup = getMatchingGroup();
+            String matchingGroup = getServiceName();
             ChatUserMatchInfo term = new ChatUserMatchInfo(getUserId(), 100);
             return matchUser(matchingGroup, roomType, term, payload);
 

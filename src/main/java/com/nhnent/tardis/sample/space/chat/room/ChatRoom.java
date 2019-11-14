@@ -33,7 +33,7 @@ public class ChatRoom extends RoomAgent implements IRoom<ChatUser>, ITimerHandle
     private ChatRoomMatchInfo gameRoomMatchInfo = new ChatRoomMatchInfo();
 
     private Map<String, ChatUser> users = new HashMap<>();
-
+    private  boolean isRefill = false;
 
     @Override
     public void onInit() throws SuspendExecution {
@@ -62,9 +62,6 @@ public class ChatRoom extends RoomAgent implements IRoom<ChatUser>, ITimerHandle
             gameRoomMatchInfo.setUserCountCurr(users.size());
             updateRoomMatchInfo(gameRoomMatchInfo);
 
-            String message = String.format("%s create room",chatUser.getNickName());
-            chatUser.send(new Packet(Sample.ChatMessageToC.newBuilder().setMessage(message)));
-            logger.info("ChatRoom.onCreateRoom - to {} : {}", chatUser.getNickName(), message);
             return true;
         }catch (Exception e){
             logger.error(ExceptionUtils.getStackTrace(e));
@@ -80,10 +77,37 @@ public class ChatRoom extends RoomAgent implements IRoom<ChatUser>, ITimerHandle
             gameRoomMatchInfo.setUserCountCurr(users.size());
             updateRoomMatchInfo(gameRoomMatchInfo);
 
-            String message = String.format("%s is join",chatUser.getNickName());
-            for(ChatUser user:users.values()){
-                user.send(new Packet(Sample.ChatMessageToC.newBuilder().setMessage(message)));
-                logger.info("ChatRoom.onJoinRoom - to {} : {}",user.getNickName(), message);
+            if(isMadeByUserMatchMaker() && !isRefill){
+                logger.info("ChatRoom.onJoinRoom - userMatchMaking");
+                if(users.size() == gameRoomMatchInfo.getUserCountMax()){
+                    logger.info("ChatRoom.onJoinRoom - userMatchMaking completed");
+                    for(ChatUser user:users.values()) {
+                        String message = String.format("%s is join",user.getNickName());
+                        for(ChatUser to:users.values()){
+                            if(to.getUserId().equals(user.getUserId()))
+                                continue;
+
+                            to.send(new Packet(Sample.ChatMessageToC.newBuilder().setMessage(message)));
+                            logger.info("ChatRoom.onJoinRoom - to {} : {}",to.getNickName(), message);
+                        }
+                    }
+                }
+            }else{
+                logger.info("ChatRoom.onJoinRoom - roomMatchMaking");
+                String message = String.format("%s is join",chatUser.getNickName());
+                for(ChatUser user:users.values()){
+                    if(chatUser.getUserId().equals(user.getUserId()))
+                        continue;
+
+                    user.send(new Packet(Sample.ChatMessageToC.newBuilder().setMessage(message)));
+                    logger.info("ChatRoom.onJoinRoom - to {} : {}",user.getNickName(), message);
+                }
+
+                if(isRefill){
+                    if(users.size() == gameRoomMatchInfo.getUserCountMax()){
+                        isRefill = false;
+                    }
+                }
             }
 
             return true;
@@ -108,10 +132,13 @@ public class ChatRoom extends RoomAgent implements IRoom<ChatUser>, ITimerHandle
 
                 try {
                     // Refill() 정보 등록
+                    logger.info("ChatRoom.onLeaveRoom - refill");
+                    isRefill = true;
                     if (!matchRefill(new ChatUserMatchInfo("Refill", 100))) {
                         logger.warn("MatchRefill for the room({}) failure!", getId());
                     }
                 } catch (Exception e) {
+                    isRefill = false;
                     logger.error(ExceptionUtils.getStackTrace(e));
                 }
             }

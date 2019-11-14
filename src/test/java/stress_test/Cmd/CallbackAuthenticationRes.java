@@ -15,7 +15,7 @@ import static org.junit.Assert.assertTrue;
 public class CallbackAuthenticationRes implements IDispatchPacket<SampleUserClass> {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
-    private static AtomicInteger channel = new AtomicInteger(1);
+    private static AtomicInteger channel = new AtomicInteger();
     private static String getChannel(){
         return String.valueOf((channel.getAndIncrement() % 4) + 1);
     }

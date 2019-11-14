@@ -19,6 +19,7 @@ public class ChatUserMatchMaker extends UserMatchMaker<ChatUserMatchInfo> {
 
     @Override
     public void match() {
+        logger.info("ChatUserMatchMaker.match()");
         // matchSize : 매치될 Room 인원 수
         // leastAmount : 매칭 계산에 필요한 인원 수.
         int leastAmount = matchSize * currentMatchPoolFactor;
@@ -36,8 +37,7 @@ public class ChatUserMatchMaker extends UserMatchMaker<ChatUserMatchInfo> {
 
         int matchingAmount = matchSingles(matchRequests);
         if (matchingAmount > 0) {
-            logger.info("{} match(s) made", matchingAmount);
-
+            logger.info("ChatUserMatchMaker.match() - {} match(s) made", matchingAmount);
             lastMatchTime = System.currentTimeMillis();
             currentMatchPoolFactor = matchPoolFactorMax;
         }
@@ -45,6 +45,7 @@ public class ChatUserMatchMaker extends UserMatchMaker<ChatUserMatchInfo> {
 
     @Override
     public boolean refill(ChatUserMatchInfo req) {
+        logger.info("ChatUserMatchMaker.refill()");
         try {
             // 전체 리필 요청 목록
             List<ChatUserMatchInfo> refillRequests = getRefillRequests();
@@ -52,11 +53,12 @@ public class ChatUserMatchMaker extends UserMatchMaker<ChatUserMatchInfo> {
                 // 리필 요청 목록이 없을 경우
                 return false;
             }
-
+            logger.info("ChatUserMatchMaker.refill() - RefillRequests : {}", refillRequests.size());
             for (ChatUserMatchInfo refillInfo : refillRequests) {
                 // 100점 이상 차이나지 않으면 리필
                 if (Math.abs(req.getRating() - refillInfo.getRating()) < 100) {
                     if (refillRoom(req, refillInfo)) { // 해당 매칭 요청을 리필이 필요한 방으로 매칭
+                        logger.info("ChatUserMatchMaker.refill() - Refill success: {}", refillInfo.getId());
                         return true;
                     }
                 }
