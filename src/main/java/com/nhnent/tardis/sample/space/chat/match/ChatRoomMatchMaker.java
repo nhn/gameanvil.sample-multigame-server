@@ -14,18 +14,26 @@ public class ChatRoomMatchMaker extends RoomMatchMaker<ChatRoomMatchInfo> {
         logger.info("ChatRoomMatchMaker.match");
         String bypassRoomId = (String)args[0];
         List<ChatRoomMatchInfo>  rooms = getRooms();
-
+        logger.info("ChatRoomMatchMaker.match - rooms : {}", rooms.size());
         // rooms는 인원수가 적은 순서로 정렬되어있음.
         // roomId 가 bypassRoomId이 아닌 첫번째 room을 선택.
         for (ChatRoomMatchInfo info : rooms) {
-            if (info.getRoomId().equals(bypassRoomId))
+            if (info.getRoomId().equals(bypassRoomId)){
+                logger.info("ChatRoomMatchMaker.match - bypass : {}", bypassRoomId);
                 continue;
+            }
+
             // 최대 인원수가 terms와 다르면 pass!
-            if(info.getUserCountMax() != terms.getUserCountMax())
+            if(info.getUserCountMax() != terms.getUserCountMax()){
+                logger.info("ChatRoomMatchMaker.match - userCountMax : {}", info.getUserCountMax());
                 continue;
+            }
+
             // 꽉 찼으면 pass!
-            if(info.getUserCountMax() == info.getUserCountCurr())
+            if(info.getUserCountMax() == info.getUserCountCurr()){
+                logger.info("ChatRoomMatchMaker.match - userCountCurr : {}", info.getUserCountMax());
                 continue;
+            }
 
             // 매칭 성공!
             logger.info("ChatRoomMatchMaker.match : {}", info.getRoomId());
@@ -42,6 +50,7 @@ public class ChatRoomMatchMaker extends RoomMatchMaker<ChatRoomMatchInfo> {
         return new Comparator<ChatRoomMatchInfo>() {
             @Override
             public int compare(ChatRoomMatchInfo o1, ChatRoomMatchInfo o2) {
+                logger.info("ChatRoomMatchMaker.match - compare : {}, {}", o1, o2);
                 return o1.getUserCountCurr() - o2.getUserCountCurr();
             }
         };

@@ -24,13 +24,13 @@ public class ChatUserMatchMaker extends UserMatchMaker<ChatUserMatchInfo> {
         // leastAmount : 매칭 계산에 필요한 인원 수.
         int leastAmount = matchSize * currentMatchPoolFactor;
         List<ChatUserMatchInfo> matchRequests = getMatchRequests(leastAmount);
-
-        // getMatchRequests : 매칭 요청자의 총 수가 leastAmount보다 적을 경우 null을 리턴한다.
         if (matchRequests == null) {
+            // getMatchRequests : 매칭 요청자의 총 수가 leastAmount보다 적을 경우 null을 리턴한다.
             if (System.currentTimeMillis() - lastMatchTime >= 1000){
                 // 1000 ms 동안  leastAmount를 체우지 못한 경우
                 // currentMatchPoolFactor를 조정하여leastAmount의 크기를 줄인다.
                 currentMatchPoolFactor = Math.max(currentMatchPoolFactor/2, 1);
+                logger.info("ChatUserMatchMaker.match() - reduce currentMatchPoolFactor: {}", currentMatchPoolFactor);
             }
             return;
         }
@@ -51,6 +51,7 @@ public class ChatUserMatchMaker extends UserMatchMaker<ChatUserMatchInfo> {
             List<ChatUserMatchInfo> refillRequests = getRefillRequests();
             if (refillRequests.isEmpty()) {
                 // 리필 요청 목록이 없을 경우
+                logger.info("ChatUserMatchMaker.refill() - refillRequests.isEmpty");
                 return false;
             }
             logger.info("ChatUserMatchMaker.refill() - RefillRequests : {}", refillRequests.size());

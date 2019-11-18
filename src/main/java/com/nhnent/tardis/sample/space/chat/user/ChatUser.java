@@ -115,8 +115,7 @@ public class ChatUser extends UserAgent implements IUser, ITimerHandler {
         try {
 
             ChatRoomMatchInfo terms = new ChatRoomMatchInfo();
-            terms.setUserCountMax(4);
-            String matchingGroup = getMatchingGroup();
+            String matchingGroup = getServiceName();
             return matchRoom(matchingGroup, roomType, terms);
 
         } catch (Exception e) {
