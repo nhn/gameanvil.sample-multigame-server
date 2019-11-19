@@ -34,10 +34,10 @@ public class Stress {
         Config.SHOW_UI = true;
 
         // 패킷 수신에 대한 타임아웃 시간을 지정합니다. (밀리초)
-        Config.WAIT_RECV_TIMEOUT_MSEC = 3000; // [default 3000]
+        Config.WAIT_RECV_TIMEOUT_MSEC = 10000; // [default 3000]
 
         // 커넥터의 run 매서드에 대한 강제종료 시간을 설정합니다. (초)
-        Config.FORCE_EXIT_TIMEOUT_SEC = 15; // [default 300]
+        Config.FORCE_EXIT_TIMEOUT_SEC = 60; // [default 300]
 
         // Ping 주기를 설정합니다. (밀리초)
         Config.PING_INTERVAL_MSEC = 3000; // [default 3000]
