@@ -44,25 +44,25 @@ public class ChatUser extends UserAgent implements IUser, ITimerHandler {
 
     @Override
     public boolean onLogin(Payload payload, Payload payload1, Payload payload2) throws SuspendExecution {
-        logger.info("ChatUser.onLogin : {}", getUserId());
+        logger.info("ChatUser.onLogin - UserId : {}", getUserId());
         addClientTopics(Arrays.asList(StringValues.ChatServiceName));
         return true;
     }
 
     @Override
     public void onPostLogin() throws SuspendExecution {
-        logger.info("ChatUser.onPostLogin : {}", getUserId());
+        logger.info("ChatUser.onPostLogin - UserId : {}", getUserId());
     }
 
     @Override
     public boolean onReLogin(Payload payload, Payload payload1, Payload payload2) throws SuspendExecution {
-        logger.info("ChatUser.onReLogin : {}", getUserId());
+        logger.info("ChatUser.onReLogin - UserId : {}", getUserId());
         return true;
     }
 
     @Override
     public void onDisconnect() throws SuspendExecution {
-        logger.info("ChatUser.onDisconnect : {}", getUserId());
+        logger.info("ChatUser.onDisconnect - UserId : {}", getUserId());
 
 //        try {
 //            String message = "["+getNickName()+"] is disconnected.";
@@ -83,22 +83,22 @@ public class ChatUser extends UserAgent implements IUser, ITimerHandler {
 
     @Override
     public void onPause(PauseType pauseType) throws SuspendExecution {
-        logger.info("ChatUser.onPause : {}", getUserId());
+        logger.info("ChatUser.onPause - UserId : {}", getUserId());
     }
 
     @Override
     public void onResume() throws SuspendExecution {
-        logger.info("ChatUser.onResume : {}", getUserId());
+        logger.info("ChatUser.onResume - UserId : {}", getUserId());
     }
 
     @Override
     public void onLogout(Payload payload, Payload outPayload) throws SuspendExecution {
-        logger.info("ChatUser.onLogout : {}", getUserId());
+        logger.info("ChatUser.onLogout - UserId : {}", getUserId());
     }
 
     @Override
     public boolean canLogout() throws SuspendExecution {
-        logger.info("ChatUser.canLogout : {}", getUserId());
+        logger.info("ChatUser.canLogout - UserId : {}", getUserId());
         return true;
     }
 
@@ -111,10 +111,16 @@ public class ChatUser extends UserAgent implements IUser, ITimerHandler {
      */
     @Override
     public MatchRoomResult onMatchRoom(final String roomType, final Payload payload) throws SuspendExecution {
-        logger.info("ChatUser.onMatchRoom : {}", getUserId());
+        logger.info("ChatUser.onMatchRoom - UserId : {}, RoomIdBeforeMove : {}", getUserId(), getRoomIdBeforeMove());
         try {
 
             ChatRoomMatchInfo terms = new ChatRoomMatchInfo();
+            // moveRoom 옵션이 true일 경우 room에 참여중인 상태에서도 matchRoom 이 가능하다.
+            // 이 경우 지금 참여중인 room에서 나간 후 다시 매칭 프로세스를 거치게 되며
+            // 참여 가능한 room 목록을 요청할 때 방금 나온 room도 목록에 포함된다.
+            // 따라서 이동하기 전 방금 나온 room 을 구분하기 위해 getRoomIdBeforeMove()로 roomId를 얻어와 terms 에 넣어준다.
+            // 원래 있던 room에 다시 join 하는것을 허용하거나, moveRoom 옵션이 false 일 경우에는 하지 않아도 된다.
+            terms.setRoomId(getRoomIdBeforeMove());
             String matchingGroup = getServiceName();
             return matchRoom(matchingGroup, roomType, terms);
 
@@ -137,7 +143,7 @@ public class ChatUser extends UserAgent implements IUser, ITimerHandler {
      * @throws SuspendExecution
      */
     public boolean onMatchUser(final String roomType, final Payload payload, Payload outPayload) throws SuspendExecution {
-        logger.info("ChatUser.onMatchUser : {}", getUserId());
+        logger.info("ChatUser.onMatchUser - UserId : {}", getUserId());
         try {
 
             String matchingGroup = getServiceName();
@@ -154,13 +160,13 @@ public class ChatUser extends UserAgent implements IUser, ITimerHandler {
     }
 
     public boolean onMatchUserCancel(final MatchCancelReason reason) throws SuspendExecution {
-        logger.info("ChatUser.onMatchUserCancel : {}", getUserId());
+        logger.info("ChatUser.onMatchUserCancel - UserId : {}", getUserId());
         return false;
     }
 
     @Override
     public boolean canTransfer() throws SuspendExecution {
-        logger.info("ChatUser.canTransfer : {}", getUserId());
+        logger.info("ChatUser.canTransfer - UserId : {}", getUserId());
         return false;
     }
 
@@ -171,13 +177,13 @@ public class ChatUser extends UserAgent implements IUser, ITimerHandler {
 
     @Override
     public ByteBuffer onTransferOut() throws SuspendExecution {
-        logger.info("ChatUser.onTransferOut : {}", getUserId());
+        logger.info("ChatUser.onTransferOut - UserId : {}", getUserId());
         return KryoSerializer.write(nickName);
     }
 
     @Override
     public void onTransferIn(final InputStream inputStream) throws SuspendExecution {
-        logger.info("ChatUser.onTransferIn : {}", getUserId());
+        logger.info("ChatUser.onTransferIn - UserId : {}", getUserId());
         try {
             nickName = (String) KryoSerializer.read(inputStream);
         } catch (Exception e) {
