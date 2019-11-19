@@ -12,13 +12,15 @@ public class ChatRoomMatchMaker extends RoomMatchMaker<ChatRoomMatchInfo> {
     @Override
     public ChatRoomMatchInfo match(ChatRoomMatchInfo terms, Object... args) {
         logger.info("ChatRoomMatchMaker.match");
-        String bypassRoomId = (String)args[0];
+        String bypassRoomId = terms.getRoomId();
+        logger.info("ChatRoomMatchMaker.match - args : {}", args);
         List<ChatRoomMatchInfo>  rooms = getRooms();
         logger.info("ChatRoomMatchMaker.match - rooms : {}", rooms.size());
         // rooms는 인원수가 적은 순서로 정렬되어있음.
         // roomId 가 bypassRoomId이 아닌 첫번째 room을 선택.
         for (ChatRoomMatchInfo info : rooms) {
             if (info.getRoomId().equals(bypassRoomId)){
+                // moveRoom 옵션이 true 일 경우 참여중인 방은 제외하기
                 logger.info("ChatRoomMatchMaker.match - bypass : {}", bypassRoomId);
                 continue;
             }
