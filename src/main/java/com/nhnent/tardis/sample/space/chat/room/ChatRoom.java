@@ -37,24 +37,26 @@ public class ChatRoom extends RoomAgent implements IRoom<ChatUser>, ITimerHandle
 
     @Override
     public void onInit() throws SuspendExecution {
-        logger.info("ChatRoom.onInit");
+        logger.info("ChatRoom.onInit - RoomId : {}", getId());
     }
 
     @Override
     public void onDestroy() throws SuspendExecution {
-        logger.info("ChatRoom.onDestroy");
+        logger.info("ChatRoom.onDestroy - RoomId : {}", getId());
     }
 
     @Override
-    public void onDispatch(ChatUser spaceUser, Packet packet) throws SuspendExecution {
-        logger.info("ChatRoom.onDispatch : {}",
+    public void onDispatch(ChatUser chatUser, Packet packet) throws SuspendExecution {
+        logger.info("ChatRoom.onDispatch : RoomId : {}, UserId : {}, {}",
+            getId(),
+            chatUser.getUserId(),
             TardisIndexer.getMsgName(packet.getDescId(), packet.getMsgIndex()));
-        dispatcher.dispatch(this, spaceUser, packet);
+        dispatcher.dispatch(this, chatUser, packet);
     }
 
     @Override
     public boolean onCreateRoom(ChatUser chatUser, Payload inPayload, Payload outPayload) throws SuspendExecution {
-        logger.info("ChatRoom.onCreateRoom");
+        logger.info("ChatRoom.onCreateRoom - RoomId : {}, UserId : {}", getId(), chatUser.getUserId());
         try{
             users.put(chatUser.getUserId(), chatUser);
 
@@ -71,7 +73,7 @@ public class ChatRoom extends RoomAgent implements IRoom<ChatUser>, ITimerHandle
 
     @Override
     public boolean onJoinRoom(ChatUser chatUser, Payload inPayload, Payload outPayload) throws SuspendExecution {
-        logger.info("ChatRoom.onJoinRoom");
+        logger.info("ChatRoom.onJoinRoom - RoomId : {}, UserId : {}", getId(), chatUser.getUserId());
         try{
             users.put(chatUser.getUserId(), chatUser);
             gameRoomMatchInfo.setUserCountCurr(users.size());
@@ -121,7 +123,7 @@ public class ChatRoom extends RoomAgent implements IRoom<ChatUser>, ITimerHandle
 
     @Override
     public boolean onLeaveRoom(ChatUser chatUser, Payload inPayload, Payload outPayload) throws SuspendExecution {
-        logger.info("ChatRoom.onLeaveRoom");
+        logger.info("ChatRoom.onLeaveRoom - RoomId : {}, UserId : {}", getId(), chatUser.getUserId());
         try{
             users.remove(chatUser.getUserId());
             gameRoomMatchInfo.setUserCountCurr(users.size());
@@ -152,7 +154,7 @@ public class ChatRoom extends RoomAgent implements IRoom<ChatUser>, ITimerHandle
 
     @Override
     public void onPostLeaveRoom(ChatUser chatUser) throws SuspendExecution {
-        logger.info("ChatRoom.onPostLeaveRoom");
+        logger.info("ChatRoom.onPostLeaveRoom - RoomId : {}, UserId : {}", getId(), chatUser.getUserId());
         String message = String.format("%s is leave",chatUser.getNickName());
         for(ChatUser user:users.values()){
             user.send(new Packet(Sample.ChatMessageToC.newBuilder().setMessage(message)));
@@ -161,7 +163,7 @@ public class ChatRoom extends RoomAgent implements IRoom<ChatUser>, ITimerHandle
 
     @Override
     public void onRejoinRoom(ChatUser chatUser, Payload outPayload) throws SuspendExecution {
-        logger.info("ChatRoom.onRejoinRoom");
+        logger.info("ChatRoom.onRejoinRoom - RoomId : {}, UserId : {}", getId(), chatUser.getUserId());
         String message = String.format("%s is back",chatUser.getNickName());
         for(ChatUser user:users.values()){
             user.send(new Packet(Sample.ChatMessageToC.newBuilder().setMessage(message)));
@@ -170,13 +172,13 @@ public class ChatRoom extends RoomAgent implements IRoom<ChatUser>, ITimerHandle
 
     @Override
     public boolean canTransfer() throws SuspendExecution {
-        logger.info("ChatRoom.canTransfer");
+        logger.info("ChatRoom.canTransfer - RoomId : {}", getId());
         return false;
     }
 
     @Override
     public void onTimer(ITimerObject iTimerObject, Object arg) throws SuspendExecution {
-        logger.info("ChatRoom.onTimer");
+        logger.info("ChatRoom.onTimer - RoomId : {}", getId());
     }
 
     //-------------------------------------------------------------------------
