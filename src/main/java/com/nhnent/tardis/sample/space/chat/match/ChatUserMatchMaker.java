@@ -29,8 +29,10 @@ public class ChatUserMatchMaker extends UserMatchMaker<ChatUserMatchInfo> {
             if (System.currentTimeMillis() - lastMatchTime >= 1000){
                 // 1000 ms 동안  leastAmount를 체우지 못한 경우
                 // currentMatchPoolFactor를 조정하여leastAmount의 크기를 줄인다.
-                currentMatchPoolFactor = Math.max(currentMatchPoolFactor/2, 1);
-                logger.info("ChatUserMatchMaker.match() - reduce currentMatchPoolFactor: {}", currentMatchPoolFactor);
+                if(currentMatchPoolFactor > 1){
+                    currentMatchPoolFactor = Math.max(currentMatchPoolFactor/2, 1);
+                    logger.info("ChatUserMatchMaker.match() - reduce currentMatchPoolFactor: {}", currentMatchPoolFactor);
+                }
             }
             return;
         }
