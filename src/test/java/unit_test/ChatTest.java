@@ -5,6 +5,7 @@ import com.nhnent.tardis.common.protocol.Base.ResultCodeMatchUserDone;
 import com.nhnent.tardis.connector.common.Config;
 import com.nhnent.tardis.connector.protocol.Packet;
 import com.nhnent.tardis.connector.protocol.result.AuthenticationResult;
+import com.nhnent.tardis.connector.protocol.result.CreateRoomResult;
 import com.nhnent.tardis.connector.protocol.result.LeaveRoomResult;
 import com.nhnent.tardis.connector.protocol.result.LoginResult;
 import com.nhnent.tardis.connector.protocol.result.MatchRoomResult;
@@ -167,6 +168,55 @@ public class ChatTest {
 
         // 다른 유저에게도 응답이 왔는지 확인.
         Sample.ChatMessageToC chatMessageToC = dalek.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
+        assertEquals("[doctor] Hello Tardis!",chatMessageToC.getMessage());
+    }
+
+    @Test
+    public void MatchRoomMoveAndChat() throws TimeoutException, IOException, InterruptedException {
+
+        ConnectorUser doctor = users.get(0);
+        ConnectorUser dalek = users.get(1);
+        ConnectorUser bobby = users.get(2);
+
+        registerNickName(doctor, "doctor");
+        registerNickName(dalek, "dalek");
+        registerNickName(bobby, "bobby");
+
+        MatchRoomResult matchRoomResult1 = doctor.matchRoom(RoomType);
+        assertTrue(matchRoomResult1.isSuccess());
+        assertTrue(matchRoomResult1.isMatchRoomCreated());
+        String roomId = matchRoomResult1.getRoomId();
+
+        MatchRoomResult matchRoomResult2 = dalek.matchRoom(RoomType);
+        assertTrue(matchRoomResult2.isSuccess());
+        assertTrue(matchRoomResult2.isMatchRoomJoined());
+        assertEquals(roomId, matchRoomResult2.getRoomId());
+
+        Sample.ChatMessageToC doctorGetDalekJoinMsg = doctor.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
+        assertEquals("dalek is join", doctorGetDalekJoinMsg.getMessage());
+
+        // 채팅방 입장
+        MatchRoomResult matchRoomResult3 = doctor.matchRoom(true, RoomType, true);
+        assertTrue(matchRoomResult3.isSuccess());
+        assertTrue(matchRoomResult3.isMatchRoomCreated());
+        assertNotEquals(roomId, matchRoomResult3.getRoomId());
+
+        LeaveRoomResult leaveRoomResult = dalek.leaveRoom();
+        assertTrue(leaveRoomResult.isSuccess());
+
+        MatchRoomResult matchRoomResult4 = bobby.matchRoom(RoomType);
+        assertTrue(matchRoomResult4.isSuccess());
+        assertTrue(matchRoomResult4.isMatchRoomJoined());
+        assertEquals(matchRoomResult3.getRoomId(), matchRoomResult4.getRoomId());
+
+        Sample.ChatMessageToC doctorGetBobbyJoinMsg = doctor.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
+        assertEquals("bobby is join", doctorGetBobbyJoinMsg.getMessage());
+
+        // 채팅 메시지 전송.
+        doctor.send(new Packet(Sample.ChatMessageToS.newBuilder().setMessage("Hello Tardis!")));
+
+        // 다른 유저에게도 응답이 왔는지 확인.
+        Sample.ChatMessageToC chatMessageToC = bobby.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
         assertEquals("[doctor] Hello Tardis!",chatMessageToC.getMessage());
     }
 
