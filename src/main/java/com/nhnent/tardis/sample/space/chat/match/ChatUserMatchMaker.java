@@ -1,7 +1,10 @@
 package com.nhnent.tardis.sample.space.chat.match;
 
 import com.nhnent.tardis.console.match.UserMatchMaker;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,12 +17,14 @@ public class ChatUserMatchMaker extends UserMatchMaker<ChatUserMatchInfo> {
     private long lastMatchTime = System.currentTimeMillis();
 
     public ChatUserMatchMaker(){
-        super(2, 5000);
+        super(
+            2, // 매치될 Room 인원 수
+            5000 // Timeout
+        );
     }
 
     @Override
     public void match() {
-        logger.info("ChatUserMatchMaker.match()");
         // matchSize : 매치될 Room 인원 수
         // leastAmount : 매칭 계산에 필요한 인원 수.
         int leastAmount = matchSize * currentMatchPoolFactor;
@@ -37,12 +42,29 @@ public class ChatUserMatchMaker extends UserMatchMaker<ChatUserMatchInfo> {
             return;
         }
 
-        int matchingAmount = matchSingles(matchRequests);
-        if (matchingAmount > 0) {
-            logger.info("ChatUserMatchMaker.match() - {} match(s) made", matchingAmount);
-            lastMatchTime = System.currentTimeMillis();
-            currentMatchPoolFactor = matchPoolFactorMax;
+        // 조건에 맞는 요청들을 모아 매칭시킨다.
+        // 여기에서는 rating을 100 단위 그룹으로 묶어 매칭을 시킨다.
+        // 0~99, 100~199, 200~299 ...
+        // 요청이 많을 경우 여기에서 그룹을 묶는 작업을 하는 것이 서버에 부하가 될 수 있다.
+        // 그룹 별로 RoomType을 나누어 별도의 MatchMaker를 사용하는 방법도 고려해 보자.
+        Map<Integer, List<ChatUserMatchInfo>> entries= new TreeMap<>();
+        for(ChatUserMatchInfo info : matchRequests){
+            int ratingGroup = info.getRating() / 100;
+            if(!entries.containsKey(ratingGroup))
+                entries.put(ratingGroup, new ArrayList<>());
+
+            List<ChatUserMatchInfo> subEntries = entries.get(ratingGroup);
+            subEntries.add(info);
         }
+
+        entries.forEach((ratingGroup, subEntries)->{
+            int matchingAmount = matchSingles(subEntries);
+            if (matchingAmount > 0) {
+                logger.info("ChatUserMatchMaker.match() - {} match(s) made for RatingGroup {}", matchingAmount, ratingGroup);
+                lastMatchTime = System.currentTimeMillis();
+                currentMatchPoolFactor = matchPoolFactorMax;
+            }
+        });
     }
 
     @Override
@@ -57,9 +79,10 @@ public class ChatUserMatchMaker extends UserMatchMaker<ChatUserMatchInfo> {
                 return false;
             }
             logger.info("ChatUserMatchMaker.refill() - RefillRequests : {}", refillRequests.size());
+            int ratingGroup = req.getRating() / 100;
             for (ChatUserMatchInfo refillInfo : refillRequests) {
-                // 100점 이상 차이나지 않으면 리필
-                if (Math.abs(req.getRating() - refillInfo.getRating()) < 100) {
+                // ratingGroup 값이 같은 경우 리필
+                if (ratingGroup == refillInfo.getRating() / 100) {
                     if (refillRoom(req, refillInfo)) { // 해당 매칭 요청을 리필이 필요한 방으로 매칭
                         logger.info("ChatUserMatchMaker.refill() - Refill success: {}", refillInfo.getId());
                         return true;
