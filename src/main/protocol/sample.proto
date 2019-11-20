@@ -19,6 +19,15 @@ message ChatMessageToC
     string message = 1;
 }
 
+message GameMessageToS
+{
+    string message = 1;
+}
+message GameMessageToC
+{
+    string message = 1;
+}
+
 message SampleData
 {
     string message = 1;

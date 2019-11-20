@@ -1,9 +1,9 @@
-package com.nhnent.tardis.sample.space.chat.match;
+package com.nhnent.tardis.sample.space.game.match;
 
 import com.nhnent.tardis.console.space.IRoomMatchInfo;
 import java.io.Serializable;
 
-public class ChatRoomMatchInfo implements Serializable, IRoomMatchInfo {
+public class GameRoomMatchInfo implements Serializable, IRoomMatchInfo {
     private String roomId = "";
     private int userCountCurr = 0;
     private int userCountMax = 2;

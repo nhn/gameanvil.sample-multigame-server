@@ -1,16 +1,16 @@
-package com.nhnent.tardis.sample.space.chat.match;
+package com.nhnent.tardis.sample.space.game.match;
 
 import com.nhnent.tardis.console.space.UserMatchInfo;
 import java.io.Serializable;
 
-public class ChatUserMatchInfo extends UserMatchInfo implements Serializable{
+public class GameUserMatchInfo extends UserMatchInfo implements Serializable{
 
     private String id;
     private int partySize = 0;
     private int rating;
 
-    public ChatUserMatchInfo(){}
-    public ChatUserMatchInfo(String id, int rating){
+    public GameUserMatchInfo(){}
+    public GameUserMatchInfo(String id, int rating){
         this.id = id;
         this.rating = rating;
     }
