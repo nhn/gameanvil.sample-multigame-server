@@ -1,7 +1,6 @@
 package com.nhnent.tardis.sample.space.chat.user;
 
 import co.paralleluniverse.fibers.SuspendExecution;
-import com.nhnent.tardis.common.Exceptions.NodeNotFoundException;
 import com.nhnent.tardis.common.Packet;
 import com.nhnent.tardis.common.Payload;
 import com.nhnent.tardis.common.internal.ITimerHandler;
@@ -13,14 +12,12 @@ import com.nhnent.tardis.console.TardisIndexer;
 import com.nhnent.tardis.console.space.IUser;
 import com.nhnent.tardis.console.space.MatchCancelReason;
 import com.nhnent.tardis.console.space.MatchRoomResult;
-import com.nhnent.tardis.console.space.RoomMode;
 import com.nhnent.tardis.console.space.UserAgent;
 import com.nhnent.tardis.sample.Defines.StringValues;
 import com.nhnent.tardis.sample.protocol.Sample;
 import com.nhnent.tardis.sample.space.chat.match.ChatRoomMatchInfo;
 import com.nhnent.tardis.sample.space.chat.match.ChatUserMatchInfo;
 import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.TimeoutException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
@@ -38,7 +35,8 @@ public class ChatUser extends UserAgent implements IUser, ITimerHandler {
     static private PacketDispatcher<ChatUser> packetDispatcher = new PacketDispatcher();
 
     static{
-        packetDispatcher.registerMsg(Sample.RegisterNickNameReq.class,CmdRegisterNickNameReq.class);
+        packetDispatcher.registerMsg(Sample.RegisterNickNameReq.class,
+            RegisterNickNameReqPacketHandler.class);
     }
 
 

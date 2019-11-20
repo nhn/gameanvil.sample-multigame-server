@@ -1,7 +1,6 @@
 package com.nhnent.tardis.sample.space.chat.room;
 
 import co.paralleluniverse.fibers.SuspendExecution;
-import com.google.protobuf.Message;
 import com.nhnent.tardis.console.TardisIndexer;
 import com.nhnent.tardis.sample.protocol.Sample;
 import com.nhnent.tardis.sample.space.chat.match.ChatRoomMatchInfo;
@@ -27,7 +26,7 @@ public class ChatRoom extends RoomAgent implements IRoom<ChatUser>, ITimerHandle
 
     private static RoomPacketDispatcher dispatcher = new RoomPacketDispatcher();
     static {
-        dispatcher.registerMsg(Sample.ChatMessageToS.class, CmdChatMessageToS.class);
+        dispatcher.registerMsg(Sample.ChatMessageToS.class, ChatMessageToSPacketHandler.class);
     }
 
     private ChatRoomMatchInfo gameRoomMatchInfo = new ChatRoomMatchInfo();

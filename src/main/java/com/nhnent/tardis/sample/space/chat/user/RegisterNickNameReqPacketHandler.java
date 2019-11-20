@@ -8,7 +8,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CmdRegisterNickNameReq implements IPacketHandler<ChatUser> {
+public class RegisterNickNameReqPacketHandler implements IPacketHandler<ChatUser> {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
