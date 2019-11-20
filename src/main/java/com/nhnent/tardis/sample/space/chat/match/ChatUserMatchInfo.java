@@ -3,7 +3,7 @@ package com.nhnent.tardis.sample.space.chat.match;
 import com.nhnent.tardis.console.space.UserMatchInfo;
 import java.io.Serializable;
 
-public class ChatUserMatchInfo extends UserMatchInfo implements Serializable, Comparable<ChatUserMatchInfo> {
+public class ChatUserMatchInfo extends UserMatchInfo implements Serializable{
 
     private String id;
     private int partySize = 0;
@@ -31,10 +31,5 @@ public class ChatUserMatchInfo extends UserMatchInfo implements Serializable, Co
 
     public void setRating(int rating){
         this.rating = rating;
-    }
-
-    @Override
-    public int compareTo(ChatUserMatchInfo o) {
-        return rating - o.rating;
     }
 }
