@@ -10,7 +10,6 @@ import com.nhnent.tardis.console.session.ISession;
 import com.nhnent.tardis.console.session.SessionAgent;
 import com.nhnent.tardis.sample.Defines.StringValues;
 import com.nhnent.tardis.sample.protocol.Sample;
-import com.nhnent.tardis.sample.session.handlers.SessionAgentBeforeAuthenticateReqHandler;
 import com.nhnent.tardis.sample.session.handlers.SessionAgentRemoveTimerPacketHandler;
 import com.nhnent.tardis.sample.session.handlers.SessionAgentSampleReqPacketHandler;
 import com.nhnent.tardis.sample.session.handlers.SessionAgentSampleToSPacketHandler;
@@ -27,7 +26,6 @@ public class SampleSessionAgent extends SessionAgent implements ISession<SampleS
     private static PacketDispatcher dispatcher = new PacketDispatcher();
 
     static {
-        dispatcher.registerMsg(Sample.BeforeAuthenticateReq.class, SessionAgentBeforeAuthenticateReqHandler.class);
         dispatcher.registerMsg(Sample.SampleReq.class, SessionAgentSampleReqPacketHandler.class);
         dispatcher.registerMsg(Sample.SampleToS.class, SessionAgentSampleToSPacketHandler.class);
         dispatcher.registerMsg(Sample.SetTimer.class, SessionAgentSetTimerPacketHandler.class);
@@ -35,18 +33,6 @@ public class SampleSessionAgent extends SessionAgent implements ISession<SampleS
     }
 
     private Logger logger = LoggerFactory.getLogger(getClass());
-
-    @Override
-    public boolean checkPreAccess(final Packet packet) throws SuspendExecution {
-        logger.info("SampleSessionAgent.checkPreAccess : {}",
-            TardisIndexer.getMsgName(packet.getDescId(), packet.getMsgIndex()));
-        // authenticate 이전에 들어온 패킷은 이 함수에서 처리 여부를 결정.
-        // 여기에서는 BeforeAuthenticateReq 인 경우 처리.
-        if (packet.msgEquals(Sample.BeforeAuthenticateReq.getDescriptor().getFullName())) {
-            return true;
-        }
-        return false;
-    }
 
     @Override
     public boolean onAuthenticate(String accountId, String password, String deviceId,
