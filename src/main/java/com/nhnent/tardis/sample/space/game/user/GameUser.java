@@ -130,14 +130,11 @@ public class GameUser extends UserAgent implements IUser, ITimerHandler {
         try {
 
             String matchingGroup = getServiceName();
-            GameUserMatchInfo term = new GameUserMatchInfo(getUserId(), 100);
+            GameUserMatchInfo term = new GameUserMatchInfo(getUserId(), 100, 1);
             return matchUser(matchingGroup, roomType, term, payload);
 
-        } catch (TimeoutException e) {
-            return false;
-
         } catch (Exception e) {
-            logger.error(ExceptionUtils.getStackTrace(e));
+            logger.error("GameUser.onMatchUser - Exception : ", e);
         }
         return false;
     }

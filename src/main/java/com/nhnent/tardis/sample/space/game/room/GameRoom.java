@@ -14,6 +14,7 @@ import com.nhnent.tardis.sample.space.game.user.GameUser;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +26,7 @@ public class GameRoom extends RoomAgent implements IRoom<GameUser>, ITimerHandle
         dispatcher.registerMsg(Sample.GameMessageToS.class, GameMessageToSPacketHandler.class);
     }
 
-    protected Map<String, GameUser> users = new HashMap<>();
+    protected Map<String, GameUser> users = new TreeMap<>();
 
     @Override
     public void onInit() throws SuspendExecution {
@@ -49,7 +50,7 @@ public class GameRoom extends RoomAgent implements IRoom<GameUser>, ITimerHandle
     @Override
     public boolean onCreateRoom(GameUser gameUser, Payload inPayload, Payload outPayload)
         throws SuspendExecution {
-        logger.info("GameRoom.onPostLeaveRoom - RoomId : {}, UserId : {}", getId(),
+        logger.info("GameRoom.onCreateRoom - RoomId : {}, UserId : {}", getId(),
             gameUser.getUserId());
         return false;
     }
@@ -57,7 +58,7 @@ public class GameRoom extends RoomAgent implements IRoom<GameUser>, ITimerHandle
     @Override
     public boolean onJoinRoom(GameUser gameUser, Payload inPayload, Payload outPayload)
         throws SuspendExecution {
-        logger.info("GameRoom.onPostLeaveRoom - RoomId : {}, UserId : {}", getId(),
+        logger.info("GameRoom.onJoinRoom - RoomId : {}, UserId : {}", getId(),
             gameUser.getUserId());
         return  false;
     }
@@ -65,7 +66,7 @@ public class GameRoom extends RoomAgent implements IRoom<GameUser>, ITimerHandle
     @Override
     public boolean onLeaveRoom(GameUser gameUser, Payload inPayload, Payload outPayload)
         throws SuspendExecution {
-        logger.info("GameRoom.onPostLeaveRoom - RoomId : {}, UserId : {}", getId(),
+        logger.info("GameRoom.onLeaveRoom - RoomId : {}, UserId : {}", getId(),
             gameUser.getUserId());
         return false;
     }

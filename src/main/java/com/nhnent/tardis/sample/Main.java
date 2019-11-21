@@ -15,8 +15,11 @@ import com.nhnent.tardis.sample.space.game.match.GameUserMatchInfo;
 import com.nhnent.tardis.sample.space.game.match.GameUserMatchMaker;
 import com.nhnent.tardis.sample.space.chat.room.ChatRoom;
 import com.nhnent.tardis.sample.space.chat.user.ChatUser;
+import com.nhnent.tardis.sample.space.game.match.GameUserPartyMatchMaker;
 import com.nhnent.tardis.sample.space.game.room.GameRoomMatchRoom;
 import com.nhnent.tardis.sample.space.game.room.GameRoomMatchUser;
+import com.nhnent.tardis.sample.space.game.room.GameRoomMatchUserParty;
+import com.nhnent.tardis.sample.space.game.room.PartyRoom;
 import com.nhnent.tardis.sample.space.game.user.GameUser;
 
 public class Main {
@@ -41,10 +44,16 @@ public class Main {
         bootstrap.setSpace(StringValues.GameServiceName)
             .node(GameNode.class)
             .user(StringValues.GameUserType, GameUser.class)
-            .room(StringValues.GameRoomType_RoomMatch, GameRoomMatchRoom.class)
-            .roomMatchMaker(StringValues.GameRoomType_RoomMatch, GameRoomMatchMaker.class, GameRoomMatchInfo.class)
-            .room(StringValues.GameRoomType_UserMatch, GameRoomMatchUser.class)
-            .userMatchMaker(StringValues.GameRoomType_UserMatch, GameUserMatchMaker.class, GameUserMatchInfo.class);
+
+            .room(StringValues.GameRoomType_MatchRoom, GameRoomMatchRoom.class)
+            .roomMatchMaker(StringValues.GameRoomType_MatchRoom, GameRoomMatchMaker.class, GameRoomMatchInfo.class)
+
+            .room(StringValues.GameRoomType_MatchUser, GameRoomMatchUser.class)
+            .userMatchMaker(StringValues.GameRoomType_MatchUser, GameUserMatchMaker.class, GameUserMatchInfo.class)
+
+            .room(StringValues.PartyRoomType, PartyRoom.class)
+            .room(StringValues.GameRoomType_MatchUserParty, GameRoomMatchUserParty.class)
+            .userMatchMaker(StringValues.GameRoomType_MatchUserParty, GameUserPartyMatchMaker.class, GameUserMatchInfo.class);
 
         bootstrap.setService(StringValues.SampleServiceName)
             .node(SampleServiceNodeAgent.class);

@@ -9,10 +9,11 @@ public class GameUserMatchInfo extends UserMatchInfo implements Serializable{
     private int partySize = 0;
     private int rating;
 
-    public GameUserMatchInfo(){}
-    public GameUserMatchInfo(String id, int rating){
+    public GameUserMatchInfo(){};
+    public GameUserMatchInfo(String id, int rating, int partySize){
         this.id = id;
         this.rating = rating;
+        this.partySize = partySize;
     }
 
     @Override
@@ -27,9 +28,5 @@ public class GameUserMatchInfo extends UserMatchInfo implements Serializable{
 
     public int getRating(){
         return rating;
-    }
-
-    public void setRating(int rating){
-        this.rating = rating;
     }
 }
