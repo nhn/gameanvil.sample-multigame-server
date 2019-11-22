@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import com.nhnent.tardis.common.protocol.Base;
 import com.nhnent.tardis.common.protocol.Base.ResultCodeMatchPartyCancel;
 import com.nhnent.tardis.common.protocol.Base.ResultCodeMatchPartyStart;
+import com.nhnent.tardis.common.protocol.Base.ResultCodeMatchRoom;
 import com.nhnent.tardis.common.protocol.Base.ResultCodeMatchUserDone;
 import com.nhnent.tardis.common.protocol.Base.ResultCodeNamedRoom;
 import com.nhnent.tardis.connector.common.Config;
@@ -101,30 +102,49 @@ public class GameTest {
         }
     }
 
+    private String matchRoom(Collection<ConnectorUser> users) throws TimeoutException {
+        String roomId = null;
+        List<ConnectorUser> members = new ArrayList<>();
+        for(ConnectorUser user : users){
+            MatchRoomResult matchRoomResult = user.matchRoom(RoomType_MatchRoom);
+            assertEquals(ResultCodeMatchRoom.MATCH_ROOM_SUCCESS, ResultCodeMatchRoom.forNumber(matchRoomResult.getResultCode()));
+            assertEquals(members.isEmpty(), matchRoomResult.isMatchRoomCreated());
+            assertNotEquals(members.isEmpty(), matchRoomResult.isMatchRoomJoined());
+            for (ConnectorUser member : members) {
+                Sample.GameMessageToC message = member.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Sample.GameMessageToC.class);
+                assertEquals(user.getUserId() + " is join", message.getMessage());
+            }
+            members.add(user);
+            if(roomId == null)
+                roomId = matchRoomResult.getRoomId();
+            else
+                assertEquals(roomId, matchRoomResult.getRoomId());
+        }
+        return roomId;
+    }
+
+    private void checkChatMsg(Collection<ConnectorUser> users, String chatMsg) {
+        String senderId = null;
+        for (ConnectorUser user : users) {
+            if (senderId == null) {
+                senderId = user.getUserId();
+                user.send(new Packet(Sample.GameMessageToS.newBuilder().setMessage(chatMsg)));
+            } else {
+                Sample.GameMessageToC gameMessageToC = user.waitProtoPacket(1, TimeUnit.SECONDS, Sample.GameMessageToC.class);
+                assertEquals("[" + senderId + "] "+ chatMsg, gameMessageToC.getMessage());
+            }
+        }
+    }
+
     @Test
     public void MatchRoomAndChat() throws TimeoutException, IOException, InterruptedException {
 
-        ConnectorUser account1 = users.get(0);
-        ConnectorUser account2 = users.get(1);
+        List<ConnectorUser> members = users.subList(0, 2);
 
         // 채팅방 입장
-        MatchRoomResult matchRoomResult1 = account1.matchRoom(RoomType_MatchRoom);
-        assertTrue(matchRoomResult1.isSuccess());
-        assertTrue(matchRoomResult1.isMatchRoomCreated());
+        matchRoom(members);
 
-        MatchRoomResult matchRoomResult2 = account2.matchRoom(RoomType_MatchRoom);
-        assertTrue(matchRoomResult2.isSuccess());
-        assertTrue(matchRoomResult2.isMatchRoomJoined());
-
-        Sample.GameMessageToC account1GetAccount2JoinMsg = account1.waitProtoPacket(5, TimeUnit.SECONDS, Sample.GameMessageToC.class);
-        assertEquals(account2.getUserId() + " is join", account1GetAccount2JoinMsg.getMessage());
-
-        // 채팅 메시지 전송.
-        account1.send(new Packet(Sample.GameMessageToS.newBuilder().setMessage("Hello Tardis!")));
-
-        // 다른 유저에게도 응답이 왔는지 확인.
-        Sample.GameMessageToC gameMessageToC = account2.waitProtoPacket(1, TimeUnit.SECONDS, Sample.GameMessageToC.class);
-        assertEquals("[" + account1.getUserId() + "] Hello Tardis!",gameMessageToC.getMessage());
+        checkChatMsg(members, "Hello Tardis!");
     }
 
     @Test
@@ -132,100 +152,57 @@ public class GameTest {
 
         ConnectorUser account1 = users.get(0);
         ConnectorUser account2 = users.get(1);
-        ConnectorUser account3 = users.get(2);
+        List<ConnectorUser> members = users.subList(0, 2);
 
-        MatchRoomResult matchRoomResult1 = account1.matchRoom(RoomType_MatchRoom);
-        assertTrue(matchRoomResult1.isSuccess());
-        assertTrue(matchRoomResult1.isMatchRoomCreated());
-        String roomId = matchRoomResult1.getRoomId();
+        String roomId = matchRoom(members);
 
-        MatchRoomResult matchRoomResult2 = account2.matchRoom(RoomType_MatchRoom);
-        assertTrue(matchRoomResult2.isSuccess());
-        assertTrue(matchRoomResult2.isMatchRoomJoined());
-        assertEquals(roomId, matchRoomResult2.getRoomId());
-
-        Sample.GameMessageToC account1GetAccount2JoinMsg = account1.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Sample.GameMessageToC.class);
-        assertEquals(account2.getUserId() + " is join", account1GetAccount2JoinMsg.getMessage());
-
-        // 채팅방 입장
-        MatchRoomResult matchRoomResult3 = account1.matchRoom(true, RoomType_MatchRoom, true);
-        assertTrue(matchRoomResult3.isSuccess());
-        assertTrue(matchRoomResult3.isMatchRoomCreated());
-        assertNotEquals(roomId, matchRoomResult3.getRoomId());
+        MatchRoomResult matchRoomMoveResult = account1.matchRoom(true, RoomType_MatchRoom, true);
+        assertEquals(ResultCodeMatchRoom.MATCH_ROOM_SUCCESS, ResultCodeMatchRoom.forNumber(matchRoomMoveResult.getResultCode()));
+        assertNotEquals(roomId, matchRoomMoveResult.getRoomId());
 
         LeaveRoomResult leaveRoomResult = account2.leaveRoom();
         assertTrue(leaveRoomResult.isSuccess());
+        account2.clearRemainWaitPackets();;
 
-        MatchRoomResult matchRoomResult4 = account3.matchRoom(RoomType_MatchRoom);
-        assertTrue(matchRoomResult4.isSuccess());
-        assertTrue(matchRoomResult4.isMatchRoomJoined());
-        assertEquals(matchRoomResult3.getRoomId(), matchRoomResult4.getRoomId());
+        MatchRoomResult matchRoomJoinResult = account2.matchRoom(RoomType_MatchRoom);
+        assertTrue(matchRoomJoinResult.isSuccess());
+        assertTrue(matchRoomJoinResult.isMatchRoomJoined());
+        assertEquals(matchRoomMoveResult.getRoomId(), matchRoomJoinResult.getRoomId());
 
         Sample.GameMessageToC account1GetAccount3JoinMsg = account1.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Sample.GameMessageToC.class);
-        assertEquals(account3.getUserId() + " is join", account1GetAccount3JoinMsg.getMessage());
+        assertEquals(account2.getUserId() + " is join", account1GetAccount3JoinMsg.getMessage());
 
-        // 채팅 메시지 전송.
-        account1.send(new Packet(Sample.GameMessageToS.newBuilder().setMessage("Hello Tardis!")));
-
-        // 다른 유저에게도 응답이 왔는지 확인.
-        Sample.GameMessageToC gameMessageToC = account3.waitProtoPacket(1, TimeUnit.SECONDS, Sample.GameMessageToC.class);
-        assertEquals("[" + account1.getUserId() + "] Hello Tardis!",gameMessageToC.getMessage());
+        checkChatMsg(members, "Hello Tardis!");
     }
 
-    @Test
-    public void MatchRoomAndDisconnect() throws TimeoutException, IOException, InterruptedException {
+    private void matchUser(Collection<ConnectorUser> users) throws TimeoutException{
+        for(ConnectorUser user : users){
+            MatchUserStartResult matchUserStartResult1 = user.matchUserStart(RoomType_MatchUser);
+            assertTrue(matchUserStartResult1.isSuccess());
+        }
 
-        ConnectorUser account1 = users.get(0);
-        ConnectorUser account2 = users.get(1);
+        for(ConnectorUser user : users){
+            user.waitProtoPacket(5, TimeUnit.SECONDS, Base.MatchUserDone.class);
+        }
 
-        // 채팅방 입장
-        MatchRoomResult matchRoomResult1 = account1.matchRoom(RoomType_MatchRoom);
-        assertTrue(matchRoomResult1.isSuccess());
-        assertTrue(matchRoomResult1.isMatchRoomCreated());
-
-        MatchRoomResult matchRoomResult2 = account2.matchRoom(RoomType_MatchRoom);
-        assertTrue(matchRoomResult2.isSuccess());
-        assertTrue(matchRoomResult2.isMatchRoomJoined());
-
-        Sample.GameMessageToC account1GetAccount2JoinMsg = account1.waitProtoPacket(1, TimeUnit.SECONDS, Sample.GameMessageToC.class);
-        assertEquals(account2.getUserId() + " is join", account1GetAccount2JoinMsg.getMessage());
-
-        String accountId = account1.getSession().getAccountId();
-        String deviceId = account1.getSession().getDeviceId();
-        account1.getSession().disconnect();
-
-        // TearDown에서 제외하기 위해 users에서 제외
-        users.remove(account1);
+        for(ConnectorUser sender : users){
+            for(ConnectorUser listener : users){
+                if(sender.getUserId() == listener.getUserId())
+                    continue;
+                Sample.GameMessageToC joinMsg = listener.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Sample.GameMessageToC.class);
+                assertEquals(sender.getUserId() + " is join", joinMsg.getMessage());
+            }
+        }
     }
 
     @Test
     public void MatchUserAndChat() throws TimeoutException, IOException, InterruptedException {
 
-        ConnectorUser account1 = users.get(0);
-        ConnectorUser account2 = users.get(1);
+        List<ConnectorUser> members = users.subList(0, 2);
 
-        // 채팅방 입장
-        MatchUserStartResult matchUserStartResult1 = account1.matchUserStart(RoomType_MatchUser);
-        assertTrue(matchUserStartResult1.isSuccess());
+        matchUser(members);
 
-        MatchUserStartResult matchUserStartResult2 = account2.matchUserStart(RoomType_MatchUser);
-        assertTrue(matchUserStartResult2.isSuccess());
-
-        Base.MatchUserDone matchUserDone1 = account1.waitProtoPacket(5, TimeUnit.SECONDS, Base.MatchUserDone.class);
-        Base.MatchUserDone matchUserDone2 = account2.waitProtoPacket(5, TimeUnit.SECONDS, Base.MatchUserDone.class);
-
-        Sample.GameMessageToC account1GetAccount2JoinMsg = account1.waitProtoPacket(5, TimeUnit.SECONDS, Sample.GameMessageToC.class);
-        assertEquals(account2.getUserId() + " is join", account1GetAccount2JoinMsg.getMessage());
-
-        Sample.GameMessageToC account2GetAccount1JoinMsg = account2.waitProtoPacket(5, TimeUnit.SECONDS, Sample.GameMessageToC.class);
-        assertEquals(account1.getUserId() + " is join", account2GetAccount1JoinMsg.getMessage());
-
-        // 채팅 메시지 전송.
-        account1.send(new Packet(Sample.GameMessageToS.newBuilder().setMessage("Hello Tardis!")));
-
-        // 다른 유저에게도 응답이 왔는지 확인.
-        Sample.GameMessageToC gameMessageToC = account2.waitProtoPacket(1, TimeUnit.SECONDS, Sample.GameMessageToC.class);
-        assertEquals("["+account1.getUserId()+"] Hello Tardis!",gameMessageToC.getMessage());
+        checkChatMsg(members, "Hello Tardis!");
     }
 
     @Test
@@ -233,44 +210,25 @@ public class GameTest {
 
         ConnectorUser account1 = users.get(0);
         ConnectorUser account2 = users.get(1);
-        ConnectorUser account3 = users.get(2);
+        List<ConnectorUser> members = users.subList(0, 2);
 
-        // 채팅방 입장
-        MatchUserStartResult matchUserStartResult1 = account1.matchUserStart(RoomType_MatchUser);
-        assertTrue(matchUserStartResult1.isSuccess());
-
-        MatchUserStartResult matchUserStartResult2 = account2.matchUserStart(RoomType_MatchUser);
-        assertTrue(matchUserStartResult2.isSuccess());
-
-        Base.MatchUserDone matchUserDone1 = account1.waitProtoPacket(10, TimeUnit.SECONDS, Base.MatchUserDone.class);
-        Base.MatchUserDone matchUserDone2 = account2.waitProtoPacket(1, TimeUnit.SECONDS, Base.MatchUserDone.class);
-
-        Sample.GameMessageToC account1GetAccount2JoinMsg = account1.waitProtoPacket(5, TimeUnit.SECONDS, Sample.GameMessageToC.class);
-        assertEquals(account2.getUserId() + " is join", account1GetAccount2JoinMsg.getMessage());
-
-        Sample.GameMessageToC account2GetAccount1JoinMsg = account2.waitProtoPacket(1, TimeUnit.SECONDS, Sample.GameMessageToC.class);
-        assertEquals(account1.getUserId() + " is join", account2GetAccount1JoinMsg.getMessage());
+        matchUser(members);
 
         LeaveRoomResult leaveRoomResult = account2.leaveRoom();
         assertTrue(leaveRoomResult.isSuccess());
 
         Thread.sleep(500);
 
-        MatchUserStartResult matchUserStartResult3 = account3.matchUserStart(RoomType_MatchUser);
-        assertTrue(matchUserStartResult3.isSuccess());
+        MatchUserStartResult matchUserStartResult = account2.matchUserStart(RoomType_MatchUser);
+        assertTrue(matchUserStartResult.isSuccess());
 
-        Base.MatchUserDone matchUserDone3 = account3.waitProtoPacket(5, TimeUnit.SECONDS, Base.MatchUserDone.class);
-        assertTrue(matchUserDone3.getResultCode() == ResultCodeMatchUserDone.MATCH_USER_DONE_SUCCESS);
+        Base.MatchUserDone matchUserDone = account2.waitProtoPacket(5, TimeUnit.SECONDS, Base.MatchUserDone.class);
+        assertTrue(matchUserDone.getResultCode() == ResultCodeMatchUserDone.MATCH_USER_DONE_SUCCESS);
 
-        Sample.GameMessageToC account1GetAccount3JoinMsg = account1.waitProtoPacket(5, TimeUnit.SECONDS, Sample.GameMessageToC.class);
-        assertEquals(account3.getUserId() + " is join", account1GetAccount3JoinMsg.getMessage());
+        Sample.GameMessageToC joinMsg = account1.waitProtoPacket(5, TimeUnit.SECONDS, Sample.GameMessageToC.class);
+        assertEquals(account2.getUserId() + " is join", joinMsg.getMessage());
 
-        // 채팅 메시지 전송.
-        account1.send(new Packet(Sample.GameMessageToS.newBuilder().setMessage("Hello Tardis!")));
-
-        // 다른 유저에게도 응답이 왔는지 확인.
-        Sample.GameMessageToC gameMessageToC = account3.waitProtoPacket(1, TimeUnit.SECONDS, Sample.GameMessageToC.class);
-        assertEquals("[" + account1.getUserId() + "] Hello Tardis!",gameMessageToC.getMessage());
+        checkChatMsg(members, "Hello Tardis!");
     }
 
     @Test
@@ -292,7 +250,7 @@ public class GameTest {
         Base.MatchUserTimeout matchUserTimeout = account1.waitProtoPacket(6, TimeUnit.SECONDS, Base.MatchUserTimeout.class);
     }
 
-    public void makePartyRoom(Collection<ConnectorUser> users, String roomId) throws TimeoutException {
+    private void makePartyRoom(Collection<ConnectorUser> users, String roomId) throws TimeoutException {
         List<ConnectorUser> members = new ArrayList<>();
         for (ConnectorUser user : users) {
             NamedRoomResult namedRoomResult1 = user.namedRoom(RoomType_Party, roomId, true);
@@ -307,7 +265,7 @@ public class GameTest {
         }
     }
 
-    public  void startMatchParty(Collection<ConnectorUser> users) throws TimeoutException {
+    private  void startMatchParty(Collection<ConnectorUser> users) throws TimeoutException {
         boolean first = true;
         for(ConnectorUser user:users){
             if(first){
@@ -321,7 +279,7 @@ public class GameTest {
         }
     }
 
-    public void cancelMatchParty(Collection<ConnectorUser> users) throws TimeoutException {
+    private void cancelMatchParty(Collection<ConnectorUser> users) throws TimeoutException {
         boolean first = true;
         for(ConnectorUser user:users){
             if(first){
@@ -335,14 +293,14 @@ public class GameTest {
         }
     }
 
-    public void checkMatchUserDone(Collection<ConnectorUser> users){
+    private void checkMatchUserDone(Collection<ConnectorUser> users){
         for(ConnectorUser user:users){
             Base.MatchUserDone matchUserDone = user.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Base.MatchUserDone.class);
             assertEquals(ResultCodeMatchUserDone.MATCH_USER_DONE_SUCCESS, matchUserDone.getResultCode());
         }
     }
 
-    public void checkMatchUserTimeout(Collection<ConnectorUser> users){
+    private void checkMatchUserTimeout(Collection<ConnectorUser> users){
         for(ConnectorUser user:users){
             user.waitProtoPacketByFirstReceived(6, TimeUnit.SECONDS, Base.MatchUserTimeout.class);
         }
@@ -440,7 +398,6 @@ public class GameTest {
         assertNotEquals(doctor.getChannelId(), dalek.getChannelId());
         assertNotEquals(doctor.getChannelId(), bobby.getChannelId());
         assertNotEquals(doctor.getChannelId(), jhone.getChannelId());
-
 
         assertEquals(sampleToC1.getMessage(), sampleToC2.getMessage());
         assertEquals(sampleToC1.getMessage(), sampleToC3.getMessage());
