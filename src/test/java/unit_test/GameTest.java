@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.nhnent.tardis.common.protocol.Base;
+import com.nhnent.tardis.common.protocol.Base.ResultCodeMatchPartyCancel;
 import com.nhnent.tardis.common.protocol.Base.ResultCodeMatchPartyStart;
 import com.nhnent.tardis.common.protocol.Base.ResultCodeMatchUserDone;
 import com.nhnent.tardis.common.protocol.Base.ResultCodeNamedRoom;
@@ -13,6 +14,7 @@ import com.nhnent.tardis.connector.protocol.Packet;
 import com.nhnent.tardis.connector.protocol.result.AuthenticationResult;
 import com.nhnent.tardis.connector.protocol.result.LeaveRoomResult;
 import com.nhnent.tardis.connector.protocol.result.LoginResult;
+import com.nhnent.tardis.connector.protocol.result.MatchPartyCancelResult;
 import com.nhnent.tardis.connector.protocol.result.MatchPartyStartResult;
 import com.nhnent.tardis.connector.protocol.result.MatchRoomResult;
 import com.nhnent.tardis.connector.protocol.result.MatchUserCancelResult;
@@ -24,6 +26,7 @@ import com.nhnent.tardis.connector.tcp.TardisConnector;
 import com.nhnent.tardis.sample.protocol.Sample;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -289,79 +292,137 @@ public class GameTest {
         Base.MatchUserTimeout matchUserTimeout = account1.waitProtoPacket(6, TimeUnit.SECONDS, Base.MatchUserTimeout.class);
     }
 
+    public void makePartyRoom(Collection<ConnectorUser> users, String roomId) throws TimeoutException {
+        List<ConnectorUser> members = new ArrayList<>();
+        for (ConnectorUser user : users) {
+            NamedRoomResult namedRoomResult1 = user.namedRoom(RoomType_Party, roomId, true);
+            assertEquals(ResultCodeNamedRoom.NAMED_ROOM_SUCCESS, ResultCodeNamedRoom.forNumber(namedRoomResult1.getResultCode()));
+            System.out.println("NAMED_ROOM_SUCCESS : " + user.getUserId());
+            for (ConnectorUser member : members) {
+                Sample.GameMessageToC message = member.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Sample.GameMessageToC.class);
+                assertEquals(user.getUserId() + " is join", message.getMessage());
+            }
+
+            members.add(user);
+        }
+    }
+
+    public  void startMatchParty(Collection<ConnectorUser> users) throws TimeoutException {
+        boolean first = true;
+        for(ConnectorUser user:users){
+            if(first){
+                MatchPartyStartResult matchPartyStartResult = user.matchPartyStart(RoomType_MatchUserParty);
+                assertEquals(ResultCodeMatchPartyStart.MATCH_PARTY_START_SUCCESS, ResultCodeMatchPartyStart.forNumber(matchPartyStartResult.getResultCode()));
+                first = false;
+            }else{
+                Base.MatchPartyStartResOrNoti matchPartyStartResOrNoti = user.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Base.MatchPartyStartResOrNoti.class);
+                assertEquals(ResultCodeMatchPartyStart.MATCH_PARTY_START_SUCCESS, matchPartyStartResOrNoti.getResultCode());
+            }
+        }
+    }
+
+    public void cancelMatchParty(Collection<ConnectorUser> users) throws TimeoutException {
+        boolean first = true;
+        for(ConnectorUser user:users){
+            if(first){
+                MatchPartyCancelResult matchPartyCancelResult = user.matchPartyCancel(RoomType_MatchUserParty);
+                assertEquals(ResultCodeMatchPartyCancel.MATCH_PARTY_CANCEL_SUCCESS, ResultCodeMatchPartyCancel.forNumber(matchPartyCancelResult.getResultCode()));
+                first = false;
+            }else{
+                Base.MatchPartyCancelResOrNoti matchPartyCancelResOrNoti = user.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Base.MatchPartyCancelResOrNoti.class);
+                assertEquals(ResultCodeMatchPartyCancel.MATCH_PARTY_CANCEL_SUCCESS, matchPartyCancelResOrNoti.getResultCode());
+            }
+        }
+    }
+
+    public void checkMatchUserDone(Collection<ConnectorUser> users){
+        for(ConnectorUser user:users){
+            Base.MatchUserDone matchUserDone = user.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Base.MatchUserDone.class);
+            assertEquals(ResultCodeMatchUserDone.MATCH_USER_DONE_SUCCESS, matchUserDone.getResultCode());
+        }
+    }
+
+    public void checkMatchUserTimeout(Collection<ConnectorUser> users){
+        for(ConnectorUser user:users){
+            user.waitProtoPacketByFirstReceived(6, TimeUnit.SECONDS, Base.MatchUserTimeout.class);
+        }
+    }
+
+    public void checkJoinMsg(Collection<ConnectorUser> users){
+        Sample.GameMessageToC joinMsg;
+        for(ConnectorUser receiver:users){
+            for(ConnectorUser sender:users){
+                if(receiver == sender)
+                    continue;;
+                joinMsg = receiver.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Sample.GameMessageToC.class);
+                assertEquals(sender.getUserId() + " is join", joinMsg.getMessage());
+            }
+        }
+    }
+
     @Test
     public void MatchParty() throws TimeoutException, IOException, InterruptedException {
 
-        ConnectorUser account1 = users.get(0);
-        ConnectorUser account2 = users.get(1);
-        ConnectorUser account3 = users.get(2);
-        ConnectorUser account4 = users.get(3);
+        List<ConnectorUser> party1 = users.subList(0, 2);
+        List<ConnectorUser> party2 = users.subList(2, 4);
 
         // PartyRoom1 입장
-        NamedRoomResult namedRoomResult1 = account1.namedRoom(RoomType_Party, "PartyRoom1", true);
-        assertEquals(ResultCodeNamedRoom.NAMED_ROOM_SUCCESS, ResultCodeNamedRoom.forNumber(namedRoomResult1.getResultCode()));
-
-        NamedRoomResult namedRoomResult2 = account2.namedRoom(RoomType_Party, "PartyRoom1", true);
-        assertEquals(ResultCodeNamedRoom.NAMED_ROOM_SUCCESS, ResultCodeNamedRoom.forNumber(namedRoomResult2.getResultCode()));
-
-        Sample.GameMessageToC account1GetAccount2JoinMsg = account1.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Sample.GameMessageToC.class);
-        assertEquals(account2.getUserId() + " is join", account1GetAccount2JoinMsg.getMessage());
-
+        makePartyRoom(party1, "PartyRoom1");
         // PartyRoom2 입장
-        NamedRoomResult namedRoomResult3 = account3.namedRoom(RoomType_Party, "PartyRoom2", true);
-        assertEquals(ResultCodeNamedRoom.NAMED_ROOM_SUCCESS, ResultCodeNamedRoom.forNumber(namedRoomResult3.getResultCode()));
+        makePartyRoom(party2, "PartyRoom2");
 
-        NamedRoomResult namedRoomResult4 = account4.namedRoom(RoomType_Party, "PartyRoom2", true);
-        assertEquals(ResultCodeNamedRoom.NAMED_ROOM_SUCCESS, ResultCodeNamedRoom.forNumber(namedRoomResult4.getResultCode()));
+        // StartMatchParty1
+        startMatchParty(party1);
+        // StartMatchParty2
+        startMatchParty(party2);
 
-        Sample.GameMessageToC account3GetAccount4JoinMsg = account3.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Sample.GameMessageToC.class);
-        assertEquals(account4.getUserId() + " is join", account3GetAccount4JoinMsg.getMessage());
+        checkMatchUserDone(users);
 
-
-        MatchPartyStartResult matchPartyStartResult1 = account1.matchPartyStart(RoomType_MatchUserParty);
-        assertEquals(ResultCodeMatchPartyStart.MATCH_PARTY_START_SUCCESS, ResultCodeMatchPartyStart.forNumber(matchPartyStartResult1.getResultCode()));
-
-        Base.MatchPartyStartResOrNoti matchPartyStartResOrNoti1 = account2.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Base.MatchPartyStartResOrNoti.class);
-
-        MatchPartyStartResult matchPartyStartResult2 = account3.matchPartyStart(RoomType_MatchUserParty);
-        assertEquals(ResultCodeMatchPartyStart.MATCH_PARTY_START_SUCCESS, ResultCodeMatchPartyStart.forNumber(matchPartyStartResult1.getResultCode()));
-
-        Base.MatchPartyStartResOrNoti matchPartyStartResOrNoti2 = account4.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Base.MatchPartyStartResOrNoti.class);
-
-
-        Base.MatchUserDone matchUserDone1 = account1.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Base.MatchUserDone.class);
-        Base.MatchUserDone matchUserDone2 = account2.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Base.MatchUserDone.class);
-        Base.MatchUserDone matchUserDone3 = account3.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Base.MatchUserDone.class);
-        Base.MatchUserDone matchUserDone4 = account4.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Base.MatchUserDone.class);
-
-        Sample.GameMessageToC account1GetJoinMsg = account1.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Sample.GameMessageToC.class);
-        assertEquals(account2.getUserId() + " is join", account1GetJoinMsg.getMessage());
-        account1GetJoinMsg = account1.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Sample.GameMessageToC.class);
-        assertEquals(account3.getUserId() + " is join", account1GetJoinMsg.getMessage());
-        account1GetJoinMsg = account1.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Sample.GameMessageToC.class);
-        assertEquals(account4.getUserId() + " is join", account1GetJoinMsg.getMessage());
-
-        Sample.GameMessageToC account2GetJoinMsg = account2.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Sample.GameMessageToC.class);
-        assertEquals(account1.getUserId() + " is join", account2GetJoinMsg.getMessage());
-        account2GetJoinMsg = account2.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Sample.GameMessageToC.class);
-        assertEquals(account3.getUserId() + " is join", account2GetJoinMsg.getMessage());
-        account2GetJoinMsg = account2.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Sample.GameMessageToC.class);
-        assertEquals(account4.getUserId() + " is join", account2GetJoinMsg.getMessage());
-
-        Sample.GameMessageToC account3GetJoinMsg = account3.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Sample.GameMessageToC.class);
-        assertEquals(account1.getUserId() + " is join", account3GetJoinMsg.getMessage());
-        account3GetJoinMsg = account3.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Sample.GameMessageToC.class);
-        assertEquals(account2.getUserId() + " is join", account3GetJoinMsg.getMessage());
-        account3GetJoinMsg = account3.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Sample.GameMessageToC.class);
-        assertEquals(account4.getUserId() + " is join", account3GetJoinMsg.getMessage());
-
-        Sample.GameMessageToC account4GetJoinMsg = account4.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Sample.GameMessageToC.class);
-        assertEquals(account1.getUserId() + " is join", account4GetJoinMsg.getMessage());
-        account4GetJoinMsg = account4.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Sample.GameMessageToC.class);
-        assertEquals(account2.getUserId() + " is join", account4GetJoinMsg.getMessage());
-        account4GetJoinMsg = account4.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Sample.GameMessageToC.class);
-        assertEquals(account3.getUserId() + " is join", account4GetJoinMsg.getMessage());
+        checkJoinMsg(users);
     }
+
+    @Test
+    public void MatchPartyAndRefill() throws TimeoutException, IOException, InterruptedException {
+
+        List<ConnectorUser> party1 = users.subList(0, 2);
+        List<ConnectorUser> party2 = users.subList(2, 4);
+
+        // PartyRoom1 입장
+        makePartyRoom(party1, "PartyRoom1");
+        // PartyRoom2 입장
+        makePartyRoom(party2, "PartyRoom2");
+
+        startMatchParty(party1);
+        startMatchParty(party2);
+
+        cancelMatchParty(party2);
+        startMatchParty(party2);
+
+        checkMatchUserDone(users);
+
+        checkJoinMsg(users);
+    }
+
+    @Test
+    public void MatchPartyCancel() throws TimeoutException, IOException, InterruptedException {
+
+        List<ConnectorUser> party1 = users.subList(0, 2);
+        List<ConnectorUser> party2 = users.subList(2, 4);
+
+        // PartyRoom1 입장
+        makePartyRoom(party1, "PartyRoom1");
+        // PartyRoom2 입장
+        makePartyRoom(party2, "PartyRoom2");
+
+        // StartMatchParty1
+        startMatchParty(party1);
+        // StartMatchParty2
+        startMatchParty(party2);
+
+        cancelMatchParty(party1);
+        checkMatchUserTimeout(party2);
+    }
+
 
     @Test
     public void MessageFromServiceNodeAgent() throws TimeoutException, IOException, InterruptedException {
