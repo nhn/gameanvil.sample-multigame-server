@@ -340,6 +340,29 @@ public class GameTest {
     }
 
     @Test
+    public void MatchPartyAndIndividuals() throws TimeoutException, IOException, InterruptedException {
+
+        List<ConnectorUser> party = users.subList(0, 2);
+        List<ConnectorUser> individuals = users.subList(2, 4);
+
+        // PartyRoom 입장
+        makePartyRoom(party, "PartyRoom");
+
+        // StartMatchParty
+        startMatchParty(party);
+
+        MatchUserStartResult matchUserStartResult1 = users.get(2).matchUserStart(RoomType_MatchUserParty);
+        assertTrue(matchUserStartResult1.isSuccess());
+
+        MatchUserStartResult matchUserStartResult2 = users.get(3).matchUserStart(RoomType_MatchUserParty);
+        assertTrue(matchUserStartResult2.isSuccess());
+
+        checkMatchUserDone(users);
+
+        checkJoinMsg(users);
+    }
+
+    @Test
     public void MatchPartyAndRefill() throws TimeoutException, IOException, InterruptedException {
 
         List<ConnectorUser> party1 = users.subList(0, 2);
