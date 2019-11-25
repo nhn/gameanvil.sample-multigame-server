@@ -376,12 +376,31 @@ public class GameTest {
         startMatchParty(party1);
         startMatchParty(party2);
 
-        cancelMatchParty(party2);
-        startMatchParty(party2);
-
         checkMatchUserDone(users);
 
         checkJoinMsg(users);
+
+        ConnectorUser account3 = users.get(3);
+        LeaveRoomResult leaveRoomResult = account3.leaveRoom();
+        assertTrue(leaveRoomResult.isSuccess());
+
+        for(int i =0;i<3;i++){
+            Sample.GameMessageToC joinMsg = users.get(i).waitProtoPacket(5, TimeUnit.SECONDS, Sample.GameMessageToC.class);
+            assertEquals(account3.getUserId() + " is leave", joinMsg.getMessage());
+        }
+
+        MatchUserStartResult matchUserStartResult1 = account3.matchUserStart(RoomType_MatchUserParty);
+        assertTrue(matchUserStartResult1.isSuccess());
+
+        Base.MatchUserDone matchUserDone = account3.waitProtoPacket(5, TimeUnit.SECONDS, Base.MatchUserDone.class);
+        assertTrue(matchUserDone.getResultCode() == ResultCodeMatchUserDone.MATCH_USER_DONE_SUCCESS);
+
+        for(int i =0;i<3;i++){
+            Sample.GameMessageToC joinMsg = users.get(i).waitProtoPacket(5, TimeUnit.SECONDS, Sample.GameMessageToC.class);
+            assertEquals(account3.getUserId() + " is join", joinMsg.getMessage());
+        }
+
+        checkChatMsg(users, "Hello Tardis!");
     }
 
     @Test

@@ -117,7 +117,7 @@ public class GameUserPartyMatchMaker extends UserMatchMaker<GameUserMatchInfo> {
             int ratingGroup = req.getRating() / 100;
             for (GameUserMatchInfo refillInfo : refillRequests) {
                 // ratingGroup 값이 같은 경우 리필
-                if (ratingGroup == refillInfo.getRating() / 100) {
+                if (req.getPartySize() == refillInfo.getPartySize() && ratingGroup == refillInfo.getRating() / 100) {
                     if (refillRoom(req, refillInfo)) { // 해당 매칭 요청을 리필이 필요한 방으로 매칭
                         logger.info("GameUserPartyMatchMaker.refill() - Refill success: {}", refillInfo.getId());
                         return true;

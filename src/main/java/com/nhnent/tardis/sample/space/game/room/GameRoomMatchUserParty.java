@@ -83,7 +83,7 @@ public class GameRoomMatchUserParty extends GameRoom {
                     // Refill() 정보 등록
                     logger.info("GameRoomMatchUserParty.onLeaveRoom - refill");
                     isRefill = true;
-                    if (!matchRefill(new GameUserMatchInfo("Refill", 100, 2))) {
+                    if (!matchRefill(new GameUserMatchInfo("Refill", 100, 1))) {
                         logger.warn("MatchRefill for the room({}) failure!", getId());
                     }
                 } catch (Exception e) {
