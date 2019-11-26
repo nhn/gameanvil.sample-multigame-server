@@ -4,6 +4,7 @@ import com.nhnent.tardis.console.TardisBootstrap;
 import com.nhnent.tardis.sample.Defines.StringValues;
 import com.nhnent.tardis.sample.protocol.Sample;
 import com.nhnent.tardis.sample.service.SampleServiceNodeAgent;
+import com.nhnent.tardis.sample.service.SampleSpotAgent;
 import com.nhnent.tardis.sample.session.SampleSessionAgent;
 import com.nhnent.tardis.sample.session.SampleSessionNodeAgent;
 import com.nhnent.tardis.sample.session.SampleSessionUserAgent;
@@ -56,7 +57,9 @@ public class Main {
             .userMatchMaker(StringValues.GameRoomType_MatchUserParty, GameUserPartyMatchMaker.class, GameUserMatchInfo.class);
 
         bootstrap.setService(StringValues.SampleServiceName)
-            .node(SampleServiceNodeAgent.class);
+            .node(SampleServiceNodeAgent.class)
+            .spot(StringValues.SampleSpotType, SampleSpotAgent.class);
+
         bootstrap.run();
     }
 

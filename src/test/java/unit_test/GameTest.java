@@ -26,9 +26,15 @@ import com.nhnent.tardis.connector.tcp.ConnectorUser;
 import com.nhnent.tardis.connector.tcp.TardisConnector;
 import com.nhnent.tardis.sample.protocol.Sample;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import org.junit.After;
@@ -129,10 +135,9 @@ public class GameTest {
             if (senderId == null) {
                 senderId = user.getUserId();
                 user.send(new Packet(Sample.GameMessageToS.newBuilder().setMessage(chatMsg)));
-            } else {
-                Sample.GameMessageToC gameMessageToC = user.waitProtoPacket(1, TimeUnit.SECONDS, Sample.GameMessageToC.class);
-                assertEquals("[" + senderId + "] "+ chatMsg, gameMessageToC.getMessage());
             }
+            Sample.GameMessageToC gameMessageToC = user.waitProtoPacket(1, TimeUnit.SECONDS, Sample.GameMessageToC.class);
+            assertEquals("[" + senderId + "] "+ chatMsg, gameMessageToC.getMessage());
         }
     }
 
@@ -216,6 +221,9 @@ public class GameTest {
 
         LeaveRoomResult leaveRoomResult = account2.leaveRoom();
         assertTrue(leaveRoomResult.isSuccess());
+
+        Sample.GameMessageToC leaveMsg = account1.waitProtoPacket(5, TimeUnit.SECONDS, Sample.GameMessageToC.class);
+        assertEquals(account2.getUserId() + " is leave", leaveMsg.getMessage());
 
         Thread.sleep(500);
 
@@ -308,12 +316,17 @@ public class GameTest {
 
     public void checkJoinMsg(Collection<ConnectorUser> users){
         Sample.GameMessageToC joinMsg;
-        for(ConnectorUser receiver:users){
-            for(ConnectorUser sender:users){
-                if(receiver == sender)
+        Map<String, ConnectorUser> mapUsers= new TreeMap<>();
+        for(ConnectorUser user:users) {
+            mapUsers.put(user.getUserId(), user);
+        }
+
+        for(Entry<String, ConnectorUser> sender:mapUsers.entrySet()){
+            for(Entry<String, ConnectorUser> receiver:mapUsers.entrySet()){
+                if(receiver.getKey().equals(sender.getKey()))
                     continue;;
-                joinMsg = receiver.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Sample.GameMessageToC.class);
-                assertEquals(sender.getUserId() + " is join", joinMsg.getMessage());
+                joinMsg = receiver.getValue().waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Sample.GameMessageToC.class);
+                assertEquals(sender.getKey() + " is join", joinMsg.getMessage());
             }
         }
     }
@@ -425,24 +438,30 @@ public class GameTest {
 
 
     @Test
-    public void MessageFromServiceNodeAgent() throws TimeoutException, IOException, InterruptedException {
+    public void MessageFromSpot() throws TimeoutException, IOException, InterruptedException {
 
-        ConnectorUser doctor = users.get(0);
-        ConnectorUser dalek = users.get(1);
-        ConnectorUser bobby = users.get(2);
-        ConnectorUser jhone = users.get(3);
+        ConnectorUser account1 = users.get(0);
+        ConnectorUser account3 = users.get(2);
+        List<ConnectorUser> members1 = users.subList(0, 2);
+        List<ConnectorUser> members2 = users.subList(2, 4);
 
-        Sample.SampleToC sampleToC4 = jhone.waitProtoPacket(5, TimeUnit.SECONDS, Sample.SampleToC.class);
-        Sample.SampleToC sampleToC3 = bobby.waitProtoPacket(5, TimeUnit.SECONDS, Sample.SampleToC.class);
-        Sample.SampleToC sampleToC2 = dalek.waitProtoPacket(5, TimeUnit.SECONDS, Sample.SampleToC.class);
-        Sample.SampleToC sampleToC1 = doctor.waitProtoPacket(5, TimeUnit.SECONDS, Sample.SampleToC.class);
+        matchRoom(members1);
+        matchUser(members2);
 
-        assertNotEquals(doctor.getChannelId(), dalek.getChannelId());
-        assertNotEquals(doctor.getChannelId(), bobby.getChannelId());
-        assertNotEquals(doctor.getChannelId(), jhone.getChannelId());
+        int restCount = 5;
+        account1.send(new Packet(Sample.ResetSpot.newBuilder().setCount(restCount)));
+        for(int i =0;i < 3; i++){
+            checkChatMsg(members1, "Hello Tardis!");
+        }
+        for(int i =0;i < 2; i++){
+            checkChatMsg(members2, "Hello Tardis!");
+        }
 
-        assertEquals(sampleToC1.getMessage(), sampleToC2.getMessage());
-        assertEquals(sampleToC1.getMessage(), sampleToC3.getMessage());
-        assertEquals(sampleToC1.getMessage(), sampleToC4.getMessage());
+        for (ConnectorUser user : users) {
+            Sample.SampleToC sampleToC = user.waitProtoPacketByFirstReceived(1, TimeUnit.SECONDS, Sample.SampleToC.class);
+            assertEquals(String.format("[Event : %s] Hello Tardis! ", account3.getUserId()), sampleToC.getMessage());
+            sampleToC = user.waitProtoPacketByFirstReceived(1, TimeUnit.SECONDS, Sample.SampleToC.class);
+            assertEquals(String.format("[Event] Next Event will be on count %s ", restCount), sampleToC.getMessage());
+        }
     }
 }

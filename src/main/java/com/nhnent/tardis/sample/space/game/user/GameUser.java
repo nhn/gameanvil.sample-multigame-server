@@ -20,7 +20,6 @@ import com.nhnent.tardis.sample.space.game.match.GameUserMatchInfo;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
-import java.util.concurrent.TimeoutException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,12 +31,15 @@ public class GameUser extends UserAgent implements IUser, ITimerHandler {
     private String nickName = "";
 
     static private PacketDispatcher<GameUser> packetDispatcher = new PacketDispatcher();
+    {
+        packetDispatcher.registerMsg(Sample.ResetSpot.class, ResetSpotPacketHandler.class);
+    }
 
     @Override
     public boolean onLogin(
         Payload payload, Payload payload1, Payload payload2) throws SuspendExecution {
         logger.info("GameUser.onLogin - UserId : {}", getUserId());
-        addClientTopics(Arrays.asList(StringValues.ChatServiceName));
+        addClientTopics(Arrays.asList(StringValues.TopicSpot));
         return true;
     }
 

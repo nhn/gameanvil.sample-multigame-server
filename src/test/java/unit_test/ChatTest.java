@@ -141,28 +141,4 @@ public class ChatTest {
         Sample.ChatMessageToC chatMessageToC = dalek.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
         assertEquals("[doctor] Hello Tardis!",chatMessageToC.getMessage());
     }
-
-    @Test
-    public void MessageFromServiceNodeAgent() throws TimeoutException, IOException, InterruptedException {
-
-        ConnectorUser doctor = users.get(0);
-        ConnectorUser dalek = users.get(1);
-        ConnectorUser bobby = users.get(2);
-        ConnectorUser jhone = users.get(3);
-
-        Sample.SampleToC sampleToC4 = jhone.waitProtoPacket(5, TimeUnit.SECONDS, Sample.SampleToC.class);
-        Sample.SampleToC sampleToC3 = bobby.waitProtoPacket(5, TimeUnit.SECONDS, Sample.SampleToC.class);
-        Sample.SampleToC sampleToC2 = dalek.waitProtoPacket(5, TimeUnit.SECONDS, Sample.SampleToC.class);
-        Sample.SampleToC sampleToC1 = doctor.waitProtoPacket(5, TimeUnit.SECONDS, Sample.SampleToC.class);
-
-        assertNotEquals(doctor.getChannelId(), dalek.getChannelId());
-        assertNotEquals(doctor.getChannelId(), bobby.getChannelId());
-        assertNotEquals(doctor.getChannelId(), jhone.getChannelId());
-
-
-        assertEquals(sampleToC1.getMessage(), sampleToC2.getMessage());
-        assertEquals(sampleToC1.getMessage(), sampleToC3.getMessage());
-        assertEquals(sampleToC1.getMessage(), sampleToC4.getMessage());
-    }
-
 }

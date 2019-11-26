@@ -53,6 +53,17 @@ message SampleToC
     string message = 1;
 }
 
+message SampleToSpot
+{
+    string from = 1;
+    string message = 2;
+}
+
+message ResetSpot
+{
+    int32 count = 1;
+}
+
 message BeforeAuthenticateReq
 {
     string message = 1;

@@ -3,6 +3,7 @@ package com.nhnent.tardis.sample.space.game.room;
 import co.paralleluniverse.fibers.SuspendExecution;
 import com.nhnent.tardis.common.Packet;
 import com.nhnent.tardis.console.space.IRoomPacketHandler;
+import com.nhnent.tardis.sample.Defines.StringValues;
 import com.nhnent.tardis.sample.protocol.Sample;
 import com.nhnent.tardis.sample.space.game.user.GameUser;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -22,16 +23,16 @@ public class GameMessageToSPacketHandler implements IRoomPacketHandler<GameRoom,
 
             // make.
             Sample.GameMessageToC.Builder toClient = Sample.GameMessageToC.newBuilder();
-            if(gameUser != null){
-                toClient.setMessage("["+gameUser.getUserId() + "] " + fromClient.getMessage());
-            }else{
-                toClient.setMessage(fromClient.getMessage());
-            }
-
-            // for send.
+            toClient.setMessage("["+gameUser.getUserId() + "] " + fromClient.getMessage());
+            logger.info("GameMessageToSPacketHandler - from : {}, msg : {}", gameUser.getUserId(), fromClient.getMessage());
+            // for send to user.
             for (GameUser user : gameRoom.getUsers()) {
                 user.send(new Packet(toClient));
             }
+
+            // for send to spot.
+            Sample.SampleToSpot.Builder toSpot = Sample.SampleToSpot.newBuilder().setFrom(gameUser.getUserId()).setMessage(fromClient.getMessage());
+            gameUser.sendToSpot(StringValues.SampleServiceName, StringValues.SampleSpotType, StringValues.SampleSpotId, new Packet(toSpot));
 
         } catch (Exception e) {
             logger.error(ExceptionUtils.getStackTrace(e));
