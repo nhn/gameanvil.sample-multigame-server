@@ -1,5 +1,5 @@
 
-Õ
+ï
 sample.proto!com.nhnent.tardis.sample.protocol"1
 RegisterNickNameReq
 nickName (	RnickName"3
@@ -28,11 +28,7 @@ SampleData
 from (	Rfrom
 message (	Rmessage"!
 	ResetSpot
-count (Rcount"1
-BeforeAuthenticateReq
-message (	Rmessage"1
-BeforeAuthenticateRes
-message (	Rmessage"@
+count (Rcount"@
 SetTimer
 interval (Rinterval
 message (	Rmessage"

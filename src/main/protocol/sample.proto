@@ -64,16 +64,6 @@ message ResetSpot
     int32 count = 1;
 }
 
-message BeforeAuthenticateReq
-{
-    string message = 1;
-}
-
-message BeforeAuthenticateRes
-{
-    string message = 1;
-}
-
 message SetTimer
 {
     int32 interval = 1;

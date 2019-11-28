@@ -127,21 +127,6 @@ public class SessionAgentTest {
     }
 
     @Test
-    public void BeforeAuthenticateReqToSessionBeforeAuthenticate() throws IOException, TimeoutException {
-
-        String message = "BeforeAuthenticateReq";
-        try {
-            // authenticate 하기 전에도 BeforeAuthenticateReq를 보내고 BeforeAuthenticateRes 응답을 받을 수 있음.
-            // BeforeAuthenticateReq 를 보낼 경우 보낸 값을 그대로 돌려 받음.
-            Packet packetRes = session.requestToSession(new Packet(Sample.BeforeAuthenticateReq.newBuilder().setMessage(message)), Sample.BeforeAuthenticateRes.class);
-            Sample.BeforeAuthenticateRes msg = Sample.BeforeAuthenticateRes.parseFrom(packetRes.getStream());
-            assertEquals(msg.getMessage(), message);
-        } catch (IOException e) {
-            fail(e.getMessage());
-        }
-    }
-
-    @Test
     public void SampleToSToSession() throws IOException, TimeoutException {
 
         authenticateSuccess();
