@@ -1,5 +1,5 @@
 
-­
+Õ
 sample.proto!com.nhnent.tardis.sample.protocol"1
 RegisterNickNameReq
 nickName (	RnickName"3
@@ -36,4 +36,6 @@ SampleData
 SetTimer
 interval (Rinterval
 message (	Rmessage"
-RemoveTimerbproto3
+RemoveTimer"&
+UserInfo
+nickName (	RnickNamebproto3

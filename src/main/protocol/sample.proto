@@ -83,3 +83,8 @@ message SetTimer
 message RemoveTimer
 {
 }
+
+message UserInfo
+{
+    string nickName = 1;
+}

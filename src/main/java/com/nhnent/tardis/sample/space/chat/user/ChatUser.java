@@ -36,9 +36,10 @@ public class ChatUser extends UserAgent implements IUser, ITimerHandler {
 
 
     @Override
-    public boolean onLogin(Payload payload, Payload payload1, Payload payload2) throws SuspendExecution {
+    public boolean onLogin(Payload payload, Payload sessionPayload, Payload outPayload) throws SuspendExecution {
         logger.info("ChatUser.onLogin - UserId : {}", getUserId());
         addClientTopics(Arrays.asList(StringValues.ChatServiceName));
+        outPayload.add(new Packet(Sample.UserInfo.newBuilder().setNickName(nickName)));
         return true;
     }
 
@@ -48,23 +49,15 @@ public class ChatUser extends UserAgent implements IUser, ITimerHandler {
     }
 
     @Override
-    public boolean onReLogin(Payload payload, Payload payload1, Payload payload2) throws SuspendExecution {
+    public boolean onReLogin(Payload payload, Payload sessionPayload, Payload outPayload) throws SuspendExecution {
         logger.info("ChatUser.onReLogin - UserId : {}", getUserId());
+        outPayload.add(new Packet(Sample.UserInfo.newBuilder().setNickName(nickName)));
         return true;
     }
 
     @Override
     public void onDisconnect() throws SuspendExecution {
         logger.info("ChatUser.onDisconnect - UserId : {}", getUserId());
-
-//        try {
-//            String message = "["+getNickName()+"] is disconnected.";
-//            this.sendToRoom(getServiceId(), getRoomId(), new Packet(Sample.ChatMessageToS.newBuilder().setMessage(message)));
-//        } catch (NodeNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (TimeoutException e) {
-//            e.printStackTrace();
-//        }
     }
 
     @Override

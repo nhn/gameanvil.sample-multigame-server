@@ -37,7 +37,7 @@ public class GameUser extends UserAgent implements IUser, ITimerHandler {
 
     @Override
     public boolean onLogin(
-        Payload payload, Payload payload1, Payload payload2) throws SuspendExecution {
+        Payload payload, Payload sessionPayload, Payload outPayload) throws SuspendExecution {
         logger.info("GameUser.onLogin - UserId : {}", getUserId());
         addClientTopics(Arrays.asList(StringValues.TopicSpot));
         return true;
@@ -49,7 +49,7 @@ public class GameUser extends UserAgent implements IUser, ITimerHandler {
     }
 
     @Override
-    public boolean onReLogin(Payload payload, Payload payload1, Payload payload2) throws SuspendExecution {
+    public boolean onReLogin(Payload payload, Payload sessionPayload, Payload outPayload) throws SuspendExecution {
         logger.info("GameUser.onReLogin - UserId : {}", getUserId());
         return true;
     }
@@ -127,6 +127,7 @@ public class GameUser extends UserAgent implements IUser, ITimerHandler {
      * @return : true: user matching 요청 성공,false: user matching 요청 실패
      * @throws SuspendExecution
      */
+    @Override
     public boolean onMatchUser(final String roomType, final Payload payload, Payload outPayload) throws SuspendExecution {
         logger.info("GameUser.onMatchUser - UserId : {}", getUserId());
         try {
@@ -141,6 +142,7 @@ public class GameUser extends UserAgent implements IUser, ITimerHandler {
         return false;
     }
 
+    @Override
     public boolean onMatchUserCancel(final MatchCancelReason reason) throws SuspendExecution {
         logger.info("GameUser.onMatchUserCancel - UserId : {}", getUserId());
         return false;
