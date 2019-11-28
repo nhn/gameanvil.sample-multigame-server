@@ -10,14 +10,14 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class GameUserPartyMatchMaker extends UserMatchMaker<GameUserMatchInfo> {
+public class GamePartyMatchMaker extends UserMatchMaker<GameUserMatchInfo> {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private final int matchPoolFactorMax = 1; // match 정원의 몇 배수까지 인원을 모은 후에 rating 별로 정렬해서 매칭할 것인가?
     private int currentMatchPoolFactor = matchPoolFactorMax;
     private long lastMatchTime = System.currentTimeMillis();
 
-    public GameUserPartyMatchMaker(){
+    public GamePartyMatchMaker(){
         super(
             4, // 매치될 Room 인원 수
             5000 // Timeout
@@ -30,7 +30,7 @@ public class GameUserPartyMatchMaker extends UserMatchMaker<GameUserMatchInfo> {
         // leastAmount : 매칭 계산에 필요한 최소 요청 수.
         int partySize = 2;
         int leastAmount = matchSize / partySize * currentMatchPoolFactor;
-        logger.info("GameUserPartyMatchMaker.match() - leastAmount: {}", leastAmount);
+        logger.info("GamePartyMatchMaker.match() - leastAmount: {}", leastAmount);
         List<GameUserMatchInfo> matchRequests = getMatchRequests(leastAmount);
         if (matchRequests == null) {
             // getMatchRequests : 매칭 요청자의 총 수가 leastAmount보다 적을 경우 null을 리턴한다.
@@ -39,7 +39,7 @@ public class GameUserPartyMatchMaker extends UserMatchMaker<GameUserMatchInfo> {
                 // currentMatchPoolFactor를 조정하여leastAmount의 크기를 줄인다.
                 if(currentMatchPoolFactor > 1){
                     currentMatchPoolFactor = Math.max(currentMatchPoolFactor/2, 1);
-                    logger.info("GameUserPartyMatchMaker.match() - reduce currentMatchPoolFactor: {}", currentMatchPoolFactor);
+                    logger.info("GamePartyMatchMaker.match() - reduce currentMatchPoolFactor: {}", currentMatchPoolFactor);
                 }
             }
             return;
@@ -104,22 +104,22 @@ public class GameUserPartyMatchMaker extends UserMatchMaker<GameUserMatchInfo> {
 
     @Override
     public boolean refill(GameUserMatchInfo req) {
-        logger.info("GameUserPartyMatchMaker.refill()");
+        logger.info("GamePartyMatchMaker.refill()");
         try {
             // 전체 리필 요청 목록
             List<GameUserMatchInfo> refillRequests = getRefillRequests();
             if (refillRequests.isEmpty()) {
                 // 리필 요청 목록이 없을 경우
-                logger.info("GameUserPartyMatchMaker.refill() - refillRequests.isEmpty");
+                logger.info("GamePartyMatchMaker.refill() - refillRequests.isEmpty");
                 return false;
             }
-            logger.info("GameUserPartyMatchMaker.refill() - RefillRequests : {}", refillRequests.size());
+            logger.info("GamePartyMatchMaker.refill() - RefillRequests : {}", refillRequests.size());
             int ratingGroup = req.getRating() / 100;
             for (GameUserMatchInfo refillInfo : refillRequests) {
                 // ratingGroup 값이 같은 경우 리필
                 if (req.getPartySize() == refillInfo.getPartySize() && ratingGroup == refillInfo.getRating() / 100) {
                     if (refillRoom(req, refillInfo)) { // 해당 매칭 요청을 리필이 필요한 방으로 매칭
-                        logger.info("GameUserPartyMatchMaker.refill() - Refill success: {}", refillInfo.getId());
+                        logger.info("GamePartyMatchMaker.refill() - Refill success: {}", refillInfo.getId());
                         return true;
                     }
                 }

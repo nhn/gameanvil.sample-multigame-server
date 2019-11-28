@@ -8,13 +8,13 @@ import com.nhnent.tardis.sample.space.game.match.GameUserMatchInfo;
 import com.nhnent.tardis.sample.space.game.user.GameUser;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
-public class GameRoomMatchUser extends GameRoom {
+public class GameRoomForeMatchUser extends GameRoom {
     private  boolean isRefill = false;
     private static final int  MaxUserCount = 2;
 
     @Override
     public boolean onCreateRoom(GameUser gameUser, Payload inPayload, Payload outPayload) throws SuspendExecution {
-        logger.info("GameRoomMatchUser.onCreateRoom - RoomId : {}, UserId : {}", getId(), gameUser.getUserId());
+        logger.info("GameRoomForeMatchUser.onCreateRoom - RoomId : {}, UserId : {}", getId(), gameUser.getUserId());
         try{
             users.put(gameUser.getUserId(), gameUser);
             return true;
@@ -26,20 +26,20 @@ public class GameRoomMatchUser extends GameRoom {
 
     @Override
     public boolean onJoinRoom(GameUser gameUser, Payload inPayload, Payload outPayload) throws SuspendExecution {
-        logger.info("GameRoomMatchUser.onJoinRoom - RoomId : {}, UserId : {}", getId(), gameUser.getUserId());
+        logger.info("GameRoomForeMatchUser.onJoinRoom - RoomId : {}, UserId : {}", getId(), gameUser.getUserId());
         try{
             users.put(gameUser.getUserId(), gameUser);
-            logger.info("GameRoomMatchUser.onJoinRoom - userMatchMaking");
+            logger.info("GameRoomForeMatchUser.onJoinRoom - userMatchMaking");
             if(isRefill){
                 if(isRefill){
-                    logger.info("GameRoomMatchUser.onJoinRoom - roomMatchMaking");
+                    logger.info("GameRoomForeMatchUser.onJoinRoom - roomMatchMaking");
                     String message = String.format("%s is join",gameUser.getUserId());
                     for(GameUser user:users.values()){
                         if(gameUser.getUserId().equals(user.getUserId()))
                             continue;
 
                         user.send(new Packet(Sample.GameMessageToC.newBuilder().setMessage(message)));
-                        logger.info("GameRoomMatchUser.onJoinRoom - to {} : {}",user.getUserId(), message);
+                        logger.info("GameRoomForeMatchUser.onJoinRoom - to {} : {}",user.getUserId(), message);
                     }
 
                     if(users.size() == MaxUserCount){
@@ -48,7 +48,7 @@ public class GameRoomMatchUser extends GameRoom {
                 }
             }else{
                 if(users.size() == MaxUserCount){
-                    logger.info("GameRoomMatchUser.onJoinRoom - userMatchMaking completed");
+                    logger.info("GameRoomForeMatchUser.onJoinRoom - userMatchMaking completed");
                     for(GameUser user:users.values()) {
                         String message = String.format("%s is join",user.getUserId());
                         for(GameUser to:users.values()){
@@ -56,7 +56,7 @@ public class GameRoomMatchUser extends GameRoom {
                                 continue;
 
                             to.send(new Packet(Sample.GameMessageToC.newBuilder().setMessage(message)));
-                            logger.info("GameRoomMatchUser.onJoinRoom - to {} : {}",to.getUserId(), message);
+                            logger.info("GameRoomForeMatchUser.onJoinRoom - to {} : {}",to.getUserId(), message);
                         }
                     }
                 }
@@ -71,7 +71,7 @@ public class GameRoomMatchUser extends GameRoom {
 
     @Override
     public boolean onLeaveRoom(GameUser gameUser, Payload inPayload, Payload outPayload) throws SuspendExecution {
-        logger.info("GameRoomMatchUser.onLeaveRoom - RoomId : {}, UserId : {}", getId(), gameUser.getUserId());
+        logger.info("GameRoomForeMatchUser.onLeaveRoom - RoomId : {}, UserId : {}", getId(), gameUser.getUserId());
         try{
             users.remove(gameUser.getUserId());
 
@@ -80,7 +80,7 @@ public class GameRoomMatchUser extends GameRoom {
 
                 try {
                     // Refill() 정보 등록
-                    logger.info("GameRoomMatchUser.onLeaveRoom - refill");
+                    logger.info("GameRoomForeMatchUser.onLeaveRoom - refill");
                     isRefill = true;
                     if (!matchRefill(new GameUserMatchInfo("Refill", 100, 1))) {
                         logger.warn("MatchRefill for the room({}) failure!", getId());

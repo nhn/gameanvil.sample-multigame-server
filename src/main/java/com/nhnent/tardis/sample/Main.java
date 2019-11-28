@@ -16,10 +16,10 @@ import com.nhnent.tardis.sample.space.game.match.GameUserMatchInfo;
 import com.nhnent.tardis.sample.space.game.match.GameUserMatchMaker;
 import com.nhnent.tardis.sample.space.chat.room.ChatRoom;
 import com.nhnent.tardis.sample.space.chat.user.ChatUser;
-import com.nhnent.tardis.sample.space.game.match.GameUserPartyMatchMaker;
-import com.nhnent.tardis.sample.space.game.room.GameRoomMatchRoom;
-import com.nhnent.tardis.sample.space.game.room.GameRoomMatchUser;
-import com.nhnent.tardis.sample.space.game.room.GameRoomMatchUserParty;
+import com.nhnent.tardis.sample.space.game.match.GamePartyMatchMaker;
+import com.nhnent.tardis.sample.space.game.room.GameRoomForMatchRoom;
+import com.nhnent.tardis.sample.space.game.room.GameRoomForeMatchUser;
+import com.nhnent.tardis.sample.space.game.room.GameRoomForeMatchParty;
 import com.nhnent.tardis.sample.space.game.room.PartyRoom;
 import com.nhnent.tardis.sample.space.game.user.GameUser;
 
@@ -46,15 +46,15 @@ public class Main {
             .node(GameNode.class)
             .user(StringValues.GameUserType, GameUser.class)
 
-            .room(StringValues.GameRoomType_MatchRoom, GameRoomMatchRoom.class)
+            .room(StringValues.GameRoomType_MatchRoom, GameRoomForMatchRoom.class)
             .roomMatchMaker(StringValues.GameRoomType_MatchRoom, GameRoomMatchMaker.class, GameRoomMatchInfo.class)
 
-            .room(StringValues.GameRoomType_MatchUser, GameRoomMatchUser.class)
+            .room(StringValues.GameRoomType_MatchUser, GameRoomForeMatchUser.class)
             .userMatchMaker(StringValues.GameRoomType_MatchUser, GameUserMatchMaker.class, GameUserMatchInfo.class)
 
             .room(StringValues.PartyRoomType, PartyRoom.class)
-            .room(StringValues.GameRoomType_MatchUserParty, GameRoomMatchUserParty.class)
-            .userMatchMaker(StringValues.GameRoomType_MatchUserParty, GameUserPartyMatchMaker.class, GameUserMatchInfo.class);
+            .room(StringValues.GameRoomType_MatchParty, GameRoomForeMatchParty.class)
+            .userMatchMaker(StringValues.GameRoomType_MatchParty, GamePartyMatchMaker.class, GameUserMatchInfo.class);
 
         bootstrap.setService(StringValues.SampleServiceName)
             .node(SampleServiceNodeAgent.class)

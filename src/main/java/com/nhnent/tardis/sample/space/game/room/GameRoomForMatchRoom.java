@@ -8,12 +8,12 @@ import com.nhnent.tardis.sample.space.game.match.GameRoomMatchInfo;
 import com.nhnent.tardis.sample.space.game.user.GameUser;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
-public class GameRoomMatchRoom extends GameRoom {
+public class GameRoomForMatchRoom extends GameRoom {
     private GameRoomMatchInfo gameRoomMatchInfo = new GameRoomMatchInfo();
 
     @Override
     public boolean onCreateRoom(GameUser gameUser, Payload inPayload, Payload outPayload) throws SuspendExecution {
-        logger.info("GameRoomMatchRoom.onCreateRoom - RoomId : {}, UserId : {}", getId(), gameUser.getUserId());
+        logger.info("GameRoomForMatchRoom.onCreateRoom - RoomId : {}, UserId : {}", getId(), gameUser.getUserId());
         try{
             users.put(gameUser.getUserId(), gameUser);
 
@@ -30,13 +30,13 @@ public class GameRoomMatchRoom extends GameRoom {
 
     @Override
     public boolean onJoinRoom(GameUser gameUser, Payload inPayload, Payload outPayload) throws SuspendExecution {
-        logger.info("GameRoomMatchRoom.onJoinRoom - RoomId : {}, UserId : {}", getId(), gameUser.getUserId());
+        logger.info("GameRoomForMatchRoom.onJoinRoom - RoomId : {}, UserId : {}", getId(), gameUser.getUserId());
         try{
-            logger.info("GameRoomMatchRoom.onJoinRoom - roomMatchMaking");
+            logger.info("GameRoomForMatchRoom.onJoinRoom - roomMatchMaking");
             String message = String.format("%s is join",gameUser.getUserId());
             for(GameUser user:users.values()){
                 user.send(new Packet(Sample.GameMessageToC.newBuilder().setMessage(message)));
-                logger.info("GameRoomMatchRoom.onJoinRoom - to {} : {}",user.getUserId(), message);
+                logger.info("GameRoomForMatchRoom.onJoinRoom - to {} : {}",user.getUserId(), message);
             }
 
             users.put(gameUser.getUserId(), gameUser);
@@ -56,7 +56,7 @@ public class GameRoomMatchRoom extends GameRoom {
 
     @Override
     public boolean onLeaveRoom(GameUser gameUser, Payload inPayload, Payload outPayload) throws SuspendExecution {
-        logger.info("GameRoomMatchRoom.onLeaveRoom - RoomId : {}, UserId : {}", getId(), gameUser.getUserId());
+        logger.info("GameRoomForMatchRoom.onLeaveRoom - RoomId : {}, UserId : {}", getId(), gameUser.getUserId());
         try{
             users.remove(gameUser.getUserId());
             gameRoomMatchInfo.setUserCountCurr(users.size());

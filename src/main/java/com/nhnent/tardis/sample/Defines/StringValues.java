@@ -9,7 +9,7 @@ public class StringValues {
     public static final String GameUserType = "GameUser";
     public static final String GameRoomType_MatchRoom = "GameRoom_MatchRoom";
     public static final String GameRoomType_MatchUser = "GameRoom_MatchUser";
-    public static final String GameRoomType_MatchUserParty = "GameRoom_MatchUserParty";
+    public static final String GameRoomType_MatchParty = "GameRoom_MatchParty";
     public static final String PartyRoomType = "PartyRoom";
 
     public static final String SampleServiceName = "SampleService";
