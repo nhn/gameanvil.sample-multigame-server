@@ -37,7 +37,7 @@ public class ChatUser extends UserAgent implements IUser, ITimerHandler {
 
     @Override
     public boolean onLogin(Payload payload, Payload sessionPayload, Payload outPayload) throws SuspendExecution {
-        logger.info("ChatUser.onLogin - UserId : {}", getUserId());
+        logger.info("ChatUser.onLogin - UserId : {}, NickName : {}", getUserId(), nickName);
         addClientTopics(Arrays.asList(StringValues.ChatServiceName));
         outPayload.add(new Packet(Sample.UserInfo.newBuilder().setNickName(nickName)));
         return true;
@@ -50,7 +50,7 @@ public class ChatUser extends UserAgent implements IUser, ITimerHandler {
 
     @Override
     public boolean onReLogin(Payload payload, Payload sessionPayload, Payload outPayload) throws SuspendExecution {
-        logger.info("ChatUser.onReLogin - UserId : {}", getUserId());
+        logger.info("ChatUser.onReLogin - UserId : {}, NickName : {}", getUserId(), nickName);
         outPayload.add(new Packet(Sample.UserInfo.newBuilder().setNickName(nickName)));
         return true;
     }
