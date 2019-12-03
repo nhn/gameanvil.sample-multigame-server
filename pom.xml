@@ -18,7 +18,7 @@
     </repositories>
 
     <groupId>com.nhnent.tardis</groupId>
-    <artifactId>tardis_server_sample</artifactId>
+    <artifactId>tardis_sample_server</artifactId>
     <version>0.1</version>
 
     <dependencies>
@@ -44,7 +44,7 @@
         </dependency>
     </dependencies>
 
-    <name>tardis_server_sample</name>
+    <name>tardis_sample_server</name>
 
     <build>
         <plugins>
