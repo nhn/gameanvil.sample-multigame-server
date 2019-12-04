@@ -16,8 +16,8 @@ public class SessionAgentSetTimerPacketHandler implements
     private Logger logger = LoggerFactory.getLogger(getClass());
     @Override
     public void execute(SampleSession sampleSession, Packet packet) throws SuspendExecution {
-        logger.info("SessionAgentSetTimerPacketHandler");
         try {
+            logger.info("SessionAgentSetTimerPacketHandler");
             Sample.SetTimer msg = Sample.SetTimer.parseFrom(packet.getStream());
             ((SampleSessionNode) SampleSessionNode.getInstance()).setTimer(msg.getInterval(), msg.getMessage());
         } catch (IOException e) {

@@ -25,6 +25,7 @@ public class GameMessageToSPacketHandler implements IRoomPacketHandler<GameRoom,
             Sample.GameMessageToC.Builder toClient = Sample.GameMessageToC.newBuilder();
             toClient.setMessage("["+gameUser.getUserId() + "] " + fromClient.getMessage());
             logger.info("GameMessageToSPacketHandler - from : {}, msg : {}", gameUser.getUserId(), fromClient.getMessage());
+
             // for send to user.
             for (GameUser user : gameRoom.getUsers()) {
                 user.send(new Packet(toClient));
