@@ -27,17 +27,18 @@ public class SampleSessionNode extends SessionNodeAgent implements ISessionNode,
     private List<SampleSession> sampleSessions = new LinkedList();
 
 
-    public void addSampleSession(SampleSession sampleSession){
+    public void addSampleSession(SampleSession sampleSession) {
         logger.info("SampleSessionNode.addSampleSession : {}", sampleSession.getAccountId());
         sampleSessions.add(sampleSession);
     }
 
-    public void removeSampleSession(SampleSession sampleSession){
+    public void removeSampleSession(SampleSession sampleSession) {
         logger.info("SampleSessionNode.removeSampleSession : {}", sampleSession.getAccountId());
         sampleSessions.remove(sampleSession);
     }
 
     private ITimerObject timerObject = null;
+
     public boolean setTimer(int interval, String message) {
         if (timerObject != null) {
             return false;
@@ -105,7 +106,7 @@ public class SampleSessionNode extends SessionNodeAgent implements ISessionNode,
     public void onTimer(ITimerObject timerObject, Object arg) throws SuspendExecution {
         logger.info("SampleSessionNode.onTimer - message : {}", arg);
         for (SampleSession sampleSession : sampleSessions) {
-            sampleSession.sendToClient(new Packet(Sample.SampleToC.newBuilder().setMessage((String)arg)));
+            sampleSession.sendToClient(new Packet(Sample.SampleToC.newBuilder().setMessage((String) arg)));
         }
     }
 }

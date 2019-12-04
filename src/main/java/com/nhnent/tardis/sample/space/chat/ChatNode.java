@@ -9,8 +9,9 @@ import com.nhnent.tardis.console.space.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ChatNode extends SpaceNodeAgent implements ISpaceNode  {
+public class ChatNode extends SpaceNodeAgent implements ISpaceNode {
     private Logger logger = LoggerFactory.getLogger(getClass());
+
     @Override
     public void onInit() throws SuspendExecution {
         logger.info("ChatNode.onInit");

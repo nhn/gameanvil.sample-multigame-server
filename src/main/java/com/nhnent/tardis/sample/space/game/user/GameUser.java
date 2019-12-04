@@ -31,6 +31,7 @@ public class GameUser extends UserAgent implements IUser, ITimerHandler {
     private String nickName = "";
 
     static private PacketDispatcher<GameUser> packetDispatcher = new PacketDispatcher();
+
     {
         packetDispatcher.registerMsg(Sample.ResetSpot.class, CmdResetSpot.class);
     }
@@ -63,7 +64,7 @@ public class GameUser extends UserAgent implements IUser, ITimerHandler {
     public void onDispatch(Packet packet) throws SuspendExecution {
         logger.info("GameUser.onDispatch : {} , {}",
             TardisIndexer.getMsgName(packet.getDescId(), packet.getMsgIndex()), getUserId());
-        packetDispatcher.dispatch(this,packet);
+        packetDispatcher.dispatch(this, packet);
     }
 
     @Override
@@ -89,9 +90,10 @@ public class GameUser extends UserAgent implements IUser, ITimerHandler {
 
     /**
      * client 에서 MatchRoom 을 요청했을 경우 발생하는 callback
+     *
      * @param roomType : 매칭되는 room 의 type
-     * @param payload : client 의 요청시 추가적으로 전달되는 data
-     * @return  matching 된 room 의 정보 , null 을 반환 할시  client 요청 옵션에 따라서 새로운 방이 생성되거나,요청 실패 처리 된다.
+     * @param payload  : client 의 요청시 추가적으로 전달되는 data
+     * @return matching 된 room 의 정보 , null 을 반환 할시  client 요청 옵션에 따라서 새로운 방이 생성되거나,요청 실패 처리 된다.
      * @throws SuspendExecution
      */
     @Override
@@ -116,13 +118,12 @@ public class GameUser extends UserAgent implements IUser, ITimerHandler {
     }
 
     /**
-     * client 에서 MatchUserStart 를 요청했을 경우 호출되는 callback
-     * server에서는 UserMatchInfo를 저장하고 주기적으로 UserMatchMaker의 match() 함수를 호출함
-     * UserMatchMaker의 match()함수에서는 getMatchRequests()를 호출하여 저장된 UserMatchInfo 목록을 가져오고
-     * 이 목록중에 조건에 맞는 UserMatchInfo를 찾아 매칭를 완료하게 됨.
-     * 여기에서 성공은 매칭의 성공 여부가 아닌 매칭 요청의 성공여부를 의미함.
-     * @param roomType : 매칭되는 room 의 type
-     * @param payload : client 의 요청시 추가적으로 전달되는 data
+     * client 에서 MatchUserStart 를 요청했을 경우 호출되는 callback server에서는 UserMatchInfo를 저장하고 주기적으로 UserMatchMaker의 match() 함수를 호출함 UserMatchMaker의
+     * match()함수에서는 getMatchRequests()를 호출하여 저장된 UserMatchInfo 목록을 가져오고 이 목록중에 조건에 맞는 UserMatchInfo를 찾아 매칭를 완료하게 됨. 여기에서 성공은 매칭의 성공 여부가 아닌 매칭 요청의
+     * 성공여부를 의미함.
+     *
+     * @param roomType   : 매칭되는 room 의 type
+     * @param payload    : client 의 요청시 추가적으로 전달되는 data
      * @param outPayload : 서버에서 client 로 전달되는 data
      * @return : true: user matching 요청 성공,false: user matching 요청 실패
      * @throws SuspendExecution

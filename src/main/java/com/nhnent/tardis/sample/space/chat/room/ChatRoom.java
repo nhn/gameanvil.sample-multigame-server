@@ -17,10 +17,11 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ChatRoom extends RoomAgent implements IRoom<ChatUser>{
+public class ChatRoom extends RoomAgent implements IRoom<ChatUser> {
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     private static RoomPacketDispatcher dispatcher = new RoomPacketDispatcher();
+
     static {
         dispatcher.registerMsg(Sample.ChatMessageToS.class, CmdChatMessageToS.class);
     }
@@ -49,11 +50,11 @@ public class ChatRoom extends RoomAgent implements IRoom<ChatUser>{
     @Override
     public boolean onCreateRoom(ChatUser chatUser, Payload inPayload, Payload outPayload) throws SuspendExecution {
         logger.info("ChatRoom.onCreateRoom - RoomId : {}, UserId : {}", getId(), chatUser.getUserId());
-        try{
+        try {
             users.put(chatUser.getUserId(), chatUser);
 
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error(ExceptionUtils.getStackTrace(e));
             return false;
         }
@@ -62,15 +63,15 @@ public class ChatRoom extends RoomAgent implements IRoom<ChatUser>{
     @Override
     public boolean onJoinRoom(ChatUser chatUser, Payload inPayload, Payload outPayload) throws SuspendExecution {
         logger.info("ChatRoom.onJoinRoom - RoomId : {}, UserId : {}", getId(), chatUser.getUserId());
-        try{
-            String message = String.format("%s is join",chatUser.getNickName());
-            for(ChatUser user:users.values()){
+        try {
+            String message = String.format("%s is join", chatUser.getNickName());
+            for (ChatUser user : users.values()) {
                 user.send(new Packet(Sample.ChatMessageToC.newBuilder().setMessage(message)));
-                logger.info("ChatRoom.onJoinRoom - to {} : {}",user.getNickName(), message);
+                logger.info("ChatRoom.onJoinRoom - to {} : {}", user.getNickName(), message);
             }
             users.put(chatUser.getUserId(), chatUser);
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             users.remove(chatUser.getUserId());
             logger.error(ExceptionUtils.getStackTrace(e));
             return false;
@@ -80,10 +81,10 @@ public class ChatRoom extends RoomAgent implements IRoom<ChatUser>{
     @Override
     public boolean onLeaveRoom(ChatUser chatUser, Payload inPayload, Payload outPayload) throws SuspendExecution {
         logger.info("ChatRoom.onLeaveRoom - RoomId : {}, UserId : {}", getId(), chatUser.getUserId());
-        try{
+        try {
             users.remove(chatUser.getUserId());
             return true;
-        }catch(Exception e){
+        } catch (Exception e) {
             users.put(chatUser.getUserId(), chatUser);
             return false;
         }
@@ -92,8 +93,8 @@ public class ChatRoom extends RoomAgent implements IRoom<ChatUser>{
     @Override
     public void onPostLeaveRoom(ChatUser chatUser) throws SuspendExecution {
         logger.info("ChatRoom.onPostLeaveRoom - RoomId : {}, UserId : {}", getId(), chatUser.getUserId());
-        String message = String.format("%s is leave",chatUser.getNickName());
-        for(ChatUser user:users.values()){
+        String message = String.format("%s is leave", chatUser.getNickName());
+        for (ChatUser user : users.values()) {
             user.send(new Packet(Sample.ChatMessageToC.newBuilder().setMessage(message)));
         }
     }
@@ -101,8 +102,8 @@ public class ChatRoom extends RoomAgent implements IRoom<ChatUser>{
     @Override
     public void onRejoinRoom(ChatUser chatUser, Payload outPayload) throws SuspendExecution {
         logger.info("ChatRoom.onRejoinRoom - RoomId : {}, UserId : {}", getId(), chatUser.getUserId());
-        String message = String.format("%s is back",chatUser.getNickName());
-        for(ChatUser user:users.values()){
+        String message = String.format("%s is back", chatUser.getNickName());
+        for (ChatUser user : users.values()) {
             user.send(new Packet(Sample.ChatMessageToC.newBuilder().setMessage(message)));
         }
     }

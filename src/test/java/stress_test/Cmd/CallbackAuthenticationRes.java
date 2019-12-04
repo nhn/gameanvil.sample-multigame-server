@@ -16,7 +16,8 @@ public class CallbackAuthenticationRes implements IDispatchPacket<SampleUserClas
 
     private Logger logger = LoggerFactory.getLogger(getClass());
     private static AtomicInteger channel = new AtomicInteger();
-    private static String getChannel(){
+
+    private static String getChannel() {
         return String.valueOf((channel.getAndIncrement() % 4) + 1);
     }
 

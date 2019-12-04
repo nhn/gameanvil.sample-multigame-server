@@ -14,11 +14,11 @@ public class CmdSessionUserAgentSampleReq implements IPacketHandler<SampleSessio
 
     @Override
     public void execute(SampleSessionUser sampleSessionUser, Packet packet) throws SuspendExecution {
-        try{
+        try {
             String message = Sample.SampleReq.parseFrom(packet.getStream()).getMessage();
             logger.info("CmdSessionUserAgentSampleReq : {}", message);
             sampleSessionUser.reply(new Packet(Sample.SampleRes.newBuilder().setMessage(message)));
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error(ExceptionUtils.getStackTrace(e));
         }
     }

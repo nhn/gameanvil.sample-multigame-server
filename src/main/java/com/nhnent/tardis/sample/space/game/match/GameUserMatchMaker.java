@@ -16,7 +16,7 @@ public class GameUserMatchMaker extends UserMatchMaker<GameUserMatchInfo> {
     private int currentMatchPoolFactor = matchPoolFactorMax;
     private long lastMatchTime = System.currentTimeMillis();
 
-    public GameUserMatchMaker(){
+    public GameUserMatchMaker() {
         super(
             2, // 매치될 Room 인원 수
             5000 // Timeout
@@ -31,11 +31,11 @@ public class GameUserMatchMaker extends UserMatchMaker<GameUserMatchInfo> {
         List<GameUserMatchInfo> matchRequests = getMatchRequests(leastAmount);
         if (matchRequests == null) {
             // getMatchRequests : 매칭 요청자의 총 수가 leastAmount보다 적을 경우 null을 리턴한다.
-            if (System.currentTimeMillis() - lastMatchTime >= 1000){
+            if (System.currentTimeMillis() - lastMatchTime >= 1000) {
                 // 1000 ms 동안  leastAmount를 체우지 못한 경우
                 // currentMatchPoolFactor를 조정하여leastAmount의 크기를 줄인다.
-                if(currentMatchPoolFactor > 1){
-                    currentMatchPoolFactor = Math.max(currentMatchPoolFactor/2, 1);
+                if (currentMatchPoolFactor > 1) {
+                    currentMatchPoolFactor = Math.max(currentMatchPoolFactor / 2, 1);
                     logger.info("GameUserMatchMaker.match() - reduce currentMatchPoolFactor: {}", currentMatchPoolFactor);
                 }
             }
@@ -47,17 +47,18 @@ public class GameUserMatchMaker extends UserMatchMaker<GameUserMatchInfo> {
         // 0~99, 100~199, 200~299 ...
         // 요청이 많을 경우 여기에서 그룹을 묶는 작업을 하는 것이 서버에 부하가 될 수 있다.
         // 그룹 별로 RoomType을 나누어 별도의 MatchMaker를 사용하는 방법도 고려해 보자.
-        Map<Integer, List<GameUserMatchInfo>> entries= new TreeMap<>();
-        for(GameUserMatchInfo info : matchRequests){
+        Map<Integer, List<GameUserMatchInfo>> entries = new TreeMap<>();
+        for (GameUserMatchInfo info : matchRequests) {
             int ratingGroup = info.getRating() / 100;
-            if(!entries.containsKey(ratingGroup))
+            if (!entries.containsKey(ratingGroup)) {
                 entries.put(ratingGroup, new ArrayList<>());
+            }
 
             List<GameUserMatchInfo> subEntries = entries.get(ratingGroup);
             subEntries.add(info);
         }
 
-        entries.forEach((ratingGroup, subEntries)->{
+        entries.forEach((ratingGroup, subEntries) -> {
             int matchingAmount = matchSingles(subEntries);
             if (matchingAmount > 0) {
                 logger.info("GameUserMatchMaker.match() - {} match(s) made for RatingGroup {}", matchingAmount, ratingGroup);

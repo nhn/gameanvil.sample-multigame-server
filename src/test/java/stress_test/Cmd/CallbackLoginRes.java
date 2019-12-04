@@ -19,7 +19,7 @@ public class CallbackLoginRes implements IDispatchPacket<SampleUserClass> {
     public void dispatch(Packet packet, SampleUserClass user) {
 
         LoginResult result = user.parseLoginResult(packet);
-        assertEquals(true,result.isSuccess());
+        assertEquals(true, result.isSuccess());
 
         user.setSendCount(0);
 

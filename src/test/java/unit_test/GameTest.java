@@ -75,7 +75,7 @@ public class GameTest {
     @Before
     public void setUp() throws TimeoutException {
 
-        for (int i=0; i<4; ++i) {
+        for (int i = 0; i < 4; ++i) {
 
             // 커넥션을 생성하고 세션 정보가 담긴 객체를 리턴.
             ConnectorSession session = connector.addSession(connector.getIncrementedValue("account_"), connector.makeUniqueId());
@@ -88,7 +88,7 @@ public class GameTest {
             ConnectorUser user = session.addUser(ServiceName);
 
             // 로그인을 진행.
-            LoginResult loginResult = user.login(UserType, String.valueOf(i+1));
+            LoginResult loginResult = user.login(UserType, String.valueOf(i + 1));
             assertTrue("Login fail", loginResult.isSuccess());
 
             // Test 단계에서 활용하도록 준비합니다.
@@ -99,7 +99,7 @@ public class GameTest {
     @After
     public void tearDown() throws TimeoutException {
 
-        for(ConnectorUser user : users){
+        for (ConnectorUser user : users) {
             user.logout();
             user.getSession().disconnect();
         }
@@ -108,7 +108,7 @@ public class GameTest {
     private String matchRoom(Collection<ConnectorUser> users) throws TimeoutException {
         String roomId = null;
         List<ConnectorUser> members = new ArrayList<>();
-        for(ConnectorUser user : users){
+        for (ConnectorUser user : users) {
             MatchRoomResult matchRoomResult = user.matchRoom(RoomType_MatchRoom);
             assertEquals(ResultCodeMatchRoom.MATCH_ROOM_SUCCESS, ResultCodeMatchRoom.forNumber(matchRoomResult.getResultCode()));
             assertEquals(members.isEmpty(), matchRoomResult.isMatchRoomCreated());
@@ -118,10 +118,11 @@ public class GameTest {
                 assertEquals(user.getUserId() + " is join", message.getMessage());
             }
             members.add(user);
-            if(roomId == null)
+            if (roomId == null) {
                 roomId = matchRoomResult.getRoomId();
-            else
+            } else {
                 assertEquals(roomId, matchRoomResult.getRoomId());
+            }
         }
         return roomId;
     }
@@ -134,7 +135,7 @@ public class GameTest {
                 user.send(new Packet(Sample.GameMessageToS.newBuilder().setMessage(chatMsg)));
             }
             Sample.GameMessageToC gameMessageToC = user.waitProtoPacket(1, TimeUnit.SECONDS, Sample.GameMessageToC.class);
-            assertEquals("[" + senderId + "] "+ chatMsg, gameMessageToC.getMessage());
+            assertEquals("[" + senderId + "] " + chatMsg, gameMessageToC.getMessage());
         }
     }
 
@@ -164,7 +165,8 @@ public class GameTest {
 
         LeaveRoomResult leaveRoomResult = account2.leaveRoom();
         assertTrue(leaveRoomResult.isSuccess());
-        account2.clearRemainWaitPackets();;
+        account2.clearRemainWaitPackets();
+        ;
 
         MatchRoomResult matchRoomJoinResult = account2.matchRoom(RoomType_MatchRoom);
         assertTrue(matchRoomJoinResult.isSuccess());
@@ -177,20 +179,21 @@ public class GameTest {
         checkChatMsg(members, "Hello Tardis!");
     }
 
-    private void matchUser(Collection<ConnectorUser> users) throws TimeoutException{
-        for(ConnectorUser user : users){
+    private void matchUser(Collection<ConnectorUser> users) throws TimeoutException {
+        for (ConnectorUser user : users) {
             MatchUserStartResult matchUserStartResult1 = user.matchUserStart(RoomType_MatchUser);
             assertTrue(matchUserStartResult1.isSuccess());
         }
 
-        for(ConnectorUser user : users){
+        for (ConnectorUser user : users) {
             user.waitProtoPacket(5, TimeUnit.SECONDS, Base.MatchUserDone.class);
         }
 
-        for(ConnectorUser sender : users){
-            for(ConnectorUser listener : users){
-                if(sender.getUserId() == listener.getUserId())
+        for (ConnectorUser sender : users) {
+            for (ConnectorUser listener : users) {
+                if (sender.getUserId() == listener.getUserId()) {
                     continue;
+                }
                 Sample.GameMessageToC joinMsg = listener.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Sample.GameMessageToC.class);
                 assertEquals(sender.getUserId() + " is join", joinMsg.getMessage());
             }
@@ -270,15 +273,15 @@ public class GameTest {
         }
     }
 
-    private  void startMatchParty(Collection<ConnectorUser> users) throws TimeoutException {
+    private void startMatchParty(Collection<ConnectorUser> users) throws TimeoutException {
         boolean first = true;
-        for(ConnectorUser user:users){
-            if(first){
+        for (ConnectorUser user : users) {
+            if (first) {
                 MatchPartyStartResult matchPartyStartResult = user.matchPartyStart(
                     RoomType_MatchParty);
                 assertEquals(ResultCodeMatchPartyStart.MATCH_PARTY_START_SUCCESS, ResultCodeMatchPartyStart.forNumber(matchPartyStartResult.getResultCode()));
                 first = false;
-            }else{
+            } else {
                 Base.MatchPartyStartResOrNoti matchPartyStartResOrNoti = user.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Base.MatchPartyStartResOrNoti.class);
                 assertEquals(ResultCodeMatchPartyStart.MATCH_PARTY_START_SUCCESS, matchPartyStartResOrNoti.getResultCode());
             }
@@ -287,43 +290,45 @@ public class GameTest {
 
     private void cancelMatchParty(Collection<ConnectorUser> users) throws TimeoutException {
         boolean first = true;
-        for(ConnectorUser user:users){
-            if(first){
+        for (ConnectorUser user : users) {
+            if (first) {
                 MatchPartyCancelResult matchPartyCancelResult = user.matchPartyCancel(
                     RoomType_MatchParty);
                 assertEquals(ResultCodeMatchPartyCancel.MATCH_PARTY_CANCEL_SUCCESS, ResultCodeMatchPartyCancel.forNumber(matchPartyCancelResult.getResultCode()));
                 first = false;
-            }else{
+            } else {
                 Base.MatchPartyCancelResOrNoti matchPartyCancelResOrNoti = user.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Base.MatchPartyCancelResOrNoti.class);
                 assertEquals(ResultCodeMatchPartyCancel.MATCH_PARTY_CANCEL_SUCCESS, matchPartyCancelResOrNoti.getResultCode());
             }
         }
     }
 
-    private void checkMatchUserDone(Collection<ConnectorUser> users){
-        for(ConnectorUser user:users){
+    private void checkMatchUserDone(Collection<ConnectorUser> users) {
+        for (ConnectorUser user : users) {
             Base.MatchUserDone matchUserDone = user.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Base.MatchUserDone.class);
             assertEquals(ResultCodeMatchUserDone.MATCH_USER_DONE_SUCCESS, matchUserDone.getResultCode());
         }
     }
 
-    private void checkMatchUserTimeout(Collection<ConnectorUser> users){
-        for(ConnectorUser user:users){
+    private void checkMatchUserTimeout(Collection<ConnectorUser> users) {
+        for (ConnectorUser user : users) {
             user.waitProtoPacketByFirstReceived(6, TimeUnit.SECONDS, Base.MatchUserTimeout.class);
         }
     }
 
-    public void checkJoinMsg(Collection<ConnectorUser> users){
+    public void checkJoinMsg(Collection<ConnectorUser> users) {
         Sample.GameMessageToC joinMsg;
-        Map<String, ConnectorUser> mapUsers= new TreeMap<>();
-        for(ConnectorUser user:users) {
+        Map<String, ConnectorUser> mapUsers = new TreeMap<>();
+        for (ConnectorUser user : users) {
             mapUsers.put(user.getUserId(), user);
         }
 
-        for(Entry<String, ConnectorUser> sender:mapUsers.entrySet()){
-            for(Entry<String, ConnectorUser> receiver:mapUsers.entrySet()){
-                if(receiver.getKey().equals(sender.getKey()))
-                    continue;;
+        for (Entry<String, ConnectorUser> sender : mapUsers.entrySet()) {
+            for (Entry<String, ConnectorUser> receiver : mapUsers.entrySet()) {
+                if (receiver.getKey().equals(sender.getKey())) {
+                    continue;
+                }
+                ;
                 joinMsg = receiver.getValue().waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Sample.GameMessageToC.class);
                 assertEquals(sender.getKey() + " is join", joinMsg.getMessage());
             }
@@ -398,7 +403,7 @@ public class GameTest {
         LeaveRoomResult leaveRoomResult = account3.leaveRoom();
         assertTrue(leaveRoomResult.isSuccess());
 
-        for(int i =0;i<3;i++){
+        for (int i = 0; i < 3; i++) {
             Sample.GameMessageToC joinMsg = users.get(i).waitProtoPacket(5, TimeUnit.SECONDS, Sample.GameMessageToC.class);
             assertEquals(account3.getUserId() + " is leave", joinMsg.getMessage());
         }
@@ -409,7 +414,7 @@ public class GameTest {
         Base.MatchUserDone matchUserDone = account3.waitProtoPacket(5, TimeUnit.SECONDS, Base.MatchUserDone.class);
         assertTrue(matchUserDone.getResultCode() == ResultCodeMatchUserDone.MATCH_USER_DONE_SUCCESS);
 
-        for(int i =0;i<3;i++){
+        for (int i = 0; i < 3; i++) {
             Sample.GameMessageToC joinMsg = users.get(i).waitProtoPacket(5, TimeUnit.SECONDS, Sample.GameMessageToC.class);
             assertEquals(account3.getUserId() + " is join", joinMsg.getMessage());
         }
@@ -451,10 +456,10 @@ public class GameTest {
 
         int restCount = 5;
         account1.send(new Packet(Sample.ResetSpot.newBuilder().setCount(restCount)));
-        for(int i =0;i < 3; i++){
+        for (int i = 0; i < 3; i++) {
             checkChatMsg(members1, "Hello Tardis!");
         }
-        for(int i =0;i < 2; i++){
+        for (int i = 0; i < 2; i++) {
             checkChatMsg(members2, "Hello Tardis!");
         }
 

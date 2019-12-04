@@ -32,15 +32,15 @@ public class Main {
         bootstrap.addProtoBufClass(0, Sample.class);
 
         bootstrap.setSession()
-                .session(SampleSession.class)
-                .user(SampleSessionUser.class)
-                .node(SampleSessionNode.class)
-                .enableWhiteModules();
+            .session(SampleSession.class)
+            .user(SampleSessionUser.class)
+            .node(SampleSessionNode.class)
+            .enableWhiteModules();
 
         bootstrap.setSpace(StringValues.ChatServiceName)
-                .node(ChatNode.class)
-                .user(StringValues.ChatUserType, ChatUser.class)
-                .room(StringValues.ChatRoomType, ChatRoom.class);
+            .node(ChatNode.class)
+            .user(StringValues.ChatUserType, ChatUser.class)
+            .room(StringValues.ChatRoomType, ChatRoom.class);
 
         bootstrap.setSpace(StringValues.GameServiceName)
             .node(GameNode.class)

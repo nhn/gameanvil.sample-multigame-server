@@ -11,6 +11,7 @@ import static org.junit.Assert.assertTrue;
 
 public class CallbackLogout implements IDispatchPacket<SampleUserClass> {
     private Logger logger = LoggerFactory.getLogger(getClass());
+
     @Override
     public void dispatch(Packet packet, SampleUserClass user) {
 

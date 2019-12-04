@@ -15,14 +15,14 @@ public class CmdRegisterNickNameReq implements IPacketHandler<ChatUser> {
     @Override
     public void execute(ChatUser chatUser, Packet packet) throws SuspendExecution {
 
-        try{
+        try {
             Sample.RegisterNickNameReq req = Sample.RegisterNickNameReq.parseFrom(packet.getStream());
 
             chatUser.setNickName(req.getNickName());
 
             Sample.RegisterNickNameRes.Builder res = Sample.RegisterNickNameRes.newBuilder().setIsSuccess(true);
             chatUser.reply(new Packet(res.build()));
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error(ExceptionUtils.getStackTrace(e));
 
             Sample.RegisterNickNameRes.Builder res = Sample.RegisterNickNameRes.newBuilder().setIsSuccess(true);

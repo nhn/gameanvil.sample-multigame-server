@@ -22,15 +22,15 @@ public class CmdChatMessageToS implements IRoomPacketHandler<ChatRoom, ChatUser>
 
             // make.
             Sample.ChatMessageToC.Builder toClient = Sample.ChatMessageToC.newBuilder();
-            if(chatUser != null){
-                toClient.setMessage("["+chatUser.getNickName() + "] " + fromClient.getMessage());
-            }else{
+            if (chatUser != null) {
+                toClient.setMessage("[" + chatUser.getNickName() + "] " + fromClient.getMessage());
+            } else {
                 toClient.setMessage(fromClient.getMessage());
             }
 
             // for send.
             for (ChatUser user : chatRoom.getUsers()) {
-               user.send(new Packet(toClient));
+                user.send(new Packet(toClient));
             }
 
         } catch (Exception e) {

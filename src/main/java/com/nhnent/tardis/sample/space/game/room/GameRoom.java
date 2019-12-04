@@ -21,6 +21,7 @@ public class GameRoom extends RoomAgent implements IRoom<GameUser>, ITimerHandle
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
     protected static RoomPacketDispatcher dispatcher = new RoomPacketDispatcher();
+
     static {
         dispatcher.registerMsg(Sample.GameMessageToS.class, CmdGameMessageToS.class);
     }
@@ -59,7 +60,7 @@ public class GameRoom extends RoomAgent implements IRoom<GameUser>, ITimerHandle
         throws SuspendExecution {
         logger.info("GameRoom.onJoinRoom - RoomId : {}, UserId : {}", getId(),
             gameUser.getUserId());
-        return  false;
+        return false;
     }
 
     @Override

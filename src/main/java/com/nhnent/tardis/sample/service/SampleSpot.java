@@ -75,17 +75,18 @@ public class SampleSpot extends SpotAgent implements ISpot {
         logger.info("SampleSpot.onTransferIn");
     }
 
-    public void resetEventCount(int resetCount){
+    public void resetEventCount(int resetCount) {
         logger.info("SampleSpot.resetEventCount - count : {}", resetCount);
         count = 0;
         eventCount = resetCount;
     }
 
     public void onEvent(String from, String message) throws SuspendExecution {
-        if(eventCount <= 0)
+        if (eventCount <= 0) {
             return;
+        }
         count++;
-        if(count == eventCount){
+        if (count == eventCount) {
             logger.info("SampleSpot.onEvent - Event!!");
             publishToClient(StringValues.TopicSpot, new Packet(Sample.SampleToC.newBuilder().setMessage(String.format("[Event : %s] %s ", from, message))));
             resetEventCount(eventCount);

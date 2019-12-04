@@ -9,9 +9,11 @@ public class SampleUserClass extends AsyncConnectorUser {
     public int getSendCount() {
         return sendCount;
     }
-    public void incSendCount(){
+
+    public void incSendCount() {
         ++sendCount;
     }
+
     public void setSendCount(int sendCount) {
         this.sendCount = sendCount;
     }
