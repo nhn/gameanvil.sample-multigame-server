@@ -1,5 +1,7 @@
 package com.nhnent.tardis.sample.service;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import co.paralleluniverse.fibers.SuspendExecution;
 import com.nhnent.tardis.common.Packet;
 import com.nhnent.tardis.common.internal.PauseType;
@@ -12,11 +14,10 @@ import com.nhnent.tardis.sample.protocol.Sample;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class SampleSpot extends SpotAgent implements ISpot {
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private static final Logger logger = getLogger(SampleSpot.class);
 
     private static PacketDispatcher dispatcher = new PacketDispatcher();
 

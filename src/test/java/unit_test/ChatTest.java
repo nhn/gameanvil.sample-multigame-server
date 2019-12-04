@@ -1,18 +1,10 @@
 package unit_test;
 
-import com.nhnent.tardis.common.protocol.Base;
-import com.nhnent.tardis.common.protocol.Base.ResultCodeMatchUserDone;
 import com.nhnent.tardis.connector.common.Config;
 import com.nhnent.tardis.connector.protocol.Packet;
 import com.nhnent.tardis.connector.protocol.result.AuthenticationResult;
-import com.nhnent.tardis.connector.protocol.result.CreateRoomResult;
-import com.nhnent.tardis.connector.protocol.result.LeaveRoomResult;
 import com.nhnent.tardis.connector.protocol.result.LoginResult;
-import com.nhnent.tardis.connector.protocol.result.MatchRoomResult;
-import com.nhnent.tardis.connector.protocol.result.MatchUserCancelResult;
-import com.nhnent.tardis.connector.protocol.result.MatchUserStartResult;
 import com.nhnent.tardis.connector.protocol.result.NamedRoomResult;
-import com.nhnent.tardis.connector.protocol.result.ReconnectResult;
 import com.nhnent.tardis.connector.tcp.ConnectorSession;
 import com.nhnent.tardis.connector.tcp.ConnectorUser;
 import com.nhnent.tardis.connector.tcp.TardisConnector;
@@ -29,7 +21,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 public class ChatTest {
@@ -40,8 +31,6 @@ public class ChatTest {
 
     private static TardisConnector connector;
     private List<ConnectorUser> users = new ArrayList<>();
-
-    //-------------------------------------------------------------------------------------
 
     @BeforeClass
     public static void configuration() {
@@ -59,8 +48,6 @@ public class ChatTest {
         // 컨텐츠 서비스 등록.
         connector.addService(0, ServiceName);
     }
-
-    //-------------------------------------------------------------------------------------
 
     @Before
     public void setUp() throws TimeoutException {
@@ -94,8 +81,6 @@ public class ChatTest {
             user.getSession().disconnect();
         }
     }
-
-    //-------------------------------------------------------------------------------------
 
     void registerNickName(ConnectorUser user, String nickName) throws IOException, TimeoutException {
 

@@ -1,5 +1,7 @@
 package com.nhnent.tardis.sample.space.chat.room;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import co.paralleluniverse.fibers.SuspendExecution;
 import com.nhnent.tardis.common.Packet;
 import com.nhnent.tardis.console.space.IRoomPacketHandler;
@@ -7,11 +9,10 @@ import com.nhnent.tardis.sample.protocol.Sample;
 import com.nhnent.tardis.sample.space.chat.user.ChatUser;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class CmdChatMessageToS implements IRoomPacketHandler<ChatRoom, ChatUser> {
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private static final Logger logger = getLogger(CmdChatMessageToS.class);
 
     @Override
     public void execute(ChatRoom chatRoom, ChatUser chatUser, Packet packet) throws SuspendExecution {

@@ -1,5 +1,7 @@
 package com.nhnent.tardis.sample.space.chat.user;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import co.paralleluniverse.fibers.SuspendExecution;
 import com.nhnent.tardis.common.Packet;
 import com.nhnent.tardis.common.Payload;
@@ -16,14 +18,13 @@ import com.nhnent.tardis.sample.protocol.Sample;
 import java.util.Arrays;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 
 public class ChatUser extends UserAgent implements IUser, ITimerHandler {
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
+    private static final Logger logger = getLogger(ChatUser.class);
 
     private String nickName = "";
 

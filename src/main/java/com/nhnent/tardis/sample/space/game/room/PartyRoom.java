@@ -1,6 +1,7 @@
 package com.nhnent.tardis.sample.space.game.room;
 
 import static com.nhnent.tardis.common.internal.BaseNode.getServiceName;
+import static org.slf4j.LoggerFactory.getLogger;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import com.nhnent.tardis.common.Packet;
@@ -16,10 +17,9 @@ import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class PartyRoom extends RoomAgent implements IRoom<GameUser> {
-    protected Logger logger = LoggerFactory.getLogger(getClass());
+    private static final Logger logger = getLogger(PartyRoom.class);
 
     protected static RoomPacketDispatcher dispatcher = new RoomPacketDispatcher();
 

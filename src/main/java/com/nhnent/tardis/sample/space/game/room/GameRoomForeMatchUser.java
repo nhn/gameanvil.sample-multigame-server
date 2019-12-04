@@ -1,5 +1,7 @@
 package com.nhnent.tardis.sample.space.game.room;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import co.paralleluniverse.fibers.SuspendExecution;
 import com.nhnent.tardis.common.Packet;
 import com.nhnent.tardis.common.Payload;
@@ -7,8 +9,10 @@ import com.nhnent.tardis.sample.protocol.Sample;
 import com.nhnent.tardis.sample.space.game.match.GameUserMatchInfo;
 import com.nhnent.tardis.sample.space.game.user.GameUser;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.slf4j.Logger;
 
 public class GameRoomForeMatchUser extends GameRoom {
+    private static final Logger logger = getLogger(GameRoomForeMatchUser.class);
     private boolean isRefill = false;
     private static final int MaxUserCount = 2;
 

@@ -7,8 +7,6 @@ import com.nhnent.tardis.connector.tcp.agent.parent.IAsyncConnectorUser;
 import com.nhnent.tardis.sample.protocol.Sample;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import stress_test.Cmd.*;
 
 import java.util.concurrent.TimeUnit;
@@ -21,9 +19,6 @@ public class Stress {
     public static String RoomType = "ChatRoom";
 
     private static TardisConnector connector;
-    private Logger logger = LoggerFactory.getLogger(getClass());
-
-    //-------------------------------------------------------------------------------------
 
     @BeforeClass
     public static void configuration() {
@@ -68,8 +63,6 @@ public class Stress {
 
         connector.addPacketTimeoutCallback(new SampleTimeout());
     }
-
-    //-------------------------------------------------------------------------------------
 
     @Test
     public void runMultiUser() throws TimeoutException {

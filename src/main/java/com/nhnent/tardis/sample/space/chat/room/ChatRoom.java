@@ -1,5 +1,7 @@
 package com.nhnent.tardis.sample.space.chat.room;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import co.paralleluniverse.fibers.SuspendExecution;
 import com.nhnent.tardis.console.TardisIndexer;
 import com.nhnent.tardis.sample.protocol.Sample;
@@ -15,10 +17,9 @@ import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class ChatRoom extends RoomAgent implements IRoom<ChatUser> {
-    private Logger logger = LoggerFactory.getLogger(getClass());
+    private static final Logger logger = getLogger(ChatRoom.class);
 
     private static RoomPacketDispatcher dispatcher = new RoomPacketDispatcher();
 

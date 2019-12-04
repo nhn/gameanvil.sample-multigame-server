@@ -7,15 +7,12 @@ import com.nhnent.tardis.connector.callback.parent.IDispatchTimer;
 import com.nhnent.tardis.connector.protocol.Packet;
 import com.nhnent.tardis.connector.tcp.agent.parent.ITimerTask;
 import com.nhnent.tardis.sample.protocol.Sample;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import stress_test.SampleUserClass;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 public class CallbackChatMessageToC implements IDispatchPacket<SampleUserClass> {
-    private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
     public void dispatch(Packet packet, SampleUserClass user) {

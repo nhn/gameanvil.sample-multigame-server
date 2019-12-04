@@ -1,5 +1,7 @@
 package com.nhnent.tardis.sample.space.game.user;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import co.paralleluniverse.fibers.SuspendExecution;
 import com.nhnent.tardis.common.Packet;
 import com.nhnent.tardis.common.Payload;
@@ -22,11 +24,10 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class GameUser extends UserAgent implements IUser, ITimerHandler {
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
+    private static final Logger logger = getLogger(GameUser.class);
 
     private String nickName = "";
 

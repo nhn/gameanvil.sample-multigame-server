@@ -1,5 +1,7 @@
 package com.nhnent.tardis.sample.session;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import co.paralleluniverse.fibers.SuspendExecution;
 import com.nhnent.tardis.common.Packet;
 import com.nhnent.tardis.common.Payload;
@@ -15,17 +17,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-public class SampleSessionNode extends SessionNodeAgent implements ISessionNode,
-    ITimerHandler {
+public class SampleSessionNode extends SessionNodeAgent implements ISessionNode, ITimerHandler {
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
-
+    private static final Logger logger = getLogger(SampleSessionNode.class);
     private PacketDispatcher packetDispatcher = new PacketDispatcher();
-
     private List<SampleSession> sampleSessions = new LinkedList();
-
 
     public void addSampleSession(SampleSession sampleSession) {
         logger.info("SampleSessionNode.addSampleSession : {}", sampleSession.getAccountId());

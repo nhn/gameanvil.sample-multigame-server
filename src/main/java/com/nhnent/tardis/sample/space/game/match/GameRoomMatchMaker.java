@@ -1,13 +1,14 @@
 package com.nhnent.tardis.sample.space.game.match;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import com.nhnent.tardis.console.match.RoomMatchMaker;
 import java.util.Comparator;
 import java.util.List;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class GameRoomMatchMaker extends RoomMatchMaker<GameRoomMatchInfo> {
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private static final Logger logger = getLogger(GameRoomMatchMaker.class);
 
     @Override
     public GameRoomMatchInfo match(GameRoomMatchInfo terms, Object... args) {

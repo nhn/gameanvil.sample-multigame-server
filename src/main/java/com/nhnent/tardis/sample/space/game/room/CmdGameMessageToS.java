@@ -1,5 +1,7 @@
 package com.nhnent.tardis.sample.space.game.room;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import co.paralleluniverse.fibers.SuspendExecution;
 import com.nhnent.tardis.common.Packet;
 import com.nhnent.tardis.console.space.IRoomPacketHandler;
@@ -8,11 +10,10 @@ import com.nhnent.tardis.sample.protocol.Sample;
 import com.nhnent.tardis.sample.space.game.user.GameUser;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class CmdGameMessageToS implements IRoomPacketHandler<GameRoom, GameUser> {
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private static final Logger logger = getLogger(CmdGameMessageToS.class);
 
     @Override
     public void execute(GameRoom gameRoom, GameUser gameUser, Packet packet) throws SuspendExecution {

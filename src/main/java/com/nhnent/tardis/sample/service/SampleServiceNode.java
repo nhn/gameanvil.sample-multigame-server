@@ -1,5 +1,7 @@
 package com.nhnent.tardis.sample.service;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import co.paralleluniverse.fibers.SuspendExecution;
 import com.nhnent.tardis.common.Packet;
 import com.nhnent.tardis.common.Payload;
@@ -10,10 +12,9 @@ import com.nhnent.tardis.console.service.IServiceNode;
 import com.nhnent.tardis.console.service.ServiceNodeAgent;
 import com.nhnent.tardis.sample.Defines.StringValues;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class SampleServiceNode extends ServiceNodeAgent implements IServiceNode{
-    private Logger logger = LoggerFactory.getLogger(getClass());
+    private static final Logger logger = getLogger(SampleServiceNode.class);
 
     @Override
     public void onInit() throws SuspendExecution {

@@ -50,8 +50,6 @@ public class GameTest {
     private static TardisConnector connector;
     private List<ConnectorUser> users = new ArrayList<>();
 
-    //-------------------------------------------------------------------------------------
-
     @BeforeClass
     public static void configuration() {
 
@@ -69,8 +67,6 @@ public class GameTest {
         connector.addService(0, "ChatService");
         connector.addService(1, ServiceName);
     }
-
-    //-------------------------------------------------------------------------------------
 
     @Before
     public void setUp() throws TimeoutException {

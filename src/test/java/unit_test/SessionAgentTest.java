@@ -60,7 +60,6 @@ public class SessionAgentTest {
         session.disconnect();
     }
 
-    //-------------------------------------------------------------------------------------
     @Test
     public void authenticateSuccess() throws IOException, TimeoutException {
         // accountId와 password가 일치할 때 성공

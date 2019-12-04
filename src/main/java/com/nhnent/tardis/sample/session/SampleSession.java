@@ -1,5 +1,7 @@
 package com.nhnent.tardis.sample.session;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import co.paralleluniverse.fibers.SuspendExecution;
 import com.nhnent.tardis.common.Packet;
 import com.nhnent.tardis.common.Payload;
@@ -16,23 +18,20 @@ import com.nhnent.tardis.sample.session.cmd.CmdSessionAgentSampleToS;
 import com.nhnent.tardis.sample.session.cmd.CmdSessionAgentSetTimer;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 
 public class SampleSession extends SessionAgent implements ISession<SampleSessionUser> {
 
+    private static final Logger logger = getLogger(SampleSession.class);
     private static PacketDispatcher dispatcher = new PacketDispatcher();
-
     static {
         dispatcher.registerMsg(Sample.SampleReq.class, CmdSessionAgentSampleReq.class);
         dispatcher.registerMsg(Sample.SampleToS.class, CmdSessionAgentSampleToS.class);
         dispatcher.registerMsg(Sample.SetTimer.class, CmdSessionAgentSetTimer.class);
         dispatcher.registerMsg(Sample.RemoveTimer.class, CmdSessionAgentRemoveTimer.class);
     }
-
-    private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
     public boolean onAuthenticate(String accountId, String password, String deviceId,

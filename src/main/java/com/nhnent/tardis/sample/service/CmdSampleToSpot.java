@@ -1,16 +1,17 @@
 package com.nhnent.tardis.sample.service;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import co.paralleluniverse.fibers.SuspendExecution;
 import com.nhnent.tardis.common.Packet;
 import com.nhnent.tardis.console.IPacketHandler;
 import com.nhnent.tardis.sample.protocol.Sample;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class CmdSampleToSpot implements IPacketHandler<SampleSpot> {
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private static final Logger logger = getLogger(CmdSampleToSpot.class);
 
     @Override
     public void execute(SampleSpot sampleSpot, Packet packet) throws SuspendExecution {

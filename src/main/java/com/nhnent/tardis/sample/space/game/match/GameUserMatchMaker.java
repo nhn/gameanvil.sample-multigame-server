@@ -1,5 +1,7 @@
 package com.nhnent.tardis.sample.space.game.match;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import com.nhnent.tardis.console.match.UserMatchMaker;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,10 +9,9 @@ import java.util.Map;
 import java.util.TreeMap;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class GameUserMatchMaker extends UserMatchMaker<GameUserMatchInfo> {
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private static final Logger logger = getLogger(GameUserMatchMaker.class);
 
     private final int matchPoolFactorMax = 1; // match 정원의 몇 배수까지 인원을 모은 후에 rating 별로 정렬해서 매칭할 것인가?
     private int currentMatchPoolFactor = matchPoolFactorMax;
