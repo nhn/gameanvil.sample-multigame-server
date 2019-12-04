@@ -15,7 +15,6 @@ import com.nhnent.tardis.sample.space.game.match.GameUserMatchInfo;
 import com.nhnent.tardis.sample.space.game.user.GameUser;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 
 public class PartyRoom extends RoomAgent implements IRoom<GameUser> {

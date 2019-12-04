@@ -7,7 +7,6 @@ import com.nhnent.tardis.common.Packet;
 import com.nhnent.tardis.console.IPacketHandler;
 import com.nhnent.tardis.sample.protocol.Sample;
 import com.nhnent.tardis.sample.session.SampleSession;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 
 public class CmdSessionAgentSampleReq implements IPacketHandler<SampleSession> {

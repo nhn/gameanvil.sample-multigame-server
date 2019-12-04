@@ -8,7 +8,6 @@ import com.nhnent.tardis.console.space.IRoomPacketHandler;
 import com.nhnent.tardis.sample.Defines.StringValues;
 import com.nhnent.tardis.sample.protocol.Sample;
 import com.nhnent.tardis.sample.space.game.user.GameUser;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 
 public class CmdGameMessageToS implements IRoomPacketHandler<GameRoom, GameUser> {

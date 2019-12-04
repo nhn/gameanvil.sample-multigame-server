@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 
 public class GameUserMatchMaker extends UserMatchMaker<GameUserMatchInfo> {

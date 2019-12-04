@@ -15,7 +15,6 @@ import com.nhnent.tardis.console.space.RoomPacketDispatcher;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 
 public class ChatRoom extends RoomAgent implements IRoom<ChatUser> {
