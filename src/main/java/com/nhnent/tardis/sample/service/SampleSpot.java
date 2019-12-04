@@ -19,14 +19,14 @@ public class SampleSpot extends SpotAgent implements ISpot {
 
     private static final Logger logger = getLogger(SampleSpot.class);
 
-    private static PacketDispatcher dispatcher = new PacketDispatcher();
+    private static PacketDispatcher packetDispatcher = new PacketDispatcher();
 
     private int count;
     private int eventCount;
 
     static {
-        dispatcher.registerMsg(Sample.SampleToSpot.class, CmdSampleToSpot.class);
-        dispatcher.registerMsg(Sample.ResetSpot.class, CmdResetSpot.class);
+        packetDispatcher.registerMsg(Sample.SampleToSpot.class, CmdSampleToSpot.class);
+        packetDispatcher.registerMsg(Sample.ResetSpot.class, CmdResetSpot.class);
     }
 
     @Override
@@ -55,8 +55,8 @@ public class SampleSpot extends SpotAgent implements ISpot {
     @Override
     public void onDispatch(Packet packet) throws SuspendExecution {
         logger.info("SampleSpot.onDispatch : {}", packet.getMsgName());
-        if (dispatcher.isRegisteredMessage(packet)) {
-            dispatcher.dispatch(this, packet);
+        if (packetDispatcher.isRegisteredMessage(packet)) {
+            packetDispatcher.dispatch(this, packet);
         }
     }
 

@@ -15,16 +15,16 @@ import org.slf4j.Logger;
 public class SampleSessionUser extends SessionUserAgent implements ISessionUser {
 
     private static final Logger logger = getLogger(SampleSessionUser.class);
-    private static PacketDispatcher dispatcher = new PacketDispatcher();
+    private static PacketDispatcher packetDispatcher = new PacketDispatcher();
 
     static {
-        dispatcher.registerMsg(Sample.SampleReq.class, CmdSessionUserAgentSampleReq.class);
+        packetDispatcher.registerMsg(Sample.SampleReq.class, CmdSessionUserAgentSampleReq.class);
     }
 
     @Override
     public void onDispatch(Packet packet) throws SuspendExecution {
         logger.info("SampleSessionUser.onDispatch : {}",
             TardisIndexer.getMsgName(packet.getDescId(), packet.getMsgIndex()));
-        dispatcher.dispatch(this, packet);
+        packetDispatcher.dispatch(this, packet);
     }
 }

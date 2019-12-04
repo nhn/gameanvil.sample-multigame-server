@@ -21,7 +21,6 @@ import org.slf4j.Logger;
 public class SampleSessionNode extends SessionNodeAgent implements ISessionNode, ITimerHandler {
 
     private static final Logger logger = getLogger(SampleSessionNode.class);
-    private PacketDispatcher packetDispatcher = new PacketDispatcher();
     private List<SampleSession> sampleSessions = new LinkedList();
 
     public void addSampleSession(SampleSession sampleSession) {
@@ -81,7 +80,6 @@ public class SampleSessionNode extends SessionNodeAgent implements ISessionNode,
     public void onDispatch(Packet packet) throws SuspendExecution {
         logger.info("SampleSessionNode.onDispatch : {}",
             TardisIndexer.getMsgName(packet.getDescId(), packet.getMsgIndex()));
-        packetDispatcher.dispatch(this, packet);
     }
 
     @Override

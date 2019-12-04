@@ -16,7 +16,6 @@ import com.nhnent.tardis.console.space.UserAgent;
 import com.nhnent.tardis.sample.Defines.StringValues;
 import com.nhnent.tardis.sample.protocol.Sample;
 import java.util.Arrays;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 
 import java.io.InputStream;
@@ -25,16 +24,13 @@ import java.nio.ByteBuffer;
 public class ChatUser extends UserAgent implements IUser, ITimerHandler {
 
     private static final Logger logger = getLogger(ChatUser.class);
-
-    private String nickName = "";
-
-    static private PacketDispatcher<ChatUser> packetDispatcher = new PacketDispatcher();
+    private static PacketDispatcher<ChatUser> packetDispatcher = new PacketDispatcher();
 
     static {
-        packetDispatcher.registerMsg(Sample.RegisterNickNameReq.class,
-            CmdRegisterNickNameReq.class);
+        packetDispatcher.registerMsg(Sample.RegisterNickNameReq.class, CmdRegisterNickNameReq.class);
     }
 
+    private String nickName = "";
 
     @Override
     public boolean onLogin(Payload payload, Payload sessionPayload, Payload outPayload) throws SuspendExecution {

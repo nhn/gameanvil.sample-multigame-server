@@ -16,7 +16,6 @@ import com.nhnent.tardis.sample.session.cmd.CmdSessionAgentRemoveTimer;
 import com.nhnent.tardis.sample.session.cmd.CmdSessionAgentSampleReq;
 import com.nhnent.tardis.sample.session.cmd.CmdSessionAgentSampleToS;
 import com.nhnent.tardis.sample.session.cmd.CmdSessionAgentSetTimer;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 
 import java.io.IOException;
@@ -25,12 +24,13 @@ import java.io.IOException;
 public class SampleSession extends SessionAgent implements ISession<SampleSessionUser> {
 
     private static final Logger logger = getLogger(SampleSession.class);
-    private static PacketDispatcher dispatcher = new PacketDispatcher();
+    private static PacketDispatcher packetDispatcher = new PacketDispatcher();
+
     static {
-        dispatcher.registerMsg(Sample.SampleReq.class, CmdSessionAgentSampleReq.class);
-        dispatcher.registerMsg(Sample.SampleToS.class, CmdSessionAgentSampleToS.class);
-        dispatcher.registerMsg(Sample.SetTimer.class, CmdSessionAgentSetTimer.class);
-        dispatcher.registerMsg(Sample.RemoveTimer.class, CmdSessionAgentRemoveTimer.class);
+        packetDispatcher.registerMsg(Sample.SampleReq.class, CmdSessionAgentSampleReq.class);
+        packetDispatcher.registerMsg(Sample.SampleToS.class, CmdSessionAgentSampleToS.class);
+        packetDispatcher.registerMsg(Sample.SetTimer.class, CmdSessionAgentSetTimer.class);
+        packetDispatcher.registerMsg(Sample.RemoveTimer.class, CmdSessionAgentRemoveTimer.class);
     }
 
     @Override
@@ -84,7 +84,7 @@ public class SampleSession extends SessionAgent implements ISession<SampleSessio
     public void onDispatch(Packet packet) throws SuspendExecution {
         logger.info("SampleSession.onDispatch : {}",
             TardisIndexer.getMsgName(packet.getDescId(), packet.getMsgIndex()));
-        dispatcher.dispatch(this, packet);
+        packetDispatcher.dispatch(this, packet);
     }
 
     @Override

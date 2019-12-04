@@ -22,20 +22,18 @@ import com.nhnent.tardis.sample.space.game.match.GameUserMatchInfo;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 
 public class GameUser extends UserAgent implements IUser, ITimerHandler {
 
     private static final Logger logger = getLogger(GameUser.class);
+    private static PacketDispatcher<GameUser> packetDispatcher = new PacketDispatcher();
 
-    private String nickName = "";
-
-    static private PacketDispatcher<GameUser> packetDispatcher = new PacketDispatcher();
-
-    {
+    static {
         packetDispatcher.registerMsg(Sample.ResetSpot.class, CmdResetSpot.class);
     }
+
+    private String nickName = "";
 
     @Override
     public boolean onLogin(
