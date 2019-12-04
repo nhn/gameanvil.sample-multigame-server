@@ -1,6 +1,7 @@
 package com.nhnent.tardis.sample.space.game.room;
 
 import static com.nhnent.tardis.common.internal.BaseNode.getServiceName;
+import static org.slf4j.LoggerFactory.getLogger;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import com.nhnent.tardis.common.Packet;
@@ -14,16 +15,15 @@ import com.nhnent.tardis.sample.space.game.match.GameUserMatchInfo;
 import com.nhnent.tardis.sample.space.game.user.GameUser;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-public class PartyRoom extends RoomAgent implements IRoom<GameUser>{
-    protected Logger logger = LoggerFactory.getLogger(getClass());
+public class PartyRoom extends RoomAgent implements IRoom<GameUser> {
+    private static final Logger logger = getLogger(PartyRoom.class);
 
     protected static RoomPacketDispatcher dispatcher = new RoomPacketDispatcher();
+
     static {
-        dispatcher.registerMsg(Sample.GameMessageToS.class, GameMessageToSPacketHandler.class);
+        dispatcher.registerMsg(Sample.GameMessageToS.class, CmdGameMessageToS.class);
     }
 
     protected Map<String, GameUser> users = new HashMap<>();
@@ -61,15 +61,16 @@ public class PartyRoom extends RoomAgent implements IRoom<GameUser>{
         throws SuspendExecution {
         logger.info("PartyRoom.onJoinRoom - RoomId : {}, UserId : {}", getId(),
             gameUser.getUserId());
-        if(isInProgressOfUserMatchMaking())
+        if (isInProgressOfUserMatchMaking()) {
             return false;
-        String message = String.format("%s is join",gameUser.getUserId());
-        for(GameUser user:users.values()){
+        }
+        String message = String.format("%s is join", gameUser.getUserId());
+        for (GameUser user : users.values()) {
             user.send(new Packet(Sample.GameMessageToC.newBuilder().setMessage(message)));
-            logger.info("PartyRoom.onJoinRoom - to {} : {}",user.getUserId(), message);
+            logger.info("PartyRoom.onJoinRoom - to {} : {}", user.getUserId(), message);
         }
         users.put(gameUser.getUserId(), gameUser);
-        return  true;
+        return true;
     }
 
     @Override
@@ -77,8 +78,9 @@ public class PartyRoom extends RoomAgent implements IRoom<GameUser>{
         throws SuspendExecution {
         logger.info("PartyRoom.onLeaveRoom - RoomId : {}, UserId : {}", getId(),
             gameUser.getUserId());
-        if(isInProgressOfUserMatchMaking())
+        if (isInProgressOfUserMatchMaking()) {
             return false;
+        }
 
         users.remove(gameUser.getUserId());
         return true;
@@ -108,8 +110,9 @@ public class PartyRoom extends RoomAgent implements IRoom<GameUser>{
 
     /**
      * client 에서 partyMatch 를 요청했을 경우 호출되는 callback
-     * @param user : 파티 매칭을 요청한 방장
-     * @param payload : client 의 요청시 추가적으로 전달되는 data
+     *
+     * @param user       : 파티 매칭을 요청한 방장
+     * @param payload    : client 의 요청시 추가적으로 전달되는 data
      * @param outPayload : 서버에서 client 로 전달되는 data
      * @return : true: user matching 요청 성공,false: user matching 요청 실패
      * @throws SuspendExecution
@@ -119,15 +122,16 @@ public class PartyRoom extends RoomAgent implements IRoom<GameUser>{
         logger.info("PartyRoom.onMatchParty - RoomId : {}, roomType : {}", getId(), roomType);
         try {
 
-            String matchingGroup = getServiceName();;
+            String matchingGroup = getServiceName();
+            ;
             GameUserMatchInfo term = new GameUserMatchInfo(getId(), 100, users.size());
-            if(matchParty(matchingGroup, roomType, term, payload)){
+            if (matchParty(matchingGroup, roomType, term, payload)) {
                 logger.info("PartyRoom.onMatchParty - {} start Party Match for RoomType {}", user.getUserId(), roomType);
                 return true;
             }
 
         } catch (Exception e) {
-            logger.error(ExceptionUtils.getStackTrace(e));
+            logger.error("PartyRoom::onMatchParty()", e);
         }
 
         return false;

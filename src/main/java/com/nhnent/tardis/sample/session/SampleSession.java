@@ -1,5 +1,7 @@
 package com.nhnent.tardis.sample.session;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import co.paralleluniverse.fibers.SuspendExecution;
 import com.nhnent.tardis.common.Packet;
 import com.nhnent.tardis.common.Payload;
@@ -10,35 +12,32 @@ import com.nhnent.tardis.console.session.ISession;
 import com.nhnent.tardis.console.session.SessionAgent;
 import com.nhnent.tardis.sample.Defines.StringValues;
 import com.nhnent.tardis.sample.protocol.Sample;
-import com.nhnent.tardis.sample.session.handlers.SessionAgentRemoveTimerPacketHandler;
-import com.nhnent.tardis.sample.session.handlers.SessionAgentSampleReqPacketHandler;
-import com.nhnent.tardis.sample.session.handlers.SessionAgentSampleToSPacketHandler;
-import com.nhnent.tardis.sample.session.handlers.SessionAgentSetTimerPacketHandler;
-import org.apache.commons.lang3.exception.ExceptionUtils;
+import com.nhnent.tardis.sample.session.cmd.CmdSessionAgentRemoveTimer;
+import com.nhnent.tardis.sample.session.cmd.CmdSessionAgentSampleReq;
+import com.nhnent.tardis.sample.session.cmd.CmdSessionAgentSampleToS;
+import com.nhnent.tardis.sample.session.cmd.CmdSessionAgentSetTimer;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 
-public class SampleSessionAgent extends SessionAgent implements ISession<SampleSessionUserAgent> {
+public class SampleSession extends SessionAgent implements ISession<SampleSessionUser> {
 
-    private static PacketDispatcher dispatcher = new PacketDispatcher();
+    private static final Logger logger = getLogger(SampleSession.class);
+    private static PacketDispatcher packetDispatcher = new PacketDispatcher();
 
     static {
-        dispatcher.registerMsg(Sample.SampleReq.class, SessionAgentSampleReqPacketHandler.class);
-        dispatcher.registerMsg(Sample.SampleToS.class, SessionAgentSampleToSPacketHandler.class);
-        dispatcher.registerMsg(Sample.SetTimer.class, SessionAgentSetTimerPacketHandler.class);
-        dispatcher.registerMsg(Sample.RemoveTimer.class, SessionAgentRemoveTimerPacketHandler.class);
+        packetDispatcher.registerMsg(Sample.SampleReq.class, CmdSessionAgentSampleReq.class);
+        packetDispatcher.registerMsg(Sample.SampleToS.class, CmdSessionAgentSampleToS.class);
+        packetDispatcher.registerMsg(Sample.SetTimer.class, CmdSessionAgentSetTimer.class);
+        packetDispatcher.registerMsg(Sample.RemoveTimer.class, CmdSessionAgentRemoveTimer.class);
     }
-
-    private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
     public boolean onAuthenticate(String accountId, String password, String deviceId,
         Payload payload, Payload outPayload) throws SuspendExecution {
         logger.info(
-            "SampleSessionAgent.onAuthenticate - accountId : {}, password : {}, deviceId : {}",
+            "SampleSession.onAuthenticate - accountId : {}, password : {}, deviceId : {}",
             accountId, password, deviceId);
         // 인증 로직 구현부. 여기서는 accountId와 password가 일치 할 경우 인증 성공.
         if (accountId.equals(password)) {
@@ -59,12 +58,12 @@ public class SampleSessionAgent extends SessionAgent implements ISession<SampleS
                         Sample.SampleData.newBuilder().setMessage(message));
                     outPayload.add(packetToClient);
                 } catch (IOException e) {
-                    logger.error(ExceptionUtils.getStackTrace(e));
+                    logger.error("SampleSession::onAuthenticate()", e);
                 }
             }
 
-            SampleSessionNodeAgent nodeAgent = SampleSessionNodeAgent.getInstance();
-            nodeAgent.addSampleSessionAgent(this);
+            SampleSessionNode sampleSessionNode = SampleSessionNode.getInstance();
+            sampleSessionNode.addSampleSession(this);
 
             return true;
         } else {
@@ -83,41 +82,41 @@ public class SampleSessionAgent extends SessionAgent implements ISession<SampleS
 
     @Override
     public void onDispatch(Packet packet) throws SuspendExecution {
-        logger.info("SampleSessionAgent.onDispatch : {}",
+        logger.info("SampleSession.onDispatch : {}",
             TardisIndexer.getMsgName(packet.getDescId(), packet.getMsgIndex()));
-        dispatcher.dispatch(this, packet);
+        packetDispatcher.dispatch(this, packet);
     }
 
     @Override
     public void onPreLogin(Payload outPayload) throws SuspendExecution {
-        logger.info("SampleSessionAgent.onPreLogin");
+        logger.info("SampleSession.onPreLogin");
         outPayload.add(new Packet(Sample.SampleData.newBuilder().setMessage("onPreLogin")));
     }
 
     @Override
-    public void onPostLogin(SampleSessionUserAgent session) throws SuspendExecution {
-        logger.info("SampleSessionAgent.onPostLogin : {}", session.getUserId());
+    public void onPostLogin(SampleSessionUser session) throws SuspendExecution {
+        logger.info("SampleSession.onPostLogin : {}", session.getUserId());
     }
 
     @Override
-    public void onPostLogout(SampleSessionUserAgent session) throws SuspendExecution {
-        logger.info("SampleSessionAgent.onPostLogout : {}", session.getUserId());
+    public void onPostLogout(SampleSessionUser session) throws SuspendExecution {
+        logger.info("SampleSession.onPostLogout : {}", session.getUserId());
     }
 
     @Override
     public void onPause(PauseType type) throws SuspendExecution {
-        logger.info("SampleSessionAgent.onPause : {}", type);
+        logger.info("SampleSession.onPause : {}", type);
     }
 
     @Override
     public void onResume() throws SuspendExecution {
-        logger.info("SampleSessionAgent.onResume");
+        logger.info("SampleSession.onResume");
     }
 
     @Override
     public void onDisconnect() throws SuspendExecution {
-        logger.info("SampleSessionAgent.onDisconnect");
-        SampleSessionNodeAgent nodeAgent = SampleSessionNodeAgent.getInstance();
-        nodeAgent.removeSampleSessionAgent(this);
+        logger.info("SampleSession.onDisconnect");
+        SampleSessionNode sampleSessionNode = SampleSessionNode.getInstance();
+        sampleSessionNode.removeSampleSession(this);
     }
 }

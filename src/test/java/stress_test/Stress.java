@@ -7,8 +7,6 @@ import com.nhnent.tardis.connector.tcp.agent.parent.IAsyncConnectorUser;
 import com.nhnent.tardis.sample.protocol.Sample;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import stress_test.Cmd.*;
 
 import java.util.concurrent.TimeUnit;
@@ -21,9 +19,6 @@ public class Stress {
     public static String RoomType = "ChatRoom";
 
     private static TardisConnector connector;
-    private Logger logger = LoggerFactory.getLogger(getClass());
-
-    //-------------------------------------------------------------------------------------
 
     @BeforeClass
     public static void configuration() {
@@ -62,19 +57,17 @@ public class Stress {
         connector.addPacketCallback(Sample.RegisterNickNameRes.class, new CallbackRegisterNickName(), 10, TimeUnit.MILLISECONDS); // 해당 콜백을 딜레이 시켜서 호출하고자 할 경우 파라미터로 옵션값을 지정할 수 있습니다.
         connector.addPacketCallbackNamedRoom(new CallbackNamedRoomRes());
 
-        connector.addPacketCallback(Sample.ChatMessageToC.class,new CallbackChatMessageToC());
+        connector.addPacketCallback(Sample.ChatMessageToC.class, new CallbackChatMessageToC());
         connector.addPacketCallbackLeaveRoom(new CallbackLeaveRoomRes(), 10); // 해당 콜백을 딜레이 시켜서 호출하고자 할 경우 파라미터로 옵션값을 지정할 수 있습니다.
         connector.addPacketCallbackLogout(new CallbackLogout());
 
         connector.addPacketTimeoutCallback(new SampleTimeout());
     }
 
-    //-------------------------------------------------------------------------------------
-
     @Test
     public void runMultiUser() throws TimeoutException {
 
-        for (int i=0; i<Config.CONCURRENT_USER; ++i) {
+        for (int i = 0; i < Config.CONCURRENT_USER; ++i) {
 
             // 커넥션을 생성하고 세션 정보가 담긴 객체를 리턴 받습니다.
 

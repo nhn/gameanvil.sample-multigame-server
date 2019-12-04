@@ -1,23 +1,23 @@
 package com.nhnent.tardis.sample.space.game.match;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import com.nhnent.tardis.console.match.UserMatchMaker;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class GamePartyMatchMaker extends UserMatchMaker<GameUserMatchInfo> {
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private static final Logger logger = getLogger(GamePartyMatchMaker.class);
 
     private final int matchPoolFactorMax = 1; // match 정원의 몇 배수까지 인원을 모은 후에 rating 별로 정렬해서 매칭할 것인가?
     private int currentMatchPoolFactor = matchPoolFactorMax;
     private long lastMatchTime = System.currentTimeMillis();
 
-    public GamePartyMatchMaker(){
+    public GamePartyMatchMaker() {
         super(
             4, // 매치될 Room 인원 수
             5000 // Timeout
@@ -34,11 +34,11 @@ public class GamePartyMatchMaker extends UserMatchMaker<GameUserMatchInfo> {
         List<GameUserMatchInfo> matchRequests = getMatchRequests(leastAmount);
         if (matchRequests == null) {
             // getMatchRequests : 매칭 요청자의 총 수가 leastAmount보다 적을 경우 null을 리턴한다.
-            if (System.currentTimeMillis() - lastMatchTime >= 1000){
+            if (System.currentTimeMillis() - lastMatchTime >= 1000) {
                 // 1000 ms 동안  leastAmount를 체우지 못한 경우
                 // currentMatchPoolFactor를 조정하여leastAmount의 크기를 줄인다.
-                if(currentMatchPoolFactor > 1){
-                    currentMatchPoolFactor = Math.max(currentMatchPoolFactor/2, 1);
+                if (currentMatchPoolFactor > 1) {
+                    currentMatchPoolFactor = Math.max(currentMatchPoolFactor / 2, 1);
                     logger.info("GamePartyMatchMaker.match() - reduce currentMatchPoolFactor: {}", currentMatchPoolFactor);
                 }
             }
@@ -50,29 +50,30 @@ public class GamePartyMatchMaker extends UserMatchMaker<GameUserMatchInfo> {
         // 0~99, 100~199, 200~299 ...
         // 요청이 많을 경우 여기에서 그룹을 묶는 작업을 하는 것이 서버에 부하가 될 수 있다.
         // 그룹 별로 RoomType을 나누어 별도의 MatchMaker를 사용하는 방법도 고려해 보자.
-        Map<Integer, List<GameUserMatchInfo>> entries= new TreeMap<>();
-        for(GameUserMatchInfo info : matchRequests){
+        Map<Integer, List<GameUserMatchInfo>> entries = new TreeMap<>();
+        for (GameUserMatchInfo info : matchRequests) {
             int ratingGroup = info.getRating() / 100;
-            if(!entries.containsKey(ratingGroup))
+            if (!entries.containsKey(ratingGroup)) {
                 entries.put(ratingGroup, new ArrayList<>());
+            }
 
             List<GameUserMatchInfo> subEntries = entries.get(ratingGroup);
             subEntries.add(info);
         }
 
         int totalMatchCount = 0;
-        for(Map.Entry<Integer, List<GameUserMatchInfo>> subEntries: entries.entrySet()){
+        for (Map.Entry<Integer, List<GameUserMatchInfo>> subEntries : entries.entrySet()) {
             LinkedList<GameUserMatchInfo> entries1 = new LinkedList<>();
             LinkedList<GameUserMatchInfo> entries2 = new LinkedList<>();
             for (GameUserMatchInfo entry : subEntries.getValue()) {
-                if(entry.getPartySize() == 2){
+                if (entry.getPartySize() == 2) {
                     entries2.add(entry);
-                }else{
+                } else {
                     entries1.add(entry);
                 }
             }
 
-            while (entries2.size() >= 2){
+            while (entries2.size() >= 2) {
                 LinkedList<GameUserMatchInfo> roomEntries = new LinkedList<>();
                 roomEntries.add(entries2.removeFirst());
                 roomEntries.add(entries2.removeFirst());
@@ -80,7 +81,7 @@ public class GamePartyMatchMaker extends UserMatchMaker<GameUserMatchInfo> {
                 totalMatchCount++;
             }
 
-            while(entries2.size() >= 1 && entries1.size() >= 2){
+            while (entries2.size() >= 1 && entries1.size() >= 2) {
                 LinkedList<GameUserMatchInfo> roomEntries = new LinkedList<>();
                 roomEntries.add(entries2.removeFirst());
                 roomEntries.add(entries1.removeFirst());
@@ -89,10 +90,11 @@ public class GamePartyMatchMaker extends UserMatchMaker<GameUserMatchInfo> {
                 totalMatchCount++;
             }
 
-            if(entries1.size() >= matchSize){
+            if (entries1.size() >= matchSize) {
                 totalMatchCount += matchSingles(entries1);
             }
-        };
+        }
+        ;
 
         if (totalMatchCount > 0) {
             logger.info("{} match(s) made", totalMatchCount);
@@ -125,7 +127,7 @@ public class GamePartyMatchMaker extends UserMatchMaker<GameUserMatchInfo> {
                 }
             }
         } catch (Exception e) {
-            logger.error(ExceptionUtils.getStackTrace(e));
+            logger.error("GamePartyMatchMaker::refill()", e);
         }
         return false;
     }

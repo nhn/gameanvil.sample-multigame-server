@@ -1,5 +1,7 @@
 package com.nhnent.tardis.sample.space.chat;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import co.paralleluniverse.fibers.SuspendExecution;
 import com.nhnent.tardis.common.Packet;
 import com.nhnent.tardis.common.Payload;
@@ -7,10 +9,10 @@ import com.nhnent.tardis.common.internal.PauseType;
 import com.nhnent.tardis.console.TardisIndexer;
 import com.nhnent.tardis.console.space.*;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-public class ChatNode extends SpaceNodeAgent implements ISpaceNode  {
-    private Logger logger = LoggerFactory.getLogger(getClass());
+public class ChatNode extends SpaceNodeAgent implements ISpaceNode {
+    private static final Logger logger = getLogger(ChatNode.class);
+
     @Override
     public void onInit() throws SuspendExecution {
         logger.info("ChatNode.onInit");

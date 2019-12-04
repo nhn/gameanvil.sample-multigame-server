@@ -1,18 +1,10 @@
 package unit_test;
 
-import com.nhnent.tardis.common.protocol.Base;
-import com.nhnent.tardis.common.protocol.Base.ResultCodeMatchUserDone;
 import com.nhnent.tardis.connector.common.Config;
 import com.nhnent.tardis.connector.protocol.Packet;
 import com.nhnent.tardis.connector.protocol.result.AuthenticationResult;
-import com.nhnent.tardis.connector.protocol.result.CreateRoomResult;
-import com.nhnent.tardis.connector.protocol.result.LeaveRoomResult;
 import com.nhnent.tardis.connector.protocol.result.LoginResult;
-import com.nhnent.tardis.connector.protocol.result.MatchRoomResult;
-import com.nhnent.tardis.connector.protocol.result.MatchUserCancelResult;
-import com.nhnent.tardis.connector.protocol.result.MatchUserStartResult;
 import com.nhnent.tardis.connector.protocol.result.NamedRoomResult;
-import com.nhnent.tardis.connector.protocol.result.ReconnectResult;
 import com.nhnent.tardis.connector.tcp.ConnectorSession;
 import com.nhnent.tardis.connector.tcp.ConnectorUser;
 import com.nhnent.tardis.connector.tcp.TardisConnector;
@@ -29,7 +21,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 public class ChatTest {
@@ -40,8 +31,6 @@ public class ChatTest {
 
     private static TardisConnector connector;
     private List<ConnectorUser> users = new ArrayList<>();
-
-    //-------------------------------------------------------------------------------------
 
     @BeforeClass
     public static void configuration() {
@@ -60,12 +49,10 @@ public class ChatTest {
         connector.addService(0, ServiceName);
     }
 
-    //-------------------------------------------------------------------------------------
-
     @Before
     public void setUp() throws TimeoutException {
 
-        for (int i=0; i<4; ++i) {
+        for (int i = 0; i < 4; ++i) {
 
             // 커넥션을 생성하고 세션 정보가 담긴 객체를 리턴.
             ConnectorSession session = connector.addSession(connector.getIncrementedValue("account_"), connector.makeUniqueId());
@@ -78,7 +65,7 @@ public class ChatTest {
             ConnectorUser user = session.addUser(ServiceName);
 
             // 로그인을 진행.
-            LoginResult loginResult = user.login(UserType, String.valueOf(i+1));
+            LoginResult loginResult = user.login(UserType, String.valueOf(i + 1));
             assertTrue("Login fail", loginResult.isSuccess());
 
             // Test 단계에서 활용하도록 준비합니다.
@@ -89,19 +76,17 @@ public class ChatTest {
     @After
     public void tearDown() throws TimeoutException {
 
-        for(ConnectorUser user : users){
+        for (ConnectorUser user : users) {
             user.logout();
             user.getSession().disconnect();
         }
     }
 
-    //-------------------------------------------------------------------------------------
-
     void registerNickName(ConnectorUser user, String nickName) throws IOException, TimeoutException {
 
         Sample.RegisterNickNameReq.Builder registerNickNameReq = Sample.RegisterNickNameReq.newBuilder().setNickName(nickName);
 
-        Sample.RegisterNickNameRes registerNickNameRes = user.requestProto(registerNickNameReq,Sample.RegisterNickNameRes.class);
+        Sample.RegisterNickNameRes registerNickNameRes = user.requestProto(registerNickNameReq, Sample.RegisterNickNameRes.class);
 
         assertTrue(registerNickNameRes.getIsSuccess());
     }
@@ -123,11 +108,11 @@ public class ChatTest {
         registerNickName(dalek, "dalek");
 
         // 채팅방 입장
-        NamedRoomResult namedRoomResult1 = doctor.namedRoom(RoomType,"Gallifrey");
+        NamedRoomResult namedRoomResult1 = doctor.namedRoom(RoomType, "Gallifrey");
         assertTrue(namedRoomResult1.isSuccess());
         assertTrue(namedRoomResult1.isMatchRoomCreated());
 
-        NamedRoomResult namedRoomResult2 = dalek.namedRoom(RoomType,"Gallifrey");
+        NamedRoomResult namedRoomResult2 = dalek.namedRoom(RoomType, "Gallifrey");
         assertTrue(namedRoomResult2.isSuccess());
         assertTrue(namedRoomResult2.isMatchRoomJoined());
 
@@ -139,6 +124,6 @@ public class ChatTest {
 
         // 다른 유저에게도 응답이 왔는지 확인.
         Sample.ChatMessageToC chatMessageToC = dalek.waitProtoPacket(1, TimeUnit.SECONDS, Sample.ChatMessageToC.class);
-        assertEquals("[doctor] Hello Tardis!",chatMessageToC.getMessage());
+        assertEquals("[doctor] Hello Tardis!", chatMessageToC.getMessage());
     }
 }

@@ -1,5 +1,7 @@
 package com.nhnent.tardis.sample.space.game;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import co.paralleluniverse.fibers.SuspendExecution;
 import com.nhnent.tardis.common.Packet;
 import com.nhnent.tardis.common.Payload;
@@ -11,10 +13,9 @@ import com.nhnent.tardis.console.space.IRoomInfo;
 import com.nhnent.tardis.console.space.ISpaceNode;
 import com.nhnent.tardis.console.space.SpaceNodeAgent;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class GameNode extends SpaceNodeAgent implements ISpaceNode {
-    private Logger logger = LoggerFactory.getLogger(getClass());
+    private static final Logger logger = getLogger(GameNode.class);
 
     @Override
     public void onInit() throws SuspendExecution {

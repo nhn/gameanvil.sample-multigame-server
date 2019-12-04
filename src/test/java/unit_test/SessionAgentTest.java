@@ -60,7 +60,6 @@ public class SessionAgentTest {
         session.disconnect();
     }
 
-    //-------------------------------------------------------------------------------------
     @Test
     public void authenticateSuccess() throws IOException, TimeoutException {
         // accountId와 password가 일치할 때 성공
@@ -86,7 +85,7 @@ public class SessionAgentTest {
             } catch (IOException e) {
                 fail(e.getMessage());
             }
-        }else{
+        } else {
             fail("Payload contains no Sample.SampleData.");
         }
     }
@@ -96,7 +95,7 @@ public class SessionAgentTest {
         // accountId와 password가 일치하지 않으면 실패.
         AuthenticationResult authResult = session.authentication();
         assertTrue(authResult.isFailure());
-        Packet packet= authResult.getPayload(Sample.SampleData.class);
+        Packet packet = authResult.getPayload(Sample.SampleData.class);
         if (null != packet) {
             try {
                 // 실패일 경우 payload에 실패 메시지를 보냄
@@ -105,7 +104,7 @@ public class SessionAgentTest {
             } catch (IOException e) {
                 fail(e.getMessage());
             }
-        }else{
+        } else {
             fail("Payload contains no Sample.SampleData.");
         }
     }
@@ -116,12 +115,12 @@ public class SessionAgentTest {
         authenticateSuccess();
 
         String message = "SampleReq";
-        try{
+        try {
             //SampleReq 를 보낼 경우 보낸 값을 그대로 돌려 받음.
             Packet packetRes = session.requestToSession(new Packet(Sample.SampleReq.newBuilder().setMessage(message)), Sample.SampleRes.class);
             Sample.SampleRes msg = Sample.SampleRes.parseFrom(packetRes.getStream());
             assertEquals(msg.getMessage(), message);
-        } catch(Exception e){
+        } catch (Exception e) {
             fail(e.toString());
         }
     }
@@ -132,13 +131,13 @@ public class SessionAgentTest {
         authenticateSuccess();
 
         String message = "SampleToS";
-        try{
+        try {
             //SampleToS 를 보낼 경우 보낸 값을 그대로 돌려 받음.
             session.sendToSession(new Packet(Sample.SampleToS.newBuilder().setMessage(message)));
             Packet packetSampleToC = session.waitPacket(1, TimeUnit.SECONDS, Sample.SampleToC.class);
             Sample.SampleToC msg = Sample.SampleToC.parseFrom(packetSampleToC.getStream());
             assertEquals(msg.getMessage(), message);
-        } catch(Exception e){
+        } catch (Exception e) {
             fail(e.toString());
         }
     }
@@ -152,12 +151,12 @@ public class SessionAgentTest {
         assertTrue(result.isSuccess());
 
         String message = "SampleReqToSessionUser";
-        try{
+        try {
             //SampleReq 를 보낼 경우 보낸 값을 그대로 돌려 받음.
             Packet packetRes = user.requestToSessionActor(new Packet(Sample.SampleReq.newBuilder().setMessage(message)), Sample.SampleRes.class);
             Sample.SampleRes msg = Sample.SampleRes.parseFrom(packetRes.getStream());
             assertEquals(msg.getMessage(), message);
-        } catch(Exception e){
+        } catch (Exception e) {
             fail(e.toString());
         }
     }
@@ -191,24 +190,24 @@ public class SessionAgentTest {
         authenticateSuccess();
 
         String message = "SetTimer";
-        try{
-            //SetTimer 를 보낼 경우 SampleSessionNodeAgent에 Timer가 동작.
+        try {
+            //SetTimer 를 보낼 경우 SampleSessionNode에 Timer가 동작.
             session.sendToSession(new Packet(Sample.SetTimer.newBuilder().setInterval(1).setMessage(message)));
             Packet packet = session.waitPacket(2, TimeUnit.SECONDS, Sample.SampleToC.class);
             Sample.SampleToC msg = Sample.SampleToC.parseFrom(packet.getStream());
             assertEquals(msg.getMessage(), message);
-        } catch(Exception e){
+        } catch (Exception e) {
             fail(e.toString());
         }
 
-        try{
-            //RemoveTimer 를 보낼 경우 SampleSessionNodeAgent에 Timer가 해제.
+        try {
+            //RemoveTimer 를 보낼 경우 SampleSessionNode에 Timer가 해제.
             session.sendToSession(new Packet(Sample.RemoveTimer.newBuilder()));
             session.waitPacket(2, TimeUnit.SECONDS, Sample.SampleToC.class);
             fail("RemoveTimer fail");
-        }catch(TimeoutException e){
+        } catch (TimeoutException e) {
             // Timer가 해제 되었기 때문에 SampleToC가 오지 않는다.
-        }catch(Exception e){
+        } catch (Exception e) {
             fail(e.toString());
         }
     }

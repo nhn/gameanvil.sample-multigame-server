@@ -25,9 +25,9 @@ public class CallbackRegisterNickName implements IDispatchPacket<SampleUserClass
             return;
         }
 
-        int nicknameRand = (int) (Math.random() * 1000)/5;
+        int nicknameRand = (int) (Math.random() * 1000) / 5;
         String roomId = String.valueOf(nicknameRand);
 
-        user.namedRoom(Stress.RoomType,roomId);
+        user.namedRoom(Stress.RoomType, roomId);
     }
 }

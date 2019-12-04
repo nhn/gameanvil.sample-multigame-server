@@ -4,22 +4,17 @@ import com.nhnent.tardis.connector.callback.parent.IDispatchPacket;
 import com.nhnent.tardis.connector.protocol.Packet;
 import com.nhnent.tardis.connector.protocol.result.LoginResult;
 import com.nhnent.tardis.sample.protocol.Sample;
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import stress_test.SampleUserClass;
 
 import static org.junit.Assert.assertEquals;
 
 public class CallbackLoginRes implements IDispatchPacket<SampleUserClass> {
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
-
     @Override
     public void dispatch(Packet packet, SampleUserClass user) {
 
         LoginResult result = user.parseLoginResult(packet);
-        assertEquals(true,result.isSuccess());
+        assertEquals(true, result.isSuccess());
 
         user.setSendCount(0);
 

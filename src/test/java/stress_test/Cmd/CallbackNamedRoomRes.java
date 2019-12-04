@@ -14,7 +14,7 @@ public class CallbackNamedRoomRes implements IDispatchPacket<SampleUserClass> {
     public void dispatch(Packet packet, SampleUserClass user) {
 
         NamedRoomResult result = user.parseNamedRoomResult(packet);
-        assertEquals(true,result.isSuccess());
+        assertEquals(true, result.isSuccess());
 
         user.send(Sample.ChatMessageToS.newBuilder().setMessage("Geronimo!!!"));
     }

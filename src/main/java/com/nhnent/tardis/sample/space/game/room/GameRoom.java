@@ -1,5 +1,7 @@
 package com.nhnent.tardis.sample.space.game.room;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import co.paralleluniverse.fibers.SuspendExecution;
 import com.nhnent.tardis.common.Packet;
 import com.nhnent.tardis.common.Payload;
@@ -12,18 +14,17 @@ import com.nhnent.tardis.console.space.RoomPacketDispatcher;
 import com.nhnent.tardis.sample.protocol.Sample;
 import com.nhnent.tardis.sample.space.game.user.GameUser;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class GameRoom extends RoomAgent implements IRoom<GameUser>, ITimerHandler {
-    protected Logger logger = LoggerFactory.getLogger(getClass());
+    private static final Logger logger = getLogger(GameRoom.class);
 
     protected static RoomPacketDispatcher dispatcher = new RoomPacketDispatcher();
+
     static {
-        dispatcher.registerMsg(Sample.GameMessageToS.class, GameMessageToSPacketHandler.class);
+        dispatcher.registerMsg(Sample.GameMessageToS.class, CmdGameMessageToS.class);
     }
 
     protected Map<String, GameUser> users = new TreeMap<>();
@@ -60,7 +61,7 @@ public class GameRoom extends RoomAgent implements IRoom<GameUser>, ITimerHandle
         throws SuspendExecution {
         logger.info("GameRoom.onJoinRoom - RoomId : {}, UserId : {}", getId(),
             gameUser.getUserId());
-        return  false;
+        return false;
     }
 
     @Override
