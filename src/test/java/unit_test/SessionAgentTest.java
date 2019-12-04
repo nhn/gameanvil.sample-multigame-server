@@ -192,7 +192,7 @@ public class SessionAgentTest {
 
         String message = "SetTimer";
         try{
-            //SetTimer 를 보낼 경우 SampleSessionNodeAgent에 Timer가 동작.
+            //SetTimer 를 보낼 경우 SampleSessionNode에 Timer가 동작.
             session.sendToSession(new Packet(Sample.SetTimer.newBuilder().setInterval(1).setMessage(message)));
             Packet packet = session.waitPacket(2, TimeUnit.SECONDS, Sample.SampleToC.class);
             Sample.SampleToC msg = Sample.SampleToC.parseFrom(packet.getStream());
@@ -202,7 +202,7 @@ public class SessionAgentTest {
         }
 
         try{
-            //RemoveTimer 를 보낼 경우 SampleSessionNodeAgent에 Timer가 해제.
+            //RemoveTimer 를 보낼 경우 SampleSessionNode에 Timer가 해제.
             session.sendToSession(new Packet(Sample.RemoveTimer.newBuilder()));
             session.waitPacket(2, TimeUnit.SECONDS, Sample.SampleToC.class);
             fail("RemoveTimer fail");

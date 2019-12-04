@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 
 
-public class SampleSessionAgent extends SessionAgent implements ISession<SampleSessionUserAgent> {
+public class SampleSession extends SessionAgent implements ISession<SampleSessionUser> {
 
     private static PacketDispatcher dispatcher = new PacketDispatcher();
 
@@ -38,7 +38,7 @@ public class SampleSessionAgent extends SessionAgent implements ISession<SampleS
     public boolean onAuthenticate(String accountId, String password, String deviceId,
         Payload payload, Payload outPayload) throws SuspendExecution {
         logger.info(
-            "SampleSessionAgent.onAuthenticate - accountId : {}, password : {}, deviceId : {}",
+            "SampleSession.onAuthenticate - accountId : {}, password : {}, deviceId : {}",
             accountId, password, deviceId);
         // 인증 로직 구현부. 여기서는 accountId와 password가 일치 할 경우 인증 성공.
         if (accountId.equals(password)) {
@@ -63,8 +63,8 @@ public class SampleSessionAgent extends SessionAgent implements ISession<SampleS
                 }
             }
 
-            SampleSessionNodeAgent nodeAgent = SampleSessionNodeAgent.getInstance();
-            nodeAgent.addSampleSessionAgent(this);
+            SampleSessionNode sampleSessionNode = SampleSessionNode.getInstance();
+            sampleSessionNode.addSampleSession(this);
 
             return true;
         } else {
@@ -83,41 +83,41 @@ public class SampleSessionAgent extends SessionAgent implements ISession<SampleS
 
     @Override
     public void onDispatch(Packet packet) throws SuspendExecution {
-        logger.info("SampleSessionAgent.onDispatch : {}",
+        logger.info("SampleSession.onDispatch : {}",
             TardisIndexer.getMsgName(packet.getDescId(), packet.getMsgIndex()));
         dispatcher.dispatch(this, packet);
     }
 
     @Override
     public void onPreLogin(Payload outPayload) throws SuspendExecution {
-        logger.info("SampleSessionAgent.onPreLogin");
+        logger.info("SampleSession.onPreLogin");
         outPayload.add(new Packet(Sample.SampleData.newBuilder().setMessage("onPreLogin")));
     }
 
     @Override
-    public void onPostLogin(SampleSessionUserAgent session) throws SuspendExecution {
-        logger.info("SampleSessionAgent.onPostLogin : {}", session.getUserId());
+    public void onPostLogin(SampleSessionUser session) throws SuspendExecution {
+        logger.info("SampleSession.onPostLogin : {}", session.getUserId());
     }
 
     @Override
-    public void onPostLogout(SampleSessionUserAgent session) throws SuspendExecution {
-        logger.info("SampleSessionAgent.onPostLogout : {}", session.getUserId());
+    public void onPostLogout(SampleSessionUser session) throws SuspendExecution {
+        logger.info("SampleSession.onPostLogout : {}", session.getUserId());
     }
 
     @Override
     public void onPause(PauseType type) throws SuspendExecution {
-        logger.info("SampleSessionAgent.onPause : {}", type);
+        logger.info("SampleSession.onPause : {}", type);
     }
 
     @Override
     public void onResume() throws SuspendExecution {
-        logger.info("SampleSessionAgent.onResume");
+        logger.info("SampleSession.onResume");
     }
 
     @Override
     public void onDisconnect() throws SuspendExecution {
-        logger.info("SampleSessionAgent.onDisconnect");
-        SampleSessionNodeAgent nodeAgent = SampleSessionNodeAgent.getInstance();
-        nodeAgent.removeSampleSessionAgent(this);
+        logger.info("SampleSession.onDisconnect");
+        SampleSessionNode sampleSessionNode = SampleSessionNode.getInstance();
+        sampleSessionNode.removeSampleSession(this);
     }
 }

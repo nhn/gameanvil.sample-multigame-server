@@ -11,7 +11,7 @@ import com.nhnent.tardis.sample.session.handlers.SessionUserAgentSampleReqPacket
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SampleSessionUserAgent extends SessionUserAgent implements ISessionUser {
+public class SampleSessionUser extends SessionUserAgent implements ISessionUser {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private static PacketDispatcher dispatcher = new PacketDispatcher();
     static {
@@ -20,7 +20,7 @@ public class SampleSessionUserAgent extends SessionUserAgent implements ISession
 
     @Override
     public void onDispatch(Packet packet) throws SuspendExecution {
-        logger.info("SampleSessionUserAgent.onDispatch : {}",
+        logger.info("SampleSessionUser.onDispatch : {}",
             TardisIndexer.getMsgName(packet.getDescId(), packet.getMsgIndex()));
         dispatcher.dispatch(this, packet);
     }

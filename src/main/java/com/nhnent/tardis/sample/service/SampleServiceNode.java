@@ -20,50 +20,50 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SampleServiceNodeAgent extends ServiceNodeAgent implements IServiceNode{
+public class SampleServiceNode extends ServiceNodeAgent implements IServiceNode{
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
     public void onInit() throws SuspendExecution {
-        logger.info("SampleServiceNodeAgent.onInit");
+        logger.info("SampleServiceNode.onInit");
         addTopic(StringValues.TopicService);
     }
 
     @Override
     public void onPrepare() throws SuspendExecution {
-        logger.info("SampleServiceNodeAgent.onPrepare");
+        logger.info("SampleServiceNode.onPrepare");
         setReady();
     }
 
     @Override
     public void onReady() throws SuspendExecution {
-        logger.info("SampleServiceNodeAgent.onReady");
+        logger.info("SampleServiceNode.onReady");
     }
 
     @Override
     public void onDispatch(Packet packet) throws SuspendExecution {
-        logger.info("SampleServiceNodeAgent.onDispatch : {}",
+        logger.info("SampleServiceNode.onDispatch : {}",
             TardisIndexer.getMsgName(packet.getDescId(), packet.getMsgIndex()));
     }
 
     @Override
     public boolean onDispatch(RestObject restObject) throws SuspendExecution {
-        logger.info("SampleServiceNodeAgent.onDispatch : {}", restObject.toString());
+        logger.info("SampleServiceNode.onDispatch : {}", restObject.toString());
         return false;
     }
 
     @Override
     public void onPause(PauseType type, Payload payload) throws SuspendExecution {
-        logger.info("SampleServiceNodeAgent.onPause");
+        logger.info("SampleServiceNode.onPause");
     }
 
     @Override
     public void onResume(Payload outPayload) throws SuspendExecution {
-        logger.info("SampleServiceNodeAgent.onResume");
+        logger.info("SampleServiceNode.onResume");
     }
 
     @Override
     public void onShutdown() throws SuspendExecution {
-        logger.info("SampleServiceNodeAgent.onShutdown");
+        logger.info("SampleServiceNode.onShutdown");
     }
 }
