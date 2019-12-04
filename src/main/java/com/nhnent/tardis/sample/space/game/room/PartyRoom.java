@@ -23,7 +23,7 @@ public class PartyRoom extends RoomAgent implements IRoom<GameUser>{
 
     protected static RoomPacketDispatcher dispatcher = new RoomPacketDispatcher();
     static {
-        dispatcher.registerMsg(Sample.GameMessageToS.class, GameMessageToSPacketHandler.class);
+        dispatcher.registerMsg(Sample.GameMessageToS.class, CmdGameMessageToS.class);
     }
 
     protected Map<String, GameUser> users = new HashMap<>();

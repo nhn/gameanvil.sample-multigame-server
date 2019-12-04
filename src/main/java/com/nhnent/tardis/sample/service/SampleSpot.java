@@ -24,8 +24,8 @@ public class SampleSpot extends SpotAgent implements ISpot {
     private int eventCount;
 
     static {
-        dispatcher.registerMsg(Sample.SampleToSpot.class, SampleToSpotPacketHandler.class);
-        dispatcher.registerMsg(Sample.ResetSpot.class, ResetSpotPacketHandler.class);
+        dispatcher.registerMsg(Sample.SampleToSpot.class, CmdSampleToSpot.class);
+        dispatcher.registerMsg(Sample.ResetSpot.class, CmdResetSpot.class);
     }
 
     @Override

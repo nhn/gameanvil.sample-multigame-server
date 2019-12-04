@@ -10,10 +10,10 @@ import com.nhnent.tardis.console.session.ISession;
 import com.nhnent.tardis.console.session.SessionAgent;
 import com.nhnent.tardis.sample.Defines.StringValues;
 import com.nhnent.tardis.sample.protocol.Sample;
-import com.nhnent.tardis.sample.session.handlers.SessionAgentRemoveTimerPacketHandler;
-import com.nhnent.tardis.sample.session.handlers.SessionAgentSampleReqPacketHandler;
-import com.nhnent.tardis.sample.session.handlers.SessionAgentSampleToSPacketHandler;
-import com.nhnent.tardis.sample.session.handlers.SessionAgentSetTimerPacketHandler;
+import com.nhnent.tardis.sample.session.cmd.CmdSessionAgentRemoveTimer;
+import com.nhnent.tardis.sample.session.cmd.CmdSessionAgentSampleReq;
+import com.nhnent.tardis.sample.session.cmd.CmdSessionAgentSampleToS;
+import com.nhnent.tardis.sample.session.cmd.CmdSessionAgentSetTimer;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,10 +26,10 @@ public class SampleSession extends SessionAgent implements ISession<SampleSessio
     private static PacketDispatcher dispatcher = new PacketDispatcher();
 
     static {
-        dispatcher.registerMsg(Sample.SampleReq.class, SessionAgentSampleReqPacketHandler.class);
-        dispatcher.registerMsg(Sample.SampleToS.class, SessionAgentSampleToSPacketHandler.class);
-        dispatcher.registerMsg(Sample.SetTimer.class, SessionAgentSetTimerPacketHandler.class);
-        dispatcher.registerMsg(Sample.RemoveTimer.class, SessionAgentRemoveTimerPacketHandler.class);
+        dispatcher.registerMsg(Sample.SampleReq.class, CmdSessionAgentSampleReq.class);
+        dispatcher.registerMsg(Sample.SampleToS.class, CmdSessionAgentSampleToS.class);
+        dispatcher.registerMsg(Sample.SetTimer.class, CmdSessionAgentSetTimer.class);
+        dispatcher.registerMsg(Sample.RemoveTimer.class, CmdSessionAgentRemoveTimer.class);
     }
 
     private Logger logger = LoggerFactory.getLogger(getClass());

@@ -31,7 +31,7 @@ public class ChatUser extends UserAgent implements IUser, ITimerHandler {
 
     static{
         packetDispatcher.registerMsg(Sample.RegisterNickNameReq.class,
-            RegisterNickNameReqPacketHandler.class);
+            CmdRegisterNickNameReq.class);
     }
 
 

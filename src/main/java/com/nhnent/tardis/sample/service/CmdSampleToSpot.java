@@ -8,7 +8,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SampleToSpotPacketHandler implements IPacketHandler<SampleSpot> {
+public class CmdSampleToSpot implements IPacketHandler<SampleSpot> {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -16,7 +16,7 @@ public class SampleToSpotPacketHandler implements IPacketHandler<SampleSpot> {
     public void execute(SampleSpot sampleSpot, Packet packet) throws SuspendExecution {
         try {
             Sample.SampleToSpot sampleToSpot = Sample.SampleToSpot.parseFrom(packet.getStream());
-            logger.info("SampleToSpotPacketHandler - from : {}, msg : {}", sampleToSpot.getFrom(), sampleToSpot.getMessage());
+            logger.info("CmdSampleToSpot - from : {}, msg : {}", sampleToSpot.getFrom(), sampleToSpot.getMessage());
             sampleSpot.onEvent(sampleToSpot.getFrom(), sampleToSpot.getMessage());
         } catch (Exception e) {
             logger.error(ExceptionUtils.getStackTrace(e));

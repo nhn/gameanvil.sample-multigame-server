@@ -12,7 +12,6 @@ import com.nhnent.tardis.console.space.RoomPacketDispatcher;
 import com.nhnent.tardis.sample.protocol.Sample;
 import com.nhnent.tardis.sample.space.game.user.GameUser;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import org.slf4j.Logger;
@@ -23,7 +22,7 @@ public class GameRoom extends RoomAgent implements IRoom<GameUser>, ITimerHandle
 
     protected static RoomPacketDispatcher dispatcher = new RoomPacketDispatcher();
     static {
-        dispatcher.registerMsg(Sample.GameMessageToS.class, GameMessageToSPacketHandler.class);
+        dispatcher.registerMsg(Sample.GameMessageToS.class, CmdGameMessageToS.class);
     }
 
     protected Map<String, GameUser> users = new TreeMap<>();

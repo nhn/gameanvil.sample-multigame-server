@@ -1,4 +1,4 @@
-package com.nhnent.tardis.sample.session.handlers;
+package com.nhnent.tardis.sample.session.cmd;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import com.nhnent.tardis.common.Packet;
@@ -9,14 +9,14 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SessionAgentSampleReqPacketHandler implements IPacketHandler<SampleSession>{
+public class CmdSessionAgentSampleReq implements IPacketHandler<SampleSession>{
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
     public void execute(SampleSession sampleSession, Packet packet) throws SuspendExecution {
         try{
             String message = Sample.SampleReq.parseFrom(packet.getStream()).getMessage();
-            logger.info("SessionAgentSampleReqPacketHandler : {}", message);
+            logger.info("CmdSessionAgentSampleReq : {}", message);
             sampleSession.reply(new Packet(Sample.SampleRes.newBuilder().setMessage(message)));
         }catch (Exception e){
             logger.error(ExceptionUtils.getStackTrace(e));

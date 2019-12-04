@@ -22,7 +22,7 @@ public class ChatRoom extends RoomAgent implements IRoom<ChatUser>{
 
     private static RoomPacketDispatcher dispatcher = new RoomPacketDispatcher();
     static {
-        dispatcher.registerMsg(Sample.ChatMessageToS.class, ChatMessageToSPacketHandler.class);
+        dispatcher.registerMsg(Sample.ChatMessageToS.class, CmdChatMessageToS.class);
     }
 
     private Map<String, ChatUser> users = new HashMap<>();

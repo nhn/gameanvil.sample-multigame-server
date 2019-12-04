@@ -8,7 +8,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ResetSpotPacketHandler implements IPacketHandler<SampleSpot> {
+public class CmdResetSpot implements IPacketHandler<SampleSpot> {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -16,7 +16,7 @@ public class ResetSpotPacketHandler implements IPacketHandler<SampleSpot> {
     public void execute(SampleSpot sampleSpot, Packet packet) throws SuspendExecution {
         try {
             Sample.ResetSpot resetSpot = Sample.ResetSpot.parseFrom(packet.getStream());
-            logger.info("ResetSpotPacketHandler - count : {}", resetSpot.getCount());
+            logger.info("CmdResetSpot - count : {}", resetSpot.getCount());
             sampleSpot.resetEventCount(resetSpot.getCount());
         } catch (Exception e) {
             logger.error(ExceptionUtils.getStackTrace(e));

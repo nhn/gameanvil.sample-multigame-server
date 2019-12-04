@@ -32,7 +32,7 @@ public class GameUser extends UserAgent implements IUser, ITimerHandler {
 
     static private PacketDispatcher<GameUser> packetDispatcher = new PacketDispatcher();
     {
-        packetDispatcher.registerMsg(Sample.ResetSpot.class, ResetSpotPacketHandler.class);
+        packetDispatcher.registerMsg(Sample.ResetSpot.class, CmdResetSpot.class);
     }
 
     @Override
