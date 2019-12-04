@@ -27,7 +27,7 @@ public class GameRoomForMatchRoom extends GameRoom {
 
             return true;
         } catch (Exception e) {
-            logger.error(ExceptionUtils.getStackTrace(e));
+            logger.error("GameRoomForMatchRoom::onCreateRoom()", e);
             return false;
         }
     }
@@ -53,7 +53,7 @@ public class GameRoomForMatchRoom extends GameRoom {
             users.remove(gameUser.getUserId());
 
             gameRoomMatchInfo.setUserCountCurr(users.size());
-            logger.error(ExceptionUtils.getStackTrace(e));
+            logger.error("GameRoomForMatchRoom::onJoinRoom()", e);
             return false;
         }
     }

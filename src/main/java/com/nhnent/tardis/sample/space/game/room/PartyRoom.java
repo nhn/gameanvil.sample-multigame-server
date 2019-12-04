@@ -132,7 +132,7 @@ public class PartyRoom extends RoomAgent implements IRoom<GameUser> {
             }
 
         } catch (Exception e) {
-            logger.error(ExceptionUtils.getStackTrace(e));
+            logger.error("PartyRoom::onMatchParty()", e);
         }
 
         return false;

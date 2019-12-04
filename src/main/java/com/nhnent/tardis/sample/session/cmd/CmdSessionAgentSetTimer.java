@@ -22,7 +22,7 @@ public class CmdSessionAgentSetTimer implements IPacketHandler<SampleSession> {
             Sample.SetTimer msg = Sample.SetTimer.parseFrom(packet.getStream());
             ((SampleSessionNode) SampleSessionNode.getInstance()).setTimer(msg.getInterval(), msg.getMessage());
         } catch (IOException e) {
-            logger.error(ExceptionUtils.getStackTrace(e));
+            logger.error("CmdSessionAgentSetTimer", e);
         }
     }
 }

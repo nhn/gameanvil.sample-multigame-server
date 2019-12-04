@@ -35,7 +35,7 @@ public class CmdChatMessageToS implements IRoomPacketHandler<ChatRoom, ChatUser>
             }
 
         } catch (Exception e) {
-            logger.error(ExceptionUtils.getStackTrace(e));
+            logger.error("CmdChatMessageToS::execute()", e);
         }
     }
 

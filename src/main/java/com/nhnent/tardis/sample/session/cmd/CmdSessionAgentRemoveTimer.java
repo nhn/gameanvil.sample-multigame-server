@@ -19,7 +19,7 @@ public class CmdSessionAgentRemoveTimer implements IPacketHandler<SampleSession>
             logger.info("CmdSessionAgentRemoveTimer");
             ((SampleSessionNode) SampleSessionNode.getInstance()).removeTimer();
         } catch (Exception e) {
-            logger.error(ExceptionUtils.getStackTrace(e));
+            logger.error("CmdSessionAgentRemoveTimer", e);
         }
     }
 }

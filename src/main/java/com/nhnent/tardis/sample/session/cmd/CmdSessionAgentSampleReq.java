@@ -20,7 +20,7 @@ public class CmdSessionAgentSampleReq implements IPacketHandler<SampleSession> {
             logger.info("CmdSessionAgentSampleReq : {}", message);
             sampleSession.reply(new Packet(Sample.SampleRes.newBuilder().setMessage(message)));
         } catch (Exception e) {
-            logger.error(ExceptionUtils.getStackTrace(e));
+            logger.error("CmdSessionAgentSampleReq", e);
         }
     }
 }

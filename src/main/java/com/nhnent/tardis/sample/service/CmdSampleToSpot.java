@@ -20,7 +20,7 @@ public class CmdSampleToSpot implements IPacketHandler<SampleSpot> {
             logger.info("CmdSampleToSpot - from : {}, msg : {}", sampleToSpot.getFrom(), sampleToSpot.getMessage());
             sampleSpot.onEvent(sampleToSpot.getFrom(), sampleToSpot.getMessage());
         } catch (Exception e) {
-            logger.error(ExceptionUtils.getStackTrace(e));
+            logger.error("CmdSampleToSpot::execute()", e);
         }
     }
 

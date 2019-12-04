@@ -19,7 +19,7 @@ public class CmdResetSpot implements IPacketHandler<SampleSpot> {
             logger.info("CmdResetSpot - count : {}", resetSpot.getCount());
             sampleSpot.resetEventCount(resetSpot.getCount());
         } catch (Exception e) {
-            logger.error(ExceptionUtils.getStackTrace(e));
+            logger.error("CmdResetSpot::execute()", e);
         }
     }
 

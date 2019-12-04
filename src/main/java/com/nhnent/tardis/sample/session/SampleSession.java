@@ -58,7 +58,7 @@ public class SampleSession extends SessionAgent implements ISession<SampleSessio
                         Sample.SampleData.newBuilder().setMessage(message));
                     outPayload.add(packetToClient);
                 } catch (IOException e) {
-                    logger.error(ExceptionUtils.getStackTrace(e));
+                    logger.error("SampleSession::onAuthenticate()", e);
                 }
             }
 

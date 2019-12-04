@@ -21,7 +21,7 @@ public class CmdResetSpot implements IPacketHandler<GameUser> {
             // for send to spot.
             gameUser.sendToSpot(StringValues.SampleServiceName, StringValues.SampleSpotType, StringValues.SampleSpotId, packet);
         } catch (Exception e) {
-            logger.error(ExceptionUtils.getStackTrace(e));
+            logger.error("CmdResetSpot::execute()", e);
         }
     }
 }

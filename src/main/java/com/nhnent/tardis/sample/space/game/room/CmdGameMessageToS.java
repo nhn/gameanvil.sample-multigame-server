@@ -37,7 +37,7 @@ public class CmdGameMessageToS implements IRoomPacketHandler<GameRoom, GameUser>
             gameUser.sendToSpot(StringValues.SampleServiceName, StringValues.SampleSpotType, StringValues.SampleSpotId, new Packet(toSpot));
 
         } catch (Exception e) {
-            logger.error(ExceptionUtils.getStackTrace(e));
+            logger.error("CmdGameMessageToS::execute()", e);
         }
     }
 

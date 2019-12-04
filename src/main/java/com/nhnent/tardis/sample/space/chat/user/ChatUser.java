@@ -112,7 +112,7 @@ public class ChatUser extends UserAgent implements IUser, ITimerHandler {
         try {
             nickName = (String) KryoSerializer.read(inputStream);
         } catch (Exception e) {
-            logger.error(ExceptionUtils.getStackTrace(e));
+            logger.error("ChatUser::onTransferIn()", e);
         }
     }
 

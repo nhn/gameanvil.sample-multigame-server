@@ -128,7 +128,7 @@ public class GamePartyMatchMaker extends UserMatchMaker<GameUserMatchInfo> {
                 }
             }
         } catch (Exception e) {
-            logger.error(ExceptionUtils.getStackTrace(e));
+            logger.error("GamePartyMatchMaker::refill()", e);
         }
         return false;
     }

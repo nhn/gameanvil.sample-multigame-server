@@ -113,7 +113,7 @@ public class GameUser extends UserAgent implements IUser, ITimerHandler {
             return matchRoom(matchingGroup, roomType, terms);
 
         } catch (Exception e) {
-            logger.error(ExceptionUtils.getStackTrace(e));
+            logger.error("GameUser::onMatchRoom()", e);
         }
         return null;
     }
@@ -139,7 +139,7 @@ public class GameUser extends UserAgent implements IUser, ITimerHandler {
             return matchUser(matchingGroup, roomType, term, payload);
 
         } catch (Exception e) {
-            logger.error("GameUser.onMatchUser - Exception : ", e);
+            logger.error("GameUser::onMatchUser()", e);
         }
         return false;
     }
@@ -173,7 +173,7 @@ public class GameUser extends UserAgent implements IUser, ITimerHandler {
         try {
             nickName = (String) KryoSerializer.read(inputStream);
         } catch (Exception e) {
-            logger.error(ExceptionUtils.getStackTrace(e));
+            logger.error("GameUser::onTransferIn()", e);
         }
     }
 }

@@ -24,7 +24,7 @@ public class CmdRegisterNickNameReq implements IPacketHandler<ChatUser> {
             Sample.RegisterNickNameRes.Builder res = Sample.RegisterNickNameRes.newBuilder().setIsSuccess(true);
             chatUser.reply(new Packet(res.build()));
         } catch (Exception e) {
-            logger.error(ExceptionUtils.getStackTrace(e));
+            logger.error("CmdRegisterNickNameReq::execute()", e);
 
             Sample.RegisterNickNameRes.Builder res = Sample.RegisterNickNameRes.newBuilder().setIsSuccess(true);
             chatUser.reply(new Packet(res.build()));

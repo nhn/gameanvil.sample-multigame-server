@@ -24,7 +24,7 @@ public class GameRoomForeMatchParty extends GameRoom {
             users.put(gameUser.getUserId(), gameUser);
             return true;
         } catch (Exception e) {
-            logger.error(ExceptionUtils.getStackTrace(e));
+            logger.error("GameRoomForeMatchParty::onCreateRoom()", e);
             return false;
         }
     }
@@ -71,7 +71,7 @@ public class GameRoomForeMatchParty extends GameRoom {
             return true;
         } catch (Exception e) {
             users.remove(gameUser.getUserId());
-            logger.error(ExceptionUtils.getStackTrace(e));
+            logger.error("GameRoomForeMatchParty::onJoinRoom()", e);
             return false;
         }
     }
@@ -94,7 +94,7 @@ public class GameRoomForeMatchParty extends GameRoom {
                     }
                 } catch (Exception e) {
                     isRefill = false;
-                    logger.error(ExceptionUtils.getStackTrace(e));
+                    logger.error("GameRoomForeMatchParty::onLeaveRoom()", e);
                 }
             }
             return true;

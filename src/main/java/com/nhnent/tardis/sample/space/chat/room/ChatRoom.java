@@ -56,7 +56,7 @@ public class ChatRoom extends RoomAgent implements IRoom<ChatUser> {
 
             return true;
         } catch (Exception e) {
-            logger.error(ExceptionUtils.getStackTrace(e));
+            logger.error("ChatRoom::onCreateRoom()", e);
             return false;
         }
     }
@@ -74,7 +74,7 @@ public class ChatRoom extends RoomAgent implements IRoom<ChatUser> {
             return true;
         } catch (Exception e) {
             users.remove(chatUser.getUserId());
-            logger.error(ExceptionUtils.getStackTrace(e));
+            logger.error("ChatRoom::onJoinRoom()", e);
             return false;
         }
     }

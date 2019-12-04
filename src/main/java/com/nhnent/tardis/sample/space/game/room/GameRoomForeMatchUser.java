@@ -23,7 +23,7 @@ public class GameRoomForeMatchUser extends GameRoom {
             users.put(gameUser.getUserId(), gameUser);
             return true;
         } catch (Exception e) {
-            logger.error(ExceptionUtils.getStackTrace(e));
+            logger.error("GameRoomForeMatchUser::onCreateRoom()", e);
             return false;
         }
     }
@@ -70,7 +70,7 @@ public class GameRoomForeMatchUser extends GameRoom {
             return true;
         } catch (Exception e) {
             users.remove(gameUser.getUserId());
-            logger.error(ExceptionUtils.getStackTrace(e));
+            logger.error("GameRoomForeMatchUser::onJoinRoom()", e);
             return false;
         }
     }
@@ -93,7 +93,7 @@ public class GameRoomForeMatchUser extends GameRoom {
                     }
                 } catch (Exception e) {
                     isRefill = false;
-                    logger.error(ExceptionUtils.getStackTrace(e));
+                    logger.error("GameRoomForeMatchUser::onLeaveRoom()", e);
                 }
             }
             return true;
