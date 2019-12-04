@@ -21,13 +21,14 @@ public class SampleSpot extends SpotAgent implements ISpot {
 
     private static PacketDispatcher packetDispatcher = new PacketDispatcher();
 
-    private int count;
-    private int eventCount;
-
     static {
         packetDispatcher.registerMsg(Sample.SampleToSpot.class, CmdSampleToSpot.class);
         packetDispatcher.registerMsg(Sample.ResetSpot.class, CmdResetSpot.class);
     }
+
+    private int count;
+    private int eventCount;
+
 
     @Override
     public boolean onInit() throws SuspendExecution {
