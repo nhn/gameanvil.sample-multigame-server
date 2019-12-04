@@ -15,17 +15,18 @@ public class RegisterNickNameReqPacketHandler implements IPacketHandler<ChatUser
     @Override
     public void execute(ChatUser chatUser, Packet packet) throws SuspendExecution {
 
-        Sample.RegisterNickNameRes.Builder res = Sample.RegisterNickNameRes.newBuilder().setIsSuccess(false);
         try{
             Sample.RegisterNickNameReq req = Sample.RegisterNickNameReq.parseFrom(packet.getStream());
 
             chatUser.setNickName(req.getNickName());
-            res.setIsSuccess(true);
 
+            Sample.RegisterNickNameRes.Builder res = Sample.RegisterNickNameRes.newBuilder().setIsSuccess(true);
+            chatUser.reply(new Packet(res.build()));
         }catch (Exception e){
             logger.error(ExceptionUtils.getStackTrace(e));
-        }
 
-        chatUser.reply(new Packet(res.build()));
+            Sample.RegisterNickNameRes.Builder res = Sample.RegisterNickNameRes.newBuilder().setIsSuccess(true);
+            chatUser.reply(new Packet(res.build()));
+        }
     }
 }
