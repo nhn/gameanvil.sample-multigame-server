@@ -29,7 +29,7 @@ public class Main {
 
         TardisBootstrap bootstrap = TardisBootstrap.getInstance();
 
-        bootstrap.addProtoBufClass(0, Sample.class);
+        bootstrap.addProtoBufClass(0, Sample.getDescriptor());
 
         bootstrap.setSession()
             .session(SampleSession.class)

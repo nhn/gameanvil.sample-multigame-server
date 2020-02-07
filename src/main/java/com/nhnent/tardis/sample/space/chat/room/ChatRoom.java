@@ -23,7 +23,7 @@ public class ChatRoom extends RoomAgent implements IRoom<ChatUser> {
     private static RoomPacketDispatcher dispatcher = new RoomPacketDispatcher();
 
     static {
-        dispatcher.registerMsg(Sample.ChatMessageToS.class, CmdChatMessageToS.class);
+        dispatcher.registerMsg(Sample.ChatMessageToS.getDescriptor(), CmdChatMessageToS.class);
     }
 
     private Map<String, ChatUser> users = new HashMap<>();
@@ -43,7 +43,7 @@ public class ChatRoom extends RoomAgent implements IRoom<ChatUser> {
         logger.info("ChatRoom.onDispatch : RoomId : {}, UserId : {}, {}",
             getId(),
             chatUser.getUserId(),
-            TardisIndexer.getMsgName(packet.getDescId(), packet.getMsgIndex()));
+            packet.getMsgName());
         dispatcher.dispatch(this, chatUser, packet);
     }
 

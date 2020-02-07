@@ -18,13 +18,13 @@ public class SampleSessionUser extends SessionUserAgent implements ISessionUser 
     private static PacketDispatcher packetDispatcher = new PacketDispatcher();
 
     static {
-        packetDispatcher.registerMsg(Sample.SampleReq.class, CmdSessionUserAgentSampleReq.class);
+        packetDispatcher.registerMsg(Sample.SampleReq.getDescriptor(), CmdSessionUserAgentSampleReq.class);
     }
 
     @Override
     public void onDispatch(Packet packet) throws SuspendExecution {
         logger.info("SampleSessionUser.onDispatch : {}",
-            TardisIndexer.getMsgName(packet.getDescId(), packet.getMsgIndex()));
+            packet.getMsgName());
         packetDispatcher.dispatch(this, packet);
     }
 }

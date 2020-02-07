@@ -36,7 +36,7 @@ public class GameNode extends SpaceNodeAgent implements ISpaceNode {
     @Override
     public void onDispatch(Packet packet) throws SuspendExecution {
         logger.info("GameNode.onDispatch : {}",
-            TardisIndexer.getMsgName(packet.getDescId(), packet.getMsgIndex()));
+            packet.getMsgName());
     }
 
     @Override

@@ -27,10 +27,10 @@ public class SampleSession extends SessionAgent implements ISession<SampleSessio
     private static PacketDispatcher packetDispatcher = new PacketDispatcher();
 
     static {
-        packetDispatcher.registerMsg(Sample.SampleReq.class, CmdSessionAgentSampleReq.class);
-        packetDispatcher.registerMsg(Sample.SampleToS.class, CmdSessionAgentSampleToS.class);
-        packetDispatcher.registerMsg(Sample.SetTimer.class, CmdSessionAgentSetTimer.class);
-        packetDispatcher.registerMsg(Sample.RemoveTimer.class, CmdSessionAgentRemoveTimer.class);
+        packetDispatcher.registerMsg(Sample.SampleReq.getDescriptor(), CmdSessionAgentSampleReq.class);
+        packetDispatcher.registerMsg(Sample.SampleToS.getDescriptor(), CmdSessionAgentSampleToS.class);
+        packetDispatcher.registerMsg(Sample.SetTimer.getDescriptor(), CmdSessionAgentSetTimer.class);
+        packetDispatcher.registerMsg(Sample.RemoveTimer.getDescriptor(), CmdSessionAgentRemoveTimer.class);
     }
 
     @Override
@@ -83,7 +83,7 @@ public class SampleSession extends SessionAgent implements ISession<SampleSessio
     @Override
     public void onDispatch(Packet packet) throws SuspendExecution {
         logger.info("SampleSession.onDispatch : {}",
-            TardisIndexer.getMsgName(packet.getDescId(), packet.getMsgIndex()));
+            packet.getMsgName());
         packetDispatcher.dispatch(this, packet);
     }
 

@@ -23,7 +23,7 @@ public class PartyRoom extends RoomAgent implements IRoom<GameUser> {
     protected static RoomPacketDispatcher dispatcher = new RoomPacketDispatcher();
 
     static {
-        dispatcher.registerMsg(Sample.GameMessageToS.class, CmdGameMessageToS.class);
+        dispatcher.registerMsg(Sample.GameMessageToS.getDescriptor(), CmdGameMessageToS.class);
     }
 
     protected Map<String, GameUser> users = new HashMap<>();
@@ -43,7 +43,7 @@ public class PartyRoom extends RoomAgent implements IRoom<GameUser> {
         logger.info("PartyRoom.onDispatch : RoomId : {}, UserId : {}, {}",
             getId(),
             gameUser.getUserId(),
-            TardisIndexer.getMsgName(packet.getDescId(), packet.getMsgIndex()));
+            packet.getMsgName());
         dispatcher.dispatch(this, gameUser, packet);
     }
 

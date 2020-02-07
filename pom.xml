@@ -18,7 +18,7 @@
     </repositories>
 
     <groupId>com.nhnent.tardis</groupId>
-    <artifactId>tardis_sample_server</artifactId>
+    <artifactId>sample_multigame_server</artifactId>
     <version>0.1</version>
 
     <dependencies>
@@ -26,7 +26,7 @@
         <dependency>
             <groupId>com.nhnent.tardis</groupId>
             <artifactId>tardis</artifactId>
-            <version>0.9.9.2</version>
+            <version>0.10.0.0</version>
         </dependency>
 
         <!-- java connector -->
@@ -44,7 +44,7 @@
         </dependency>
     </dependencies>
 
-    <name>tardis_sample_server</name>
+    <name>sample_multigame_server</name>
 
     <build>
         <plugins>

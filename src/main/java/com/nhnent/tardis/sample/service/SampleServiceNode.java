@@ -36,7 +36,7 @@ public class SampleServiceNode extends ServiceNodeAgent implements IServiceNode{
     @Override
     public void onDispatch(Packet packet) throws SuspendExecution {
         logger.info("SampleServiceNode.onDispatch : {}",
-            TardisIndexer.getMsgName(packet.getDescId(), packet.getMsgIndex()));
+            packet.getMsgName());
     }
 
     @Override

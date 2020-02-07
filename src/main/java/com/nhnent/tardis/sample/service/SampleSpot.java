@@ -22,8 +22,8 @@ public class SampleSpot extends SpotAgent implements ISpot {
     private static PacketDispatcher packetDispatcher = new PacketDispatcher();
 
     static {
-        packetDispatcher.registerMsg(Sample.SampleToSpot.class, CmdSampleToSpot.class);
-        packetDispatcher.registerMsg(Sample.ResetSpot.class, CmdResetSpot.class);
+        packetDispatcher.registerMsg(Sample.SampleToSpot.getDescriptor(), CmdSampleToSpot.class);
+        packetDispatcher.registerMsg(Sample.ResetSpot.getDescriptor(), CmdResetSpot.class);
     }
 
     private int count;

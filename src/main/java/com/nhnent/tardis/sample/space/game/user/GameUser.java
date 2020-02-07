@@ -30,7 +30,7 @@ public class GameUser extends UserAgent implements IUser, ITimerHandler {
     private static PacketDispatcher<GameUser> packetDispatcher = new PacketDispatcher();
 
     static {
-        packetDispatcher.registerMsg(Sample.ResetSpot.class, CmdResetSpot.class);
+        packetDispatcher.registerMsg(Sample.ResetSpot.getDescriptor(), CmdResetSpot.class);
     }
 
     private String nickName = "";
@@ -62,7 +62,7 @@ public class GameUser extends UserAgent implements IUser, ITimerHandler {
     @Override
     public void onDispatch(Packet packet) throws SuspendExecution {
         logger.info("GameUser.onDispatch : {} , {}",
-            TardisIndexer.getMsgName(packet.getDescId(), packet.getMsgIndex()), getUserId());
+            packet.getMsgName(), getUserId());
         packetDispatcher.dispatch(this, packet);
     }
 
