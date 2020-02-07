@@ -32,7 +32,7 @@ public class ChatNode extends SpaceNodeAgent implements ISpaceNode {
     @Override
     public void onDispatch(Packet packet) throws SuspendExecution {
         logger.info("ChatNode.onDispatch : {}",
-            TardisIndexer.getMsgName(packet.getDescId(), packet.getMsgIndex()));
+            packet.getMsgName());
     }
 
     @Override

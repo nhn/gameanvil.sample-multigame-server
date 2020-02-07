@@ -27,7 +27,7 @@ public class ChatUser extends UserAgent implements IUser, ITimerHandler {
     private static PacketDispatcher<ChatUser> packetDispatcher = new PacketDispatcher();
 
     static {
-        packetDispatcher.registerMsg(Sample.RegisterNickNameReq.class, CmdRegisterNickNameReq.class);
+        packetDispatcher.registerMsg(Sample.RegisterNickNameReq.getDescriptor(), CmdRegisterNickNameReq.class);
     }
 
     private String nickName = "";
@@ -60,7 +60,7 @@ public class ChatUser extends UserAgent implements IUser, ITimerHandler {
     @Override
     public void onDispatch(Packet packet) throws SuspendExecution {
         logger.info("ChatUser.onDispatch : {} , {}",
-            TardisIndexer.getMsgName(packet.getDescId(), packet.getMsgIndex()), getUserId());
+            packet.getMsgName(), getUserId());
         packetDispatcher.dispatch(this, packet);
     }
 

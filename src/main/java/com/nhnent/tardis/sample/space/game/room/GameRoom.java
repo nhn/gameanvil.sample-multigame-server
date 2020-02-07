@@ -24,7 +24,7 @@ public class GameRoom extends RoomAgent implements IRoom<GameUser>, ITimerHandle
     protected static RoomPacketDispatcher dispatcher = new RoomPacketDispatcher();
 
     static {
-        dispatcher.registerMsg(Sample.GameMessageToS.class, CmdGameMessageToS.class);
+        dispatcher.registerMsg(Sample.GameMessageToS.getDescriptor(), CmdGameMessageToS.class);
     }
 
     protected Map<String, GameUser> users = new TreeMap<>();
@@ -44,7 +44,7 @@ public class GameRoom extends RoomAgent implements IRoom<GameUser>, ITimerHandle
         logger.info("GameRoom.onDispatch : RoomId : {}, UserId : {}, {}",
             getId(),
             gameUser.getUserId(),
-            TardisIndexer.getMsgName(packet.getDescId(), packet.getMsgIndex()));
+            packet.getMsgName());
         dispatcher.dispatch(this, gameUser, packet);
     }
 

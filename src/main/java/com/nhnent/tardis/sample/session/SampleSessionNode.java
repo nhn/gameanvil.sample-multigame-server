@@ -79,7 +79,7 @@ public class SampleSessionNode extends SessionNodeAgent implements ISessionNode,
     @Override
     public void onDispatch(Packet packet) throws SuspendExecution {
         logger.info("SampleSessionNode.onDispatch : {}",
-            TardisIndexer.getMsgName(packet.getDescId(), packet.getMsgIndex()));
+            packet.getMsgName());
     }
 
     @Override
