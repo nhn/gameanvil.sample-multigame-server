@@ -133,7 +133,7 @@ public class GameUser extends UserAgent implements IUser, ITimerHandler {
         try {
 
             String matchingGroup = getServiceName();
-            GameUserMatchInfo term = new GameUserMatchInfo(getUserId(), 100, 1);
+            GameUserMatchInfo term = new GameUserMatchInfo(getUserId(), 100, 0);
             return matchUser(matchingGroup, roomType, term, payload);
 
         } catch (Exception e) {
@@ -145,7 +145,7 @@ public class GameUser extends UserAgent implements IUser, ITimerHandler {
     @Override
     public boolean onMatchUserCancel(final MatchCancelReason reason) throws SuspendExecution {
         logger.info("GameUser.onMatchUserCancel - UserId : {}", getUserId());
-        return false;
+        return true;
     }
 
     @Override
