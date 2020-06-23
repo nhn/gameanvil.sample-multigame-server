@@ -26,14 +26,14 @@
         <dependency>
             <groupId>com.nhnent.tardis</groupId>
             <artifactId>tardis</artifactId>
-            <version>0.10.0.1</version>
+            <version>0.10.0.2-AOT</version>
         </dependency>
 
         <!-- java connector -->
         <dependency>
             <groupId>com.nhnent.tardis</groupId>
             <artifactId>tardis-test-agent</artifactId>
-            <version>0.9.9.5</version>
+            <version>0.10.0.4</version>
         </dependency>
 
         <!-- junit -->
@@ -126,6 +126,24 @@
                         <argument>com.nhnent.tardis.sample.Main</argument>
                     </arguments>
                 </configuration>
+            </plugin>
+            <!-- Quasar AOT Instrumentation  -->
+            <plugin>
+                <groupId>com.vlkan</groupId>
+                <artifactId>quasar-maven-plugin</artifactId>
+                <version>0.7.9</version>
+                <configuration>
+                    <check>true</check>
+                    <debug>true</debug>
+                    <verbose>true</verbose>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>instrument</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
         <resources>
