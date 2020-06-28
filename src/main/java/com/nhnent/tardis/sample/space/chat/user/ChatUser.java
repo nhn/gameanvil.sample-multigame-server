@@ -3,25 +3,22 @@ package com.nhnent.tardis.sample.space.chat.user;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import co.paralleluniverse.fibers.SuspendExecution;
-import com.nhnent.tardis.common.Packet;
-import com.nhnent.tardis.common.Payload;
-import com.nhnent.tardis.common.internal.ITimerHandler;
-import com.nhnent.tardis.common.internal.ITimerObject;
-import com.nhnent.tardis.common.internal.PauseType;
-import com.nhnent.tardis.common.serializer.KryoSerializer;
-import com.nhnent.tardis.console.PacketDispatcher;
-import com.nhnent.tardis.console.TardisIndexer;
-import com.nhnent.tardis.console.space.IUser;
-import com.nhnent.tardis.console.space.UserAgent;
+import com.nhn.gameflex.define.PauseType;
+import com.nhn.gameflex.node.game.BaseUser;
+import com.nhn.gameflex.packet.Packet;
+import com.nhn.gameflex.packet.PacketDispatcher;
+import com.nhn.gameflex.packet.Payload;
+import com.nhn.gameflex.serializer.KryoSerializer;
+import com.nhn.gameflex.timer.Timer;
+import com.nhn.gameflex.timer.TimerHandler;
 import com.nhnent.tardis.sample.Defines.StringValues;
 import com.nhnent.tardis.sample.protocol.Sample;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 import org.slf4j.Logger;
 
-import java.io.InputStream;
-import java.nio.ByteBuffer;
-
-public class ChatUser extends UserAgent implements IUser, ITimerHandler {
+public class ChatUser extends BaseUser implements TimerHandler {
 
     private static final Logger logger = getLogger(ChatUser.class);
     private static PacketDispatcher<ChatUser> packetDispatcher = new PacketDispatcher();
@@ -92,7 +89,7 @@ public class ChatUser extends UserAgent implements IUser, ITimerHandler {
     }
 
     @Override
-    public void onTimer(ITimerObject iTimerObject, Object o) throws SuspendExecution {
+    public void onTimer(Timer timer, Object o) throws SuspendExecution {
         logger.info("ChatUser.onTimer : {}", getUserId());
     }
 
@@ -120,6 +117,6 @@ public class ChatUser extends UserAgent implements IUser, ITimerHandler {
         if (!nickName.isEmpty()) {
             return nickName;
         }
-        return getUserId();
+        return "" + getUserId();
     }
 }

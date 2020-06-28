@@ -1,13 +1,13 @@
 package unit_test;
 
-import com.nhnent.tardis.connector.common.Config;
-import com.nhnent.tardis.connector.protocol.Packet;
-import com.nhnent.tardis.connector.protocol.result.AuthenticationResult;
-import com.nhnent.tardis.connector.protocol.result.LoginResult;
-import com.nhnent.tardis.connector.protocol.result.NamedRoomResult;
-import com.nhnent.tardis.connector.tcp.ConnectorSession;
-import com.nhnent.tardis.connector.tcp.ConnectorUser;
-import com.nhnent.tardis.connector.tcp.TardisConnector;
+import com.nhn.gameflexcore.connector.common.Config;
+import com.nhn.gameflexcore.connector.protocol.Packet;
+import com.nhn.gameflexcore.connector.protocol.result.AuthenticationResult;
+import com.nhn.gameflexcore.connector.protocol.result.LoginResult;
+import com.nhn.gameflexcore.connector.protocol.result.NamedRoomResult;
+import com.nhn.gameflexcore.connector.tcp.ConnectorSession;
+import com.nhn.gameflexcore.connector.tcp.ConnectorUser;
+import com.nhn.gameflexcore.connector.tcp.TardisConnector;
 import com.nhnent.tardis.sample.protocol.Sample;
 import org.junit.After;
 import org.junit.Before;

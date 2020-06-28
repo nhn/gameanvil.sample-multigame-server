@@ -2,7 +2,7 @@ package com.nhnent.tardis.sample.space.game.match;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
-import com.nhnent.tardis.console.match.UserMatchMaker;
+import com.nhn.gameflex.node.match.UserMatchMaker;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

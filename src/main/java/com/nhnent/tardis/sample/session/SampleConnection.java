@@ -3,27 +3,24 @@ package com.nhnent.tardis.sample.session;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import co.paralleluniverse.fibers.SuspendExecution;
-import com.nhnent.tardis.common.Packet;
-import com.nhnent.tardis.common.Payload;
-import com.nhnent.tardis.common.internal.PauseType;
-import com.nhnent.tardis.console.PacketDispatcher;
-import com.nhnent.tardis.console.TardisIndexer;
-import com.nhnent.tardis.console.session.ISession;
-import com.nhnent.tardis.console.session.SessionAgent;
+import com.nhn.gameflex.define.PauseType;
+import com.nhn.gameflex.node.gateway.BaseConnection;
+import com.nhn.gameflex.packet.Packet;
+import com.nhn.gameflex.packet.PacketDispatcher;
+import com.nhn.gameflex.packet.Payload;
 import com.nhnent.tardis.sample.Defines.StringValues;
 import com.nhnent.tardis.sample.protocol.Sample;
 import com.nhnent.tardis.sample.session.cmd.CmdSessionAgentRemoveTimer;
 import com.nhnent.tardis.sample.session.cmd.CmdSessionAgentSampleReq;
 import com.nhnent.tardis.sample.session.cmd.CmdSessionAgentSampleToS;
 import com.nhnent.tardis.sample.session.cmd.CmdSessionAgentSetTimer;
+import java.io.IOException;
 import org.slf4j.Logger;
 
-import java.io.IOException;
 
+public class SampleConnection extends BaseConnection<SampleSessionUser> {
 
-public class SampleSession extends SessionAgent implements ISession<SampleSessionUser> {
-
-    private static final Logger logger = getLogger(SampleSession.class);
+    private static final Logger logger = getLogger(SampleConnection.class);
     private static PacketDispatcher packetDispatcher = new PacketDispatcher();
 
     static {
@@ -62,8 +59,8 @@ public class SampleSession extends SessionAgent implements ISession<SampleSessio
                 }
             }
 
-            SampleSessionNode sampleSessionNode = SampleSessionNode.getInstance();
-            sampleSessionNode.addSampleSession(this);
+            SampleGatewayNode sampleGatewayNode = SampleGatewayNode.getInstance();
+            sampleGatewayNode.addSampleSession(this);
 
             return true;
         } else {
@@ -116,7 +113,7 @@ public class SampleSession extends SessionAgent implements ISession<SampleSessio
     @Override
     public void onDisconnect() throws SuspendExecution {
         logger.info("SampleSession.onDisconnect");
-        SampleSessionNode sampleSessionNode = SampleSessionNode.getInstance();
-        sampleSessionNode.removeSampleSession(this);
+        SampleGatewayNode sampleGatewayNode = SampleGatewayNode.getInstance();
+        sampleGatewayNode.removeSampleSession(this);
     }
 }

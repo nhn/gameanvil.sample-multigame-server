@@ -1,12 +1,12 @@
 package com.nhnent.tardis.sample;
 
-import com.nhnent.tardis.console.TardisBootstrap;
+import com.nhn.gameflex.GameflexBootstrap;
 import com.nhnent.tardis.sample.Defines.StringValues;
 import com.nhnent.tardis.sample.protocol.Sample;
 import com.nhnent.tardis.sample.service.SampleServiceNode;
 import com.nhnent.tardis.sample.service.SampleSpot;
-import com.nhnent.tardis.sample.session.SampleSession;
-import com.nhnent.tardis.sample.session.SampleSessionNode;
+import com.nhnent.tardis.sample.session.SampleConnection;
+import com.nhnent.tardis.sample.session.SampleGatewayNode;
 import com.nhnent.tardis.sample.session.SampleSessionUser;
 import com.nhnent.tardis.sample.space.chat.ChatNode;
 import com.nhnent.tardis.sample.space.game.GameNode;
@@ -27,22 +27,22 @@ public class Main {
 
     public static void main(String[] args) {
 
-        TardisBootstrap bootstrap = TardisBootstrap.getInstance();
+        GameflexBootstrap bootstrap = GameflexBootstrap.getInstance();
 
         bootstrap.addProtoBufClass(0, Sample.getDescriptor());
 
-        bootstrap.setSession()
-            .session(SampleSession.class)
-            .user(SampleSessionUser.class)
-            .node(SampleSessionNode.class)
+        bootstrap.setGateway()
+            .connection(SampleConnection.class)
+            .session(SampleSessionUser.class)
+            .node(SampleGatewayNode.class)
             .enableWhiteModules();
 
-        bootstrap.setSpace(StringValues.ChatServiceName)
+        bootstrap.setGame(StringValues.ChatServiceName)
             .node(ChatNode.class)
             .user(StringValues.ChatUserType, ChatUser.class)
             .room(StringValues.ChatRoomType, ChatRoom.class);
 
-        bootstrap.setSpace(StringValues.GameServiceName)
+        bootstrap.setGame(StringValues.GameServiceName)
             .node(GameNode.class)
             .user(StringValues.GameUserType, GameUser.class)
 
@@ -56,7 +56,7 @@ public class Main {
             .room(StringValues.GameRoomType_MatchParty, GameRoomForeMatchParty.class)
             .userMatchMaker(StringValues.GameRoomType_MatchParty, GamePartyMatchMaker.class, GameUserMatchInfo.class);
 
-        bootstrap.setService(StringValues.SampleServiceName)
+        bootstrap.setSupport(StringValues.SampleServiceName)
             .node(SampleServiceNode.class)
             .spot(StringValues.SampleSpotType, SampleSpot.class);
 

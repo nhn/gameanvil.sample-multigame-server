@@ -24,16 +24,16 @@
     <dependencies>
         <!-- tardis -->
         <dependency>
-            <groupId>com.nhnent.tardis</groupId>
-            <artifactId>tardis</artifactId>
-            <version>0.10.0.2-AOT</version>
+            <groupId>com.nhn.gameflex</groupId>
+            <artifactId>gameflex</artifactId>
+            <version>DEV-1.0.0-AOT</version>
         </dependency>
 
         <!-- java connector -->
         <dependency>
             <groupId>com.nhnent.tardis</groupId>
             <artifactId>tardis-test-agent</artifactId>
-            <version>0.10.0.4</version>
+            <version>DEV-1.0.0</version>
         </dependency>
 
         <!-- junit -->

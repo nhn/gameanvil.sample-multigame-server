@@ -1,15 +1,12 @@
 package com.nhnent.tardis.sample.space.game.room;
 
-import static com.nhnent.tardis.common.internal.BaseNode.getServiceName;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import co.paralleluniverse.fibers.SuspendExecution;
-import com.nhnent.tardis.common.Packet;
-import com.nhnent.tardis.common.Payload;
-import com.nhnent.tardis.console.TardisIndexer;
-import com.nhnent.tardis.console.space.IRoom;
-import com.nhnent.tardis.console.space.RoomAgent;
-import com.nhnent.tardis.console.space.RoomPacketDispatcher;
+import com.nhn.gameflex.node.game.BaseRoom;
+import com.nhn.gameflex.node.game.RoomPacketDispatcher;
+import com.nhn.gameflex.packet.Packet;
+import com.nhn.gameflex.packet.Payload;
 import com.nhnent.tardis.sample.protocol.Sample;
 import com.nhnent.tardis.sample.space.game.match.GameUserMatchInfo;
 import com.nhnent.tardis.sample.space.game.user.GameUser;
@@ -17,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.slf4j.Logger;
 
-public class PartyRoom extends RoomAgent implements IRoom<GameUser> {
+public class PartyRoom extends BaseRoom<GameUser> {
     private static final Logger logger = getLogger(PartyRoom.class);
 
     protected static RoomPacketDispatcher dispatcher = new RoomPacketDispatcher();
@@ -26,7 +23,7 @@ public class PartyRoom extends RoomAgent implements IRoom<GameUser> {
         dispatcher.registerMsg(Sample.GameMessageToS.getDescriptor(), CmdGameMessageToS.class);
     }
 
-    protected Map<String, GameUser> users = new HashMap<>();
+    protected Map<Integer, GameUser> users = new HashMap<>();
 
     @Override
     public void onInit() throws SuspendExecution {
@@ -122,8 +119,7 @@ public class PartyRoom extends RoomAgent implements IRoom<GameUser> {
         logger.info("PartyRoom.onMatchParty - RoomId : {}, roomType : {}", getId(), roomType);
         try {
 
-            String matchingGroup = getServiceName();
-            ;
+            String matchingGroup = getRoomType();
             GameUserMatchInfo term = new GameUserMatchInfo(getId(), 100, users.size());
             if (matchParty(matchingGroup, roomType, term, payload)) {
                 logger.info("PartyRoom.onMatchParty - {} start Party Match for RoomType {}", user.getUserId(), roomType);

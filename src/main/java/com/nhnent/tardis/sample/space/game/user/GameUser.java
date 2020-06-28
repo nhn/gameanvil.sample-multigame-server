@@ -3,18 +3,16 @@ package com.nhnent.tardis.sample.space.game.user;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import co.paralleluniverse.fibers.SuspendExecution;
-import com.nhnent.tardis.common.Packet;
-import com.nhnent.tardis.common.Payload;
-import com.nhnent.tardis.common.internal.ITimerHandler;
-import com.nhnent.tardis.common.internal.ITimerObject;
-import com.nhnent.tardis.common.internal.PauseType;
-import com.nhnent.tardis.common.serializer.KryoSerializer;
-import com.nhnent.tardis.console.PacketDispatcher;
-import com.nhnent.tardis.console.TardisIndexer;
-import com.nhnent.tardis.console.space.IUser;
-import com.nhnent.tardis.console.space.MatchCancelReason;
-import com.nhnent.tardis.console.space.MatchRoomResult;
-import com.nhnent.tardis.console.space.UserAgent;
+import com.nhn.gameflex.define.PauseType;
+import com.nhn.gameflex.node.game.BaseUser;
+import com.nhn.gameflex.node.game.data.MatchCancelReason;
+import com.nhn.gameflex.node.game.data.MatchRoomResult;
+import com.nhn.gameflex.packet.Packet;
+import com.nhn.gameflex.packet.PacketDispatcher;
+import com.nhn.gameflex.packet.Payload;
+import com.nhn.gameflex.serializer.KryoSerializer;
+import com.nhn.gameflex.timer.Timer;
+import com.nhn.gameflex.timer.TimerHandler;
 import com.nhnent.tardis.sample.Defines.StringValues;
 import com.nhnent.tardis.sample.protocol.Sample;
 import com.nhnent.tardis.sample.space.game.match.GameRoomMatchInfo;
@@ -24,7 +22,7 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 import org.slf4j.Logger;
 
-public class GameUser extends UserAgent implements IUser, ITimerHandler {
+public class GameUser extends BaseUser implements TimerHandler {
 
     private static final Logger logger = getLogger(GameUser.class);
     private static PacketDispatcher<GameUser> packetDispatcher = new PacketDispatcher();
@@ -36,8 +34,7 @@ public class GameUser extends UserAgent implements IUser, ITimerHandler {
     private String nickName = "";
 
     @Override
-    public boolean onLogin(
-        Payload payload, Payload sessionPayload, Payload outPayload) throws SuspendExecution {
+    public boolean onLogin(Payload payload, Payload sessionPayload, Payload outPayload) throws SuspendExecution {
         logger.info("GameUser.onLogin - UserId : {}", getUserId());
         addClientTopics(Arrays.asList(StringValues.TopicSpot));
         return true;
@@ -117,9 +114,7 @@ public class GameUser extends UserAgent implements IUser, ITimerHandler {
     }
 
     /**
-     * client 에서 MatchUserStart 를 요청했을 경우 호출되는 callback server에서는 UserMatchInfo를 저장하고 주기적으로 UserMatchMaker의 match() 함수를 호출함 UserMatchMaker의
-     * match()함수에서는 getMatchRequests()를 호출하여 저장된 UserMatchInfo 목록을 가져오고 이 목록중에 조건에 맞는 UserMatchInfo를 찾아 매칭를 완료하게 됨. 여기에서 성공은 매칭의 성공 여부가 아닌 매칭 요청의
-     * 성공여부를 의미함.
+     * client 에서 MatchUserStart 를 요청했을 경우 호출되는 callback server에서는 UserMatchInfo를 저장하고 주기적으로 UserMatchMaker의 match() 함수를 호출함 UserMatchMaker의 match()함수에서는 getMatchRequests()를 호출하여 저장된 UserMatchInfo 목록을 가져오고 이 목록중에 조건에 맞는 UserMatchInfo를 찾아 매칭를 완료하게 됨. 여기에서 성공은 매칭의 성공 여부가 아닌 매칭 요청의 성공여부를 의미함.
      *
      * @param roomType   : 매칭되는 room 의 type
      * @param payload    : client 의 요청시 추가적으로 전달되는 data
@@ -155,7 +150,7 @@ public class GameUser extends UserAgent implements IUser, ITimerHandler {
     }
 
     @Override
-    public void onTimer(ITimerObject iTimerObject, Object o) throws SuspendExecution {
+    public void onTimer(Timer timer, Object o) throws SuspendExecution {
         logger.info("GameUser.onTimer : {}", getUserId());
     }
 

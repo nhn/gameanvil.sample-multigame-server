@@ -1,9 +1,9 @@
 package stress_test;
 
-import com.nhnent.tardis.connector.common.Config;
-import com.nhnent.tardis.connector.tcp.ConnectorSession;
-import com.nhnent.tardis.connector.tcp.TardisConnector;
-import com.nhnent.tardis.connector.tcp.agent.parent.IAsyncConnectorUser;
+import com.nhn.gameflexcore.connector.common.Config;
+import com.nhn.gameflexcore.connector.tcp.ConnectorSession;
+import com.nhn.gameflexcore.connector.tcp.TardisConnector;
+import com.nhn.gameflexcore.connector.tcp.agent.parent.IAsyncConnectorUser;
 import com.nhnent.tardis.sample.protocol.Sample;
 import org.junit.BeforeClass;
 import org.junit.Test;

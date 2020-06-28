@@ -1,13 +1,13 @@
 package com.nhnent.tardis.sample.service;
 
 import co.paralleluniverse.fibers.SuspendExecution;
-import com.nhnent.tardis.common.Packet;
-import com.nhnent.tardis.console.IPacketHandler;
+import com.nhn.gameflex.packet.Packet;
+import com.nhn.gameflex.packet.PacketHandler;
 import com.nhnent.tardis.sample.protocol.Sample;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CmdResetSpot implements IPacketHandler<SampleSpot> {
+public class CmdResetSpot implements PacketHandler<SampleSpot> {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 

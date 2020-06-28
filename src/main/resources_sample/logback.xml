@@ -3,90 +3,50 @@
 <configuration debug="true" scan="true" scanPeriod="30 seconds">
 -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <!-- We output the timezone for disambiguation across the different environments. -->
-            <pattern>[%d{ISO8601} %d{Z}] [%highlight(%level)] [%logger{10}] [%X{tardisTag}] %msg%n</pattern>
-            <!--<pattern>[%d{ISO8601} %d{Z}] [%highlight(%level)] [%logger{10}] %msg%n</pattern>-->
+        <encoder>			
+			<!-- 개발용 : FileName과 Line정보는 성능에 매우 악영향을 주므로 개발용도로만 사용할 것! -->
+			<pattern>[%d{ISO8601}] [%highlight(%-5level)] [%thread] [%cyan(%F:%L)] %yellow(%msg%n)</pattern>
+			
+			<!-- 서비스용 -->
+			<!--<pattern>[%d{ISO8601}] [%highlight(%-5level)] [%thread] [%magenta(%logger{10})] %yellow(%msg%n)</pattern>-->
         </encoder>
     </appender>
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>log/ngt.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>log/tardis-%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>30</maxHistory>
         </rollingPolicy>
         <encoder>
-            <!-- We output the timezone for disambiguation across the different environments. -->
-            <pattern>[%d{ISO8601} %d{Z}] [%highlight(%level)] [%logger{10}] [%X{tardisTag}] %msg%n</pattern>
-            <!--<pattern>[%d{ISO8601} %d{Z}] [%highlight(%level)] [%logger{10}] %msg%n</pattern>-->
+			<!-- old -->
+            <!--<pattern>[%d{ISO8601} %d{Z}] [-5(%level)] [%logger{10}] [%X{tardisTag}] %msg%n</pattern>-->
+			
+			<!-- 개발용 : FileName과 Line정보는 성능에 매우 악영향을 주므로 개발용도로만 사용할 것! -->
+			<pattern>[%d{ISO8601}] [%-5level] [%thread] [%F:%L] %msg%n</pattern>
+			
+			<!-- 서비스용 -->
+			<!--<pattern>[%d{ISO8601}] [%-5level] [%thread] [%logger{10}] %msg%n</pattern>-->
         </encoder>
     </appender>
 
+	<!-- 서비스용 : FILE 로거는 반드시 ASYNC로 처리하도록 한다. 개발할 때는 FileName과 LineNum을 남기고자 할 경우에 FILE을 직접 사용 -->
+	<!--
     <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
         <appender-ref ref="FILE" />
     </appender>
+	-->
 
     <logger name="com.nhnent.tardis" level="INFO" />
 
-    <appender name="ELASTIC" class="com.internetitem.logback.elasticsearch.ElasticsearchAppender">
-        <url>http://localhost:9200/tardis-log/log/_bulk</url>
-        <index>tardis-log</index> <!--logs-%date{yyyy-MM-dd}         ${HOSTNAME} -->
-        <type>log</type>
-        <loggerName>es-logger</loggerName> <!-- optional -->
-        <errorLoggerName>es-error-logger</errorLoggerName> <!-- optional -->
-        <connectTimeout>30000</connectTimeout> <!-- optional (in ms, default 30000) -->
-        <errorsToStderr>false</errorsToStderr> <!-- optional (default false) -->
-        <includeCallerData>false</includeCallerData> <!-- optional (default false) -->
-        <logsToStderr>false</logsToStderr> <!-- optional (default false) -->
-        <maxQueueSize>104857600</maxQueueSize> <!-- optional (default 104857600) -->
-        <maxRetries>3</maxRetries> <!-- optional (default 3) -->
-        <readTimeout>30000</readTimeout> <!-- optional (in ms, default 30000) -->
-        <sleepTime>250</sleepTime> <!-- optional (in ms, default 250) -->
-        <rawJsonMessage>false</rawJsonMessage> <!-- optional (default false) -->
-        <includeMdc>false</includeMdc> <!-- optional (default false) -->
-        <maxMessageSize>100</maxMessageSize> <!-- optional (default -1 -->
-        <authentication class="com.internetitem.logback.elasticsearch.config.BasicAuthentication" /> <!-- optional -->
-        <properties>
-            <property>
-                <name>host</name>
-                <value>${HOSTNAME}</value>
-                <allowEmpty>false</allowEmpty>
-            </property>
-            <property>
-                <name>level</name>
-                <value>%level</value>
-                <allowEmpty>false</allowEmpty>
-            </property>
-            <property>
-                <name>stacktrace</name>
-                <value>%ex</value>
-            </property>
-            <property>
-                <name>logger</name>
-                <value>%logger{10}</value>
-            </property>
-        </properties>
-        <headers>
-            <header>
-                <name>Content-Type</name>
-                <value>application/json</value>
-            </header>
-        </headers>
-    </appender>
-
-    <logger name="es-logger" level="INFO" additivity="false">
-        <appender name="ES_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <!-- ... -->
-            <encoder>
-                <pattern>%msg%n</pattern> <!-- This pattern is important, otherwise it won't be the raw Elasticsearch format anyomre -->
-            </encoder>
-        </appender>
-    </logger>
-
 
     <root>
-        <level value="INFO"/>
-        <appender-ref ref="ASYNC"/>
+        <level value="INFO"/>		
+		<!-- 개발용 : includeLocation="true"는 FileName과 Line정보를 출력하기 위함이며 이는 성능에 매우 악영향을 주므로 개발용도로만 사용할 것! -->
+		<appender-ref ref="FILE" includeLocation="true"/>
+		
+		<!-- 서비스용 -->
+		<!--<appender-ref ref="ASYNC"/>-->
+		
         <appender-ref ref="STDOUT"/>
         <!--<appender-ref ref="ELASTIC"/> &lt;!&ndash;엘라스틱에 로그 쓸지 말지 on off&ndash;&gt;-->
     </root>

@@ -3,12 +3,12 @@ package com.nhnent.tardis.sample.space.game.user;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import co.paralleluniverse.fibers.SuspendExecution;
-import com.nhnent.tardis.common.Packet;
-import com.nhnent.tardis.console.IPacketHandler;
+import com.nhn.gameflex.packet.Packet;
+import com.nhn.gameflex.packet.PacketHandler;
 import com.nhnent.tardis.sample.Defines.StringValues;
 import org.slf4j.Logger;
 
-public class CmdResetSpot implements IPacketHandler<GameUser> {
+public class CmdResetSpot implements PacketHandler<GameUser> {
 
     private static final Logger logger = getLogger(CmdResetSpot.class);
 

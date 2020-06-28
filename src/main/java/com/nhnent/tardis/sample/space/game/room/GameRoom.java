@@ -3,14 +3,12 @@ package com.nhnent.tardis.sample.space.game.room;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import co.paralleluniverse.fibers.SuspendExecution;
-import com.nhnent.tardis.common.Packet;
-import com.nhnent.tardis.common.Payload;
-import com.nhnent.tardis.common.internal.ITimerHandler;
-import com.nhnent.tardis.common.internal.ITimerObject;
-import com.nhnent.tardis.console.TardisIndexer;
-import com.nhnent.tardis.console.space.IRoom;
-import com.nhnent.tardis.console.space.RoomAgent;
-import com.nhnent.tardis.console.space.RoomPacketDispatcher;
+import com.nhn.gameflex.node.game.BaseRoom;
+import com.nhn.gameflex.node.game.RoomPacketDispatcher;
+import com.nhn.gameflex.packet.Packet;
+import com.nhn.gameflex.packet.Payload;
+import com.nhn.gameflex.timer.Timer;
+import com.nhn.gameflex.timer.TimerHandler;
 import com.nhnent.tardis.sample.protocol.Sample;
 import com.nhnent.tardis.sample.space.game.user.GameUser;
 import java.util.Collection;
@@ -18,7 +16,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import org.slf4j.Logger;
 
-public class GameRoom extends RoomAgent implements IRoom<GameUser>, ITimerHandler {
+public class GameRoom extends BaseRoom<GameUser> implements TimerHandler {
     private static final Logger logger = getLogger(GameRoom.class);
 
     protected static RoomPacketDispatcher dispatcher = new RoomPacketDispatcher();
@@ -27,7 +25,7 @@ public class GameRoom extends RoomAgent implements IRoom<GameUser>, ITimerHandle
         dispatcher.registerMsg(Sample.GameMessageToS.getDescriptor(), CmdGameMessageToS.class);
     }
 
-    protected Map<String, GameUser> users = new TreeMap<>();
+    protected Map<Integer, GameUser> users = new TreeMap<>();
 
     @Override
     public void onInit() throws SuspendExecution {
@@ -99,7 +97,7 @@ public class GameRoom extends RoomAgent implements IRoom<GameUser>, ITimerHandle
     }
 
     @Override
-    public void onTimer(ITimerObject iTimerObject, Object arg) throws SuspendExecution {
+    public void onTimer(Timer iTimerObject, Object arg) throws SuspendExecution {
         logger.info("GameRoom.onTimer - RoomId : {}", getId());
     }
 
