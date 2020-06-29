@@ -17,7 +17,7 @@ import com.nhn.gameflexcore.connector.protocol.result.MatchUserStartResult;
 import com.nhn.gameflexcore.connector.protocol.result.NamedRoomResult;
 import com.nhn.gameflexcore.connector.tcp.ConnectorSession;
 import com.nhn.gameflexcore.connector.tcp.ConnectorUser;
-import com.nhn.gameflexcore.connector.tcp.TardisConnector;
+import com.nhn.gameflexcore.connector.tcp.GameflexConnector;
 import com.nhn.gameflexcore.protocol.Base;
 import com.nhn.gameflexcore.protocol.Base.ResultCodeMatchPartyCancel;
 import com.nhn.gameflexcore.protocol.Base.ResultCodeMatchPartyStart;
@@ -47,7 +47,7 @@ public class GameTest {
     public static String RoomType_MatchParty = "GameRoom_MatchParty";
     public static String RoomType_Party = "PartyRoom";
 
-    private static TardisConnector connector;
+    private static GameflexConnector connector;
     private List<ConnectorUser> users = new ArrayList<>();
 
     @BeforeClass
@@ -58,7 +58,7 @@ public class GameTest {
         Config.WAIT_RECV_TIMEOUT_MSEC = 5000;
 
         // 커넥터와, Base 프로토콜 사용 편의를 위해 Helper 를 생성합니다.
-        connector = TardisConnector.getInstance();
+        connector = GameflexConnector.getInstance();
 
         // 컨텐츠 프로토콜 등록.
         connector.addProtoBufClass(0, Sample.class);

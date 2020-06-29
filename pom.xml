@@ -26,14 +26,14 @@
         <dependency>
             <groupId>com.nhn.gameflex</groupId>
             <artifactId>gameflex</artifactId>
-            <version>DEV-1.0.0-AOT</version>
+            <version>1.0.0-EA</version>
         </dependency>
 
         <!-- java connector -->
         <dependency>
-            <groupId>com.nhnent.tardis</groupId>
-            <artifactId>tardis-test-agent</artifactId>
-            <version>DEV-1.0.0</version>
+            <groupId>com.nhn.gameflex</groupId>
+            <artifactId>gameflex-test-agent</artifactId>
+            <version>1.0.0-EA</version>
         </dependency>
 
         <!-- junit -->
