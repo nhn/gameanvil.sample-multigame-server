@@ -2,7 +2,7 @@ package com.nhnent.tardis.sample.space.game.match;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
-import com.nhnent.tardis.console.match.RoomMatchMaker;
+import com.nhn.gameflex.node.match.RoomMatchMaker;
 import java.util.Comparator;
 import java.util.List;
 import org.slf4j.Logger;
@@ -13,14 +13,14 @@ public class GameRoomMatchMaker extends RoomMatchMaker<GameRoomMatchInfo> {
     @Override
     public GameRoomMatchInfo match(GameRoomMatchInfo terms, Object... args) {
         logger.info("GameRoomMatchMaker.match");
-        String bypassRoomId = terms.getRoomId();
+        int bypassRoomId = terms.getRoomId();
         logger.info("GameRoomMatchMaker.match - args : {}", args);
         List<GameRoomMatchInfo> rooms = getRooms();
         logger.info("GameRoomMatchMaker.match - rooms : {}", rooms.size());
         // rooms는 인원수가 적은 순서로 정렬되어있음.
         // roomId 가 bypassRoomId이 아닌 첫번째 room을 선택.
         for (GameRoomMatchInfo info : rooms) {
-            if (info.getRoomId().equals(bypassRoomId)) {
+            if (info.getRoomId() == bypassRoomId) {
                 // moveRoom 옵션이 true 일 경우 참여중인 방은 제외하기
                 logger.info("GameRoomMatchMaker.match - bypass : {}", bypassRoomId);
                 continue;

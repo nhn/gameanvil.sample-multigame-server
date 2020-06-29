@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
+             version="1.0">
+
+    <!--<persistence-unit name="db_test" transaction-type="RESOURCE_LOCAL">-->
+    <persistence-unit name="db_h2">
+        <properties>
+            <!-- 필수 속성 -->
+            <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
+            <property name="javax.persistence.jdbc.user" value="sa"/>
+            <property name="javax.persistence.jdbc.password" value=""/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:h2:tcp://127.0.0.1/~/test"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
+
+            <!-- 옵션 -->
+            <property name="hibernate.show_sql" value="false" />
+            <property name="hibernate.format_sql" value="true" />
+            <property name="hibernate.use_sql_comments" value="true" />
+
+            <!-- 기본키 자동 생성 전략 (sequence 나 auto_increase 등을 사용 할때 적용) -->
+            <property name="hibernate.id.new_generator_mappings" value="true" />
+
+            <!-- 자동 생성 기능을 사용하지 않으려면 property 를 삭제하거나 value 에 잘못된 옵션을 넣는다 -->
+            <!-- none 은 잘못된 옵션이므로 자동 생성 기능을 사용하지 않겠다는 의미 -->
+            <property name="hibernate.hbm2ddl.auto" value="update" />
+
+            <!--<property name="hibernate.connection.autocommit" value="true"/>-->
+
+            <!-- 기본 매핑 이름 -->
+            <!-- <property name="hibernate.ejb.naming_strategy" value="org.hibernate.cfg.ImprovedNamingStrategy" />  -->
+
+            <property name="hibernate.c3p0.min_size" value="5" />
+            <property name="hibernate.c3p0.max_size" value="30" />
+            <property name="hibernate.c3p0.acquire_increment" value="1" />
+            <property name="hibernate.c3p0.timeout" value="1800" />
+            <property name="hibernate.c3p0.preferredTestQuery" value="SELECT 1" />
+            <property name="hibernate.c3p0.testConnectionOnCheckout" value="true" />
+
+        </properties>
+    </persistence-unit>
+
+    <persistence-unit name="mem_db_h2">
+        <properties>
+            <!-- 필수 속성 -->
+            <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
+            <property name="javax.persistence.jdbc.user" value="sa"/>
+            <property name="javax.persistence.jdbc.password" value=""/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:test;DB_CLOSE_DELAY=-1"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
+
+            <!-- 옵션 -->
+            <property name="hibernate.show_sql" value="false" />
+            <property name="hibernate.format_sql" value="true" />
+            <property name="hibernate.use_sql_comments" value="true" />
+
+            <!-- 기본키 자동 생성 전략 (sequence 나 auto_increase 등을 사용 할때 적용) -->
+            <property name="hibernate.id.new_generator_mappings" value="true" />
+
+            <!-- 자동 생성 기능을 사용하지 않으려면 property 를 삭제하거나 value 에 잘못된 옵션을 넣는다 -->
+            <!-- none 은 잘못된 옵션이므로 자동 생성 기능을 사용하지 않겠다는 의미 -->
+            <property name="hibernate.hbm2ddl.auto" value="update" />
+
+            <!--<property name="hibernate.connection.autocommit" value="true"/>-->
+
+            <!-- 기본 매핑 이름 -->
+            <!-- <property name="hibernate.ejb.naming_strategy" value="org.hibernate.cfg.ImprovedNamingStrategy" />  -->
+
+            <property name="hibernate.c3p0.min_size" value="5" />
+            <property name="hibernate.c3p0.max_size" value="30" />
+            <property name="hibernate.c3p0.acquire_increment" value="1" />
+            <property name="hibernate.c3p0.timeout" value="1800" />
+        </properties>
+    </persistence-unit>
+
+    <persistence-unit name="db_mySql">
+        <properties>
+            <!-- 필수 속성 -->
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+            <property name="javax.persistence.jdbc.user" value="root"/>
+            <property name="javax.persistence.jdbc.password" value="1234"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/sample?useSSL=false"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+
+            <!-- 옵션 -->
+            <property name="hibernate.show_sql" value="false" />
+            <property name="hibernate.format_sql" value="true" />
+            <property name="hibernate.use_sql_comments" value="true" />
+
+            <!-- 기본키 자동 생성 전략 (sequence 나 auto_increase 등을 사용 할때 적용) -->
+            <property name="hibernate.id.new_generator_mappings" value="true" />
+
+            <!-- 자동 생성 기능을 사용하지 않으려면 property 를 삭제하거나 value 에 잘못된 옵션을 넣는다 -->
+            <!-- none 은 잘못된 옵션이므로 자동 생성 기능을 사용하지 않겠다는 의미 -->
+            <property name="hibernate.hbm2ddl.auto" value="update" />
+
+            <!--<property name="hibernate.connection.autocommit" value="true"/>-->
+
+            <!-- 기본 매핑 이름 -->
+            <!-- <property name="hibernate.ejb.naming_strategy" value="org.hibernate.cfg.ImprovedNamingStrategy" />  -->
+        </properties>
+    </persistence-unit>
+
+    <persistence-unit name="mem_gameflex_db_h2">
+        <properties>
+            <!-- 필수 속성 -->
+            <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
+            <property name="javax.persistence.jdbc.user" value="sa"/>
+            <property name="javax.persistence.jdbc.password" value=""/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:gameflex_admin;DB_CLOSE_DELAY=-1"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
+
+            <!-- 옵션 -->
+            <property name="hibernate.show_sql" value="false" />
+            <property name="hibernate.format_sql" value="true" />
+            <property name="hibernate.use_sql_comments" value="true" />
+
+            <!-- 기본키 자동 생성 전략 (sequence 나 auto_increase 등을 사용 할때 적용) -->
+            <property name="hibernate.id.new_generator_mappings" value="true" />
+
+            <!-- 자동 생성 기능을 사용하지 않으려면 property 를 삭제하거나 value 에 잘못된 옵션을 넣는다 -->
+            <!-- none 은 잘못된 옵션이므로 자동 생성 기능을 사용하지 않겠다는 의미 -->
+            <property name="hibernate.hbm2ddl.auto" value="update" />
+
+            <!--<property name="hibernate.connection.autocommit" value="true"/>-->
+
+            <!-- 기본 매핑 이름 -->
+            <!-- <property name="hibernate.ejb.naming_strategy" value="org.hibernate.cfg.ImprovedNamingStrategy" />  -->
+
+            <property name="hibernate.c3p0.min_size" value="5" />
+            <property name="hibernate.c3p0.max_size" value="30" />
+            <property name="hibernate.c3p0.acquire_increment" value="1" />
+            <property name="hibernate.c3p0.timeout" value="1800" />
+        </properties>
+    </persistence-unit>
+
+</persistence>

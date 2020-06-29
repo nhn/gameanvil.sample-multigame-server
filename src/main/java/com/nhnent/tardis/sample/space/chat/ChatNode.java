@@ -3,14 +3,16 @@ package com.nhnent.tardis.sample.space.chat;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import co.paralleluniverse.fibers.SuspendExecution;
-import com.nhnent.tardis.common.Packet;
-import com.nhnent.tardis.common.Payload;
-import com.nhnent.tardis.common.internal.PauseType;
-import com.nhnent.tardis.console.TardisIndexer;
-import com.nhnent.tardis.console.space.*;
+import com.nhn.gameflex.define.PauseType;
+import com.nhn.gameflex.node.game.BaseGameNode;
+import com.nhn.gameflex.node.game.data.ChannelUpdateType;
+import com.nhn.gameflex.node.game.data.ChannelUserInfo;
+import com.nhn.gameflex.node.game.data.RoomInfo;
+import com.nhn.gameflex.packet.Packet;
+import com.nhn.gameflex.packet.Payload;
 import org.slf4j.Logger;
 
-public class ChatNode extends SpaceNodeAgent implements ISpaceNode {
+public class ChatNode extends BaseGameNode {
     private static final Logger logger = getLogger(ChatNode.class);
 
     @Override
@@ -51,12 +53,17 @@ public class ChatNode extends SpaceNodeAgent implements ISpaceNode {
     }
 
     @Override
-    public void onChannelUserUpdate(ChannelUpdateType type, IChannelUserInfo channelUserInfo, String userId) throws SuspendExecution {
+    public void onChannelUserUpdate(ChannelUpdateType type, ChannelUserInfo channelUserInfo, int userId, String accountId) throws SuspendExecution {
         logger.info("ChatNode.onChannelUserUpdate - ChannelUpdateType : {}, UserId : {}", type, userId);
     }
 
     @Override
-    public void onChannelRoomUpdate(ChannelUpdateType type, IRoomInfo channelRoomInfo, String roomId) throws SuspendExecution {
+    public void onChannelRoomUpdate(ChannelUpdateType type, RoomInfo channelRoomInfo, int roomId) throws SuspendExecution {
         logger.info("ChatNode.onChannelRoomUpdate - ChannelUpdateType : {}, RoomId : {}", type, roomId);
+    }
+
+    @Override
+    public void onChannelInfo(Payload outPayload) throws SuspendExecution {
+
     }
 }

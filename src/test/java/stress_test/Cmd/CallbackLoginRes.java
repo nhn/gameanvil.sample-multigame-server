@@ -1,8 +1,8 @@
 package stress_test.Cmd;
 
-import com.nhnent.tardis.connector.callback.parent.IDispatchPacket;
-import com.nhnent.tardis.connector.protocol.Packet;
-import com.nhnent.tardis.connector.protocol.result.LoginResult;
+import com.nhn.gameflexcore.connector.callback.parent.IDispatchPacket;
+import com.nhn.gameflexcore.connector.protocol.Packet;
+import com.nhn.gameflexcore.connector.protocol.result.LoginResult;
 import com.nhnent.tardis.sample.protocol.Sample;
 import stress_test.SampleUserClass;
 
@@ -20,7 +20,7 @@ public class CallbackLoginRes implements IDispatchPacket<SampleUserClass> {
 
         //int nicknameRand = (int) Math.random() * 10000;
         //String nickName = String.format("doctor %d",nicknameRand);
-        Sample.RegisterNickNameReq.Builder req = Sample.RegisterNickNameReq.newBuilder().setNickName(user.getUserId());
+        Sample.RegisterNickNameReq.Builder req = Sample.RegisterNickNameReq.newBuilder().setNickName("" + user.getUserId());
         user.request(new Packet(req), Sample.RegisterNickNameRes.class);
     }
 

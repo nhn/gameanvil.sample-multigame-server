@@ -3,18 +3,16 @@ package com.nhnent.tardis.sample.space.game;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import co.paralleluniverse.fibers.SuspendExecution;
-import com.nhnent.tardis.common.Packet;
-import com.nhnent.tardis.common.Payload;
-import com.nhnent.tardis.common.internal.PauseType;
-import com.nhnent.tardis.console.TardisIndexer;
-import com.nhnent.tardis.console.space.ChannelUpdateType;
-import com.nhnent.tardis.console.space.IChannelUserInfo;
-import com.nhnent.tardis.console.space.IRoomInfo;
-import com.nhnent.tardis.console.space.ISpaceNode;
-import com.nhnent.tardis.console.space.SpaceNodeAgent;
+import com.nhn.gameflex.define.PauseType;
+import com.nhn.gameflex.node.game.BaseGameNode;
+import com.nhn.gameflex.node.game.data.ChannelUpdateType;
+import com.nhn.gameflex.node.game.data.ChannelUserInfo;
+import com.nhn.gameflex.node.game.data.RoomInfo;
+import com.nhn.gameflex.packet.Packet;
+import com.nhn.gameflex.packet.Payload;
 import org.slf4j.Logger;
 
-public class GameNode extends SpaceNodeAgent implements ISpaceNode {
+public class GameNode extends BaseGameNode {
     private static final Logger logger = getLogger(GameNode.class);
 
     @Override
@@ -55,16 +53,17 @@ public class GameNode extends SpaceNodeAgent implements ISpaceNode {
     }
 
     @Override
-    public void onChannelUserUpdate(ChannelUpdateType type, IChannelUserInfo channelUserInfo,
-        String userId) throws SuspendExecution {
-        logger.info("GameNode.onChannelUserUpdate - ChannelUpdateType : {}, UserId : {}", type,
-            userId);
+    public void onChannelUserUpdate(ChannelUpdateType type, ChannelUserInfo channelUserInfo, int userId, String accountId) throws SuspendExecution {
+        logger.info("GameNode.onChannelUserUpdate - ChannelUpdateType : {}, UserId : {}, AccountId : {}", type, userId, accountId);
     }
 
     @Override
-    public void onChannelRoomUpdate(ChannelUpdateType type, IRoomInfo channelRoomInfo,
-        String roomId) throws SuspendExecution {
-        logger.info("GameNode.onChannelRoomUpdate - ChannelUpdateType : {}, RoomId : {}", type,
-            roomId);
+    public void onChannelRoomUpdate(ChannelUpdateType type, RoomInfo channelRoomInfo, int roomId) throws SuspendExecution {
+        logger.info("GameNode.onChannelRoomUpdate - ChannelUpdateType : {}, RoomId : {}", type, roomId);
+    }
+
+    @Override
+    public void onChannelInfo(Payload outPayload) throws SuspendExecution {
+
     }
 }

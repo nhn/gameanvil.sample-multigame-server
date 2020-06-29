@@ -1,19 +1,19 @@
 package com.nhnent.tardis.sample.space.game.match;
 
-import com.nhnent.tardis.console.space.IRoomMatchInfo;
+import com.nhn.gameflex.node.match.RoomMatchInfo;
 import java.io.Serializable;
 
-public class GameRoomMatchInfo implements Serializable, IRoomMatchInfo {
-    private String roomId = "";
+public class GameRoomMatchInfo implements Serializable, RoomMatchInfo {
+    private int roomId = 0;
     private int userCountCurr = 0;
     private int userCountMax = 2;
 
-    public void setRoomId(String id) {
+    public void setRoomId(int id) {
         roomId = id;
     }
 
     @Override
-    public String getRoomId() {
+    public int getRoomId() {
         return roomId;
     }
 

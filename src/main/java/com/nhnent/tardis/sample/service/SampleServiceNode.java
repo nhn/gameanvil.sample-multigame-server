@@ -3,17 +3,15 @@ package com.nhnent.tardis.sample.service;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import co.paralleluniverse.fibers.SuspendExecution;
-import com.nhnent.tardis.common.Packet;
-import com.nhnent.tardis.common.Payload;
-import com.nhnent.tardis.common.internal.PauseType;
-import com.nhnent.tardis.common.internal.RestObject;
-import com.nhnent.tardis.console.TardisIndexer;
-import com.nhnent.tardis.console.service.IServiceNode;
-import com.nhnent.tardis.console.service.ServiceNodeAgent;
+import com.nhn.gameflex.define.PauseType;
+import com.nhn.gameflex.node.support.BaseSupportNode;
+import com.nhn.gameflex.packet.Packet;
+import com.nhn.gameflex.packet.Payload;
+import com.nhn.gameflex.rest.RestObject;
 import com.nhnent.tardis.sample.Defines.StringValues;
 import org.slf4j.Logger;
 
-public class SampleServiceNode extends ServiceNodeAgent implements IServiceNode{
+public class SampleServiceNode extends BaseSupportNode {
     private static final Logger logger = getLogger(SampleServiceNode.class);
 
     @Override

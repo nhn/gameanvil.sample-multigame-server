@@ -3,8 +3,8 @@ package com.nhnent.tardis.sample.space.game.room;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import co.paralleluniverse.fibers.SuspendExecution;
-import com.nhnent.tardis.common.Packet;
-import com.nhnent.tardis.common.Payload;
+import com.nhn.gameflex.packet.Packet;
+import com.nhn.gameflex.packet.Payload;
 import com.nhnent.tardis.sample.protocol.Sample;
 import com.nhnent.tardis.sample.space.game.match.GameUserMatchInfo;
 import com.nhnent.tardis.sample.space.game.user.GameUser;
@@ -39,7 +39,7 @@ public class GameRoomForeMatchParty extends GameRoom {
                     logger.info("GameRoomForeMatchParty.onJoinRoom - roomMatchMaking");
                     String message = String.format("%s is join", gameUser.getUserId());
                     for (GameUser user : users.values()) {
-                        if (gameUser.getUserId().equals(user.getUserId())) {
+                        if (gameUser.getUserId() == user.getUserId()) {
                             continue;
                         }
 
@@ -57,7 +57,7 @@ public class GameRoomForeMatchParty extends GameRoom {
                     for (GameUser user : users.values()) {
                         String message = String.format("%s is join", user.getUserId());
                         for (GameUser to : users.values()) {
-                            if (to.getUserId().equals(user.getUserId())) {
+                            if (to.getUserId() == user.getUserId()) {
                                 continue;
                             }
 
@@ -88,7 +88,7 @@ public class GameRoomForeMatchParty extends GameRoom {
                     // Refill() 정보 등록
                     logger.info("GameRoomForeMatchParty.onLeaveRoom - refill");
                     isRefill = true;
-                    if (!matchRefill(new GameUserMatchInfo("Refill", 100, 1))) {
+                    if (!matchRefill(new GameUserMatchInfo(getId(), 100, 1))) {
                         logger.warn("MatchRefill for the room({}) failure!", getId());
                     }
                 } catch (Exception e) {

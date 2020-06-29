@@ -3,13 +3,13 @@ package com.nhnent.tardis.sample.space.chat.room;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import co.paralleluniverse.fibers.SuspendExecution;
-import com.nhnent.tardis.common.Packet;
-import com.nhnent.tardis.console.space.IRoomPacketHandler;
+import com.nhn.gameflex.node.game.RoomPacketHandler;
+import com.nhn.gameflex.packet.Packet;
 import com.nhnent.tardis.sample.protocol.Sample;
 import com.nhnent.tardis.sample.space.chat.user.ChatUser;
 import org.slf4j.Logger;
 
-public class CmdChatMessageToS implements IRoomPacketHandler<ChatRoom, ChatUser> {
+public class CmdChatMessageToS implements RoomPacketHandler<ChatRoom, ChatUser> {
 
     private static final Logger logger = getLogger(CmdChatMessageToS.class);
 

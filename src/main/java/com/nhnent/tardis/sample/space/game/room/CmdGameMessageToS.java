@@ -3,14 +3,14 @@ package com.nhnent.tardis.sample.space.game.room;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import co.paralleluniverse.fibers.SuspendExecution;
-import com.nhnent.tardis.common.Packet;
-import com.nhnent.tardis.console.space.IRoomPacketHandler;
+import com.nhn.gameflex.node.game.RoomPacketHandler;
+import com.nhn.gameflex.packet.Packet;
 import com.nhnent.tardis.sample.Defines.StringValues;
 import com.nhnent.tardis.sample.protocol.Sample;
 import com.nhnent.tardis.sample.space.game.user.GameUser;
 import org.slf4j.Logger;
 
-public class CmdGameMessageToS implements IRoomPacketHandler<GameRoom, GameUser> {
+public class CmdGameMessageToS implements RoomPacketHandler<GameRoom, GameUser> {
 
     private static final Logger logger = getLogger(CmdGameMessageToS.class);
 
@@ -32,7 +32,7 @@ public class CmdGameMessageToS implements IRoomPacketHandler<GameRoom, GameUser>
             }
 
             // for send to spot.
-            Sample.SampleToSpot.Builder toSpot = Sample.SampleToSpot.newBuilder().setFrom(gameUser.getUserId()).setMessage(fromClient.getMessage());
+            Sample.SampleToSpot.Builder toSpot = Sample.SampleToSpot.newBuilder().setFrom("" + gameUser.getUserId()).setMessage(fromClient.getMessage());
             gameUser.sendToSpot(StringValues.SampleServiceName, StringValues.SampleSpotType, StringValues.SampleSpotId, new Packet(toSpot));
 
         } catch (Exception e) {

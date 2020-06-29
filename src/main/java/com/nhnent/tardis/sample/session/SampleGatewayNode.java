@@ -3,37 +3,34 @@ package com.nhnent.tardis.sample.session;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import co.paralleluniverse.fibers.SuspendExecution;
-import com.nhnent.tardis.common.Packet;
-import com.nhnent.tardis.common.Payload;
-import com.nhnent.tardis.common.internal.ITimerHandler;
-import com.nhnent.tardis.common.internal.ITimerObject;
-import com.nhnent.tardis.common.internal.PauseType;
-import com.nhnent.tardis.console.PacketDispatcher;
-import com.nhnent.tardis.console.TardisIndexer;
-import com.nhnent.tardis.console.session.ISessionNode;
-import com.nhnent.tardis.console.session.SessionNodeAgent;
+import com.nhn.gameflex.define.PauseType;
+import com.nhn.gameflex.packet.Packet;
+import com.nhn.gameflex.packet.Payload;
+import com.nhn.gameflex.timer.TimerHandler;
+import com.nhn.gameflex.timer.Timer;
+import com.nhn.gameflex.node.gateway.BaseGatewayNode;
 import com.nhnent.tardis.sample.protocol.Sample;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 
-public class SampleSessionNode extends SessionNodeAgent implements ISessionNode, ITimerHandler {
+public class SampleGatewayNode extends BaseGatewayNode implements TimerHandler {
 
-    private static final Logger logger = getLogger(SampleSessionNode.class);
-    private List<SampleSession> sampleSessions = new LinkedList();
+    private static final Logger logger = getLogger(SampleGatewayNode.class);
+    private List<SampleConnection> sampleConnections = new LinkedList();
 
-    public void addSampleSession(SampleSession sampleSession) {
-        logger.info("SampleSessionNode.addSampleSession : {}", sampleSession.getAccountId());
-        sampleSessions.add(sampleSession);
+    public void addSampleSession(SampleConnection sampleConnection) {
+        logger.info("SampleSessionNode.addSampleSession : {}", sampleConnection.getAccountId());
+        sampleConnections.add(sampleConnection);
     }
 
-    public void removeSampleSession(SampleSession sampleSession) {
-        logger.info("SampleSessionNode.removeSampleSession : {}", sampleSession.getAccountId());
-        sampleSessions.remove(sampleSession);
+    public void removeSampleSession(SampleConnection sampleConnection) {
+        logger.info("SampleSessionNode.removeSampleSession : {}", sampleConnection.getAccountId());
+        sampleConnections.remove(sampleConnection);
     }
 
-    private ITimerObject timerObject = null;
+    private Timer timerObject = null;
 
     public boolean setTimer(int interval, String message) {
         if (timerObject != null) {
@@ -98,10 +95,10 @@ public class SampleSessionNode extends SessionNodeAgent implements ISessionNode,
     }
 
     @Override
-    public void onTimer(ITimerObject timerObject, Object arg) throws SuspendExecution {
+    public void onTimer(Timer timerObject, Object arg) throws SuspendExecution {
         logger.info("SampleSessionNode.onTimer - message : {}", arg);
-        for (SampleSession sampleSession : sampleSessions) {
-            sampleSession.sendToClient(new Packet(Sample.SampleToC.newBuilder().setMessage((String) arg)));
+        for (SampleConnection sampleConnection : sampleConnections) {
+            sampleConnection.sendToClient(new Packet(Sample.SampleToC.newBuilder().setMessage((String) arg)));
         }
     }
 }

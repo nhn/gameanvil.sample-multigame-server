@@ -14,7 +14,7 @@ public class StringValues {
 
     public static final String SampleServiceName = "SampleService";
     public static final String SampleSpotType = "SampleSpot";
-    public static final String SampleSpotId = "SampleSpotId";
+    public static final int SampleSpotId = 1;
 
     public static final String TopicService = "TopicService";
     public static final String TopicSpot = "TopicSpot";

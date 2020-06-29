@@ -1,13 +1,13 @@
 package unit_test;
 
-import com.nhnent.tardis.connector.common.Config;
-import com.nhnent.tardis.connector.protocol.Packet;
-import com.nhnent.tardis.connector.protocol.result.AuthenticationResult;
-import com.nhnent.tardis.connector.protocol.result.ChannelListResult;
-import com.nhnent.tardis.connector.protocol.result.LoginResult;
-import com.nhnent.tardis.connector.tcp.ConnectorSession;
-import com.nhnent.tardis.connector.tcp.ConnectorUser;
-import com.nhnent.tardis.connector.tcp.TardisConnector;
+import com.nhn.gameflexcore.connector.common.Config;
+import com.nhn.gameflexcore.connector.protocol.Packet;
+import com.nhn.gameflexcore.connector.protocol.result.AuthenticationResult;
+import com.nhn.gameflexcore.connector.protocol.result.ChannelListResult;
+import com.nhn.gameflexcore.connector.protocol.result.LoginResult;
+import com.nhn.gameflexcore.connector.tcp.ConnectorSession;
+import com.nhn.gameflexcore.connector.tcp.ConnectorUser;
+import com.nhn.gameflexcore.connector.tcp.GameflexConnector;
 import com.nhnent.tardis.sample.Defines.StringValues;
 import com.nhnent.tardis.sample.protocol.Sample;
 import java.util.List;
@@ -28,7 +28,7 @@ public class SessionAgentTest {
     public static String UserType = "ChatUser";
     public static String RoomType = "ChatRoom";
 
-    private static TardisConnector connector;
+    private static GameflexConnector connector;
     private ConnectorSession session = null;
 
     @BeforeClass
@@ -39,7 +39,7 @@ public class SessionAgentTest {
         Config.WAIT_RECV_TIMEOUT_MSEC = 3000;
 
         // 커넥터와, Base 프로토콜 사용 편의를 위해 Helper 를 생성합니다.
-        connector = TardisConnector.getInstance();
+        connector = GameflexConnector.getInstance();
 
         // 컨텐츠 프로토콜 등록.
         connector.addProtoBufClass(0, Sample.class);

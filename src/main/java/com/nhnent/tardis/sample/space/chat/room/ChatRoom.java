@@ -3,21 +3,18 @@ package com.nhnent.tardis.sample.space.chat.room;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import co.paralleluniverse.fibers.SuspendExecution;
-import com.nhnent.tardis.console.TardisIndexer;
+import com.nhn.gameflex.node.game.BaseRoom;
+import com.nhn.gameflex.node.game.RoomPacketDispatcher;
+import com.nhn.gameflex.packet.Packet;
+import com.nhn.gameflex.packet.Payload;
 import com.nhnent.tardis.sample.protocol.Sample;
 import com.nhnent.tardis.sample.space.chat.user.ChatUser;
-import com.nhnent.tardis.common.Packet;
-import com.nhnent.tardis.common.Payload;
-import com.nhnent.tardis.console.space.IRoom;
-import com.nhnent.tardis.console.space.RoomAgent;
-import com.nhnent.tardis.console.space.RoomPacketDispatcher;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import org.slf4j.Logger;
 
-public class ChatRoom extends RoomAgent implements IRoom<ChatUser> {
+public class ChatRoom extends BaseRoom<ChatUser> {
     private static final Logger logger = getLogger(ChatRoom.class);
 
     private static RoomPacketDispatcher dispatcher = new RoomPacketDispatcher();
@@ -26,7 +23,7 @@ public class ChatRoom extends RoomAgent implements IRoom<ChatUser> {
         dispatcher.registerMsg(Sample.ChatMessageToS.getDescriptor(), CmdChatMessageToS.class);
     }
 
-    private Map<String, ChatUser> users = new HashMap<>();
+    private Map<Integer, ChatUser> users = new HashMap<>();
 
     @Override
     public void onInit() throws SuspendExecution {

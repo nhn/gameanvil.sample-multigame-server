@@ -3,19 +3,18 @@ package com.nhnent.tardis.sample.service;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import co.paralleluniverse.fibers.SuspendExecution;
-import com.nhnent.tardis.common.Packet;
-import com.nhnent.tardis.common.internal.PauseType;
-import com.nhnent.tardis.common.internal.RestObject;
-import com.nhnent.tardis.console.PacketDispatcher;
-import com.nhnent.tardis.console.service.ISpot;
-import com.nhnent.tardis.console.service.SpotAgent;
+import com.nhn.gameflex.define.PauseType;
+import com.nhn.gameflex.node.support.BaseSpot;
+import com.nhn.gameflex.packet.Packet;
+import com.nhn.gameflex.packet.PacketDispatcher;
+import com.nhn.gameflex.rest.RestObject;
 import com.nhnent.tardis.sample.Defines.StringValues;
 import com.nhnent.tardis.sample.protocol.Sample;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import org.slf4j.Logger;
 
-public class SampleSpot extends SpotAgent implements ISpot {
+public class SampleSpot extends BaseSpot {
 
     private static final Logger logger = getLogger(SampleSpot.class);
 

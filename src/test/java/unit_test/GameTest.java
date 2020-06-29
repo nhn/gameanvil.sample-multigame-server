@@ -4,26 +4,26 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
-import com.nhnent.tardis.common.protocol.Base;
-import com.nhnent.tardis.common.protocol.Base.ResultCodeMatchPartyCancel;
-import com.nhnent.tardis.common.protocol.Base.ResultCodeMatchPartyStart;
-import com.nhnent.tardis.common.protocol.Base.ResultCodeMatchRoom;
-import com.nhnent.tardis.common.protocol.Base.ResultCodeMatchUserDone;
-import com.nhnent.tardis.common.protocol.Base.ResultCodeNamedRoom;
-import com.nhnent.tardis.connector.common.Config;
-import com.nhnent.tardis.connector.protocol.Packet;
-import com.nhnent.tardis.connector.protocol.result.AuthenticationResult;
-import com.nhnent.tardis.connector.protocol.result.LeaveRoomResult;
-import com.nhnent.tardis.connector.protocol.result.LoginResult;
-import com.nhnent.tardis.connector.protocol.result.MatchPartyCancelResult;
-import com.nhnent.tardis.connector.protocol.result.MatchPartyStartResult;
-import com.nhnent.tardis.connector.protocol.result.MatchRoomResult;
-import com.nhnent.tardis.connector.protocol.result.MatchUserCancelResult;
-import com.nhnent.tardis.connector.protocol.result.MatchUserStartResult;
-import com.nhnent.tardis.connector.protocol.result.NamedRoomResult;
-import com.nhnent.tardis.connector.tcp.ConnectorSession;
-import com.nhnent.tardis.connector.tcp.ConnectorUser;
-import com.nhnent.tardis.connector.tcp.TardisConnector;
+import com.nhn.gameflexcore.connector.common.Config;
+import com.nhn.gameflexcore.connector.protocol.Packet;
+import com.nhn.gameflexcore.connector.protocol.result.AuthenticationResult;
+import com.nhn.gameflexcore.connector.protocol.result.LeaveRoomResult;
+import com.nhn.gameflexcore.connector.protocol.result.LoginResult;
+import com.nhn.gameflexcore.connector.protocol.result.MatchPartyCancelResult;
+import com.nhn.gameflexcore.connector.protocol.result.MatchPartyStartResult;
+import com.nhn.gameflexcore.connector.protocol.result.MatchRoomResult;
+import com.nhn.gameflexcore.connector.protocol.result.MatchUserCancelResult;
+import com.nhn.gameflexcore.connector.protocol.result.MatchUserStartResult;
+import com.nhn.gameflexcore.connector.protocol.result.NamedRoomResult;
+import com.nhn.gameflexcore.connector.tcp.ConnectorSession;
+import com.nhn.gameflexcore.connector.tcp.ConnectorUser;
+import com.nhn.gameflexcore.connector.tcp.GameflexConnector;
+import com.nhn.gameflexcore.protocol.Base;
+import com.nhn.gameflexcore.protocol.Base.ResultCodeMatchPartyCancel;
+import com.nhn.gameflexcore.protocol.Base.ResultCodeMatchPartyStart;
+import com.nhn.gameflexcore.protocol.Base.ResultCodeMatchRoom;
+import com.nhn.gameflexcore.protocol.Base.ResultCodeMatchUserDone;
+import com.nhn.gameflexcore.protocol.Base.ResultCodeNamedRoom;
 import com.nhnent.tardis.sample.protocol.Sample;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -47,7 +47,7 @@ public class GameTest {
     public static String RoomType_MatchParty = "GameRoom_MatchParty";
     public static String RoomType_Party = "PartyRoom";
 
-    private static TardisConnector connector;
+    private static GameflexConnector connector;
     private List<ConnectorUser> users = new ArrayList<>();
 
     @BeforeClass
@@ -58,7 +58,7 @@ public class GameTest {
         Config.WAIT_RECV_TIMEOUT_MSEC = 5000;
 
         // 커넥터와, Base 프로토콜 사용 편의를 위해 Helper 를 생성합니다.
-        connector = TardisConnector.getInstance();
+        connector = GameflexConnector.getInstance();
 
         // 컨텐츠 프로토콜 등록.
         connector.addProtoBufClass(0, Sample.class);
@@ -101,8 +101,8 @@ public class GameTest {
         }
     }
 
-    private String matchRoom(Collection<ConnectorUser> users) throws TimeoutException {
-        String roomId = null;
+    private int matchRoom(Collection<ConnectorUser> users) throws TimeoutException {
+        int roomId = 0;
         List<ConnectorUser> members = new ArrayList<>();
         for (ConnectorUser user : users) {
             MatchRoomResult matchRoomResult = user.matchRoom(RoomType_MatchRoom);
@@ -114,7 +114,7 @@ public class GameTest {
                 assertEquals(user.getUserId() + " is join", message.getMessage());
             }
             members.add(user);
-            if (roomId == null) {
+            if (roomId == 0) {
                 roomId = matchRoomResult.getRoomId();
             } else {
                 assertEquals(roomId, matchRoomResult.getRoomId());
@@ -124,9 +124,9 @@ public class GameTest {
     }
 
     private void checkChatMsg(Collection<ConnectorUser> users, String chatMsg) {
-        String senderId = null;
+        int senderId = 0;
         for (ConnectorUser user : users) {
-            if (senderId == null) {
+            if (senderId == 0) {
                 senderId = user.getUserId();
                 user.send(new Packet(Sample.GameMessageToS.newBuilder().setMessage(chatMsg)));
             }
@@ -153,7 +153,7 @@ public class GameTest {
         ConnectorUser account2 = users.get(1);
         List<ConnectorUser> members = users.subList(0, 2);
 
-        String roomId = matchRoom(members);
+        int roomId = matchRoom(members);
 
         MatchRoomResult matchRoomMoveResult = account1.matchRoom(true, RoomType_MatchRoom, true);
         assertEquals(ResultCodeMatchRoom.MATCH_ROOM_SUCCESS, ResultCodeMatchRoom.forNumber(matchRoomMoveResult.getResultCode()));
@@ -314,13 +314,13 @@ public class GameTest {
 
     public void checkJoinMsg(Collection<ConnectorUser> users) {
         Sample.GameMessageToC joinMsg;
-        Map<String, ConnectorUser> mapUsers = new TreeMap<>();
+        Map<Integer, ConnectorUser> mapUsers = new TreeMap<>();
         for (ConnectorUser user : users) {
             mapUsers.put(user.getUserId(), user);
         }
 
-        for (Entry<String, ConnectorUser> sender : mapUsers.entrySet()) {
-            for (Entry<String, ConnectorUser> receiver : mapUsers.entrySet()) {
+        for (Entry<Integer, ConnectorUser> sender : mapUsers.entrySet()) {
+            for (Entry<Integer, ConnectorUser> receiver : mapUsers.entrySet()) {
                 if (receiver.getKey().equals(sender.getKey())) {
                     continue;
                 }
