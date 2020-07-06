@@ -3,13 +3,13 @@ package com.nhnent.tardis.sample.space.chat;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import co.paralleluniverse.fibers.SuspendExecution;
-import com.nhn.gameflex.define.PauseType;
-import com.nhn.gameflex.node.game.BaseGameNode;
-import com.nhn.gameflex.node.game.data.ChannelUpdateType;
-import com.nhn.gameflex.node.game.data.ChannelUserInfo;
-import com.nhn.gameflex.node.game.data.RoomInfo;
-import com.nhn.gameflex.packet.Packet;
-import com.nhn.gameflex.packet.Payload;
+import com.nhn.gameanvil.define.PauseType;
+import com.nhn.gameanvil.node.game.BaseGameNode;
+import com.nhn.gameanvil.node.game.data.ChannelUpdateType;
+import com.nhn.gameanvil.node.game.data.ChannelUserInfo;
+import com.nhn.gameanvil.node.game.data.RoomInfo;
+import com.nhn.gameanvil.packet.Packet;
+import com.nhn.gameanvil.packet.Payload;
 import org.slf4j.Logger;
 
 public class ChatNode extends BaseGameNode {

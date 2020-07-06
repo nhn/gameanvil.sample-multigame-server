@@ -1,8 +1,8 @@
 package stress_test.Cmd;
 
-import com.nhn.gameflexcore.connector.callback.parent.IDispatchPacket;
-import com.nhn.gameflexcore.connector.protocol.Packet;
-import com.nhn.gameflexcore.connector.protocol.result.LogoutResult;
+import com.nhn.gameanvilcore.connector.callback.parent.IDispatchPacket;
+import com.nhn.gameanvilcore.connector.protocol.Packet;
+import com.nhn.gameanvilcore.connector.protocol.result.LogoutResult;
 import stress_test.SampleUserClass;
 
 import static org.junit.Assert.assertTrue;

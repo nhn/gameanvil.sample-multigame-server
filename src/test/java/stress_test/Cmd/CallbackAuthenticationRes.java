@@ -1,8 +1,8 @@
 package stress_test.Cmd;
 
-import com.nhn.gameflexcore.connector.callback.parent.IDispatchPacket;
-import com.nhn.gameflexcore.connector.protocol.Packet;
-import com.nhn.gameflexcore.connector.protocol.result.AuthenticationResult;
+import com.nhn.gameanvilcore.connector.callback.parent.IDispatchPacket;
+import com.nhn.gameanvilcore.connector.protocol.Packet;
+import com.nhn.gameanvilcore.connector.protocol.result.AuthenticationResult;
 import java.util.concurrent.atomic.AtomicInteger;
 import stress_test.Stress;
 import stress_test.SampleUserClass;

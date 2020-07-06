@@ -36,7 +36,7 @@
     </appender>
 	-->
 
-    <logger name="com.nhnent.tardis" level="INFO" />
+    <logger name="com.nhnent.gameanvil" level="INFO" />
 
 
     <root>

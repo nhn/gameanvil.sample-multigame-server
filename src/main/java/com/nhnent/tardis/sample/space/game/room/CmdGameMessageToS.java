@@ -3,8 +3,8 @@ package com.nhnent.tardis.sample.space.game.room;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import co.paralleluniverse.fibers.SuspendExecution;
-import com.nhn.gameflex.node.game.RoomPacketHandler;
-import com.nhn.gameflex.packet.Packet;
+import com.nhn.gameanvil.node.game.RoomPacketHandler;
+import com.nhn.gameanvil.packet.Packet;
 import com.nhnent.tardis.sample.Defines.StringValues;
 import com.nhnent.tardis.sample.protocol.Sample;
 import com.nhnent.tardis.sample.space.game.user.GameUser;

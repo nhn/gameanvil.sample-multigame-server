@@ -194,7 +194,7 @@
     "db": {
       "user": "root",
       "password": "1234",
-      "url": "jdbc:h2:mem:gameflex_admin;DB_CLOSE_DELAY=-1"
+      "url": "jdbc:h2:mem:gameanvil_admin;DB_CLOSE_DELAY=-1"
     }
   }
 }

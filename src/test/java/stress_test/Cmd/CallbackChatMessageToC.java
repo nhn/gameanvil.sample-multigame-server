@@ -2,10 +2,10 @@ package stress_test.Cmd;
 
 import static org.junit.Assert.fail;
 
-import com.nhn.gameflexcore.connector.callback.parent.IDispatchPacket;
-import com.nhn.gameflexcore.connector.callback.parent.IDispatchTimer;
-import com.nhn.gameflexcore.connector.protocol.Packet;
-import com.nhn.gameflexcore.connector.tcp.agent.parent.ITimerTask;
+import com.nhn.gameanvilcore.connector.callback.parent.IDispatchPacket;
+import com.nhn.gameanvilcore.connector.callback.parent.IDispatchTimer;
+import com.nhn.gameanvilcore.connector.protocol.Packet;
+import com.nhn.gameanvilcore.connector.tcp.agent.parent.ITimerTask;
 import com.nhnent.tardis.sample.protocol.Sample;
 import stress_test.SampleUserClass;
 

@@ -3,11 +3,11 @@ package com.nhnent.tardis.sample.service;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import co.paralleluniverse.fibers.SuspendExecution;
-import com.nhn.gameflex.define.PauseType;
-import com.nhn.gameflex.node.support.BaseSpot;
-import com.nhn.gameflex.packet.Packet;
-import com.nhn.gameflex.packet.PacketDispatcher;
-import com.nhn.gameflex.rest.RestObject;
+import com.nhn.gameanvil.define.PauseType;
+import com.nhn.gameanvil.node.support.BaseSpot;
+import com.nhn.gameanvil.packet.Packet;
+import com.nhn.gameanvil.packet.PacketDispatcher;
+import com.nhn.gameanvil.rest.RestObject;
 import com.nhnent.tardis.sample.Defines.StringValues;
 import com.nhnent.tardis.sample.protocol.Sample;
 import java.io.InputStream;

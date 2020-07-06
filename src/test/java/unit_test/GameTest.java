@@ -4,26 +4,26 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
-import com.nhn.gameflexcore.connector.common.Config;
-import com.nhn.gameflexcore.connector.protocol.Packet;
-import com.nhn.gameflexcore.connector.protocol.result.AuthenticationResult;
-import com.nhn.gameflexcore.connector.protocol.result.LeaveRoomResult;
-import com.nhn.gameflexcore.connector.protocol.result.LoginResult;
-import com.nhn.gameflexcore.connector.protocol.result.MatchPartyCancelResult;
-import com.nhn.gameflexcore.connector.protocol.result.MatchPartyStartResult;
-import com.nhn.gameflexcore.connector.protocol.result.MatchRoomResult;
-import com.nhn.gameflexcore.connector.protocol.result.MatchUserCancelResult;
-import com.nhn.gameflexcore.connector.protocol.result.MatchUserStartResult;
-import com.nhn.gameflexcore.connector.protocol.result.NamedRoomResult;
-import com.nhn.gameflexcore.connector.tcp.ConnectorSession;
-import com.nhn.gameflexcore.connector.tcp.ConnectorUser;
-import com.nhn.gameflexcore.connector.tcp.GameflexConnector;
-import com.nhn.gameflexcore.protocol.Base;
-import com.nhn.gameflexcore.protocol.Base.ResultCodeMatchPartyCancel;
-import com.nhn.gameflexcore.protocol.Base.ResultCodeMatchPartyStart;
-import com.nhn.gameflexcore.protocol.Base.ResultCodeMatchRoom;
-import com.nhn.gameflexcore.protocol.Base.ResultCodeMatchUserDone;
-import com.nhn.gameflexcore.protocol.Base.ResultCodeNamedRoom;
+import com.nhn.gameanvilcore.connector.common.Config;
+import com.nhn.gameanvilcore.connector.protocol.Packet;
+import com.nhn.gameanvilcore.connector.protocol.result.AuthenticationResult;
+import com.nhn.gameanvilcore.connector.protocol.result.LeaveRoomResult;
+import com.nhn.gameanvilcore.connector.protocol.result.LoginResult;
+import com.nhn.gameanvilcore.connector.protocol.result.MatchPartyCancelResult;
+import com.nhn.gameanvilcore.connector.protocol.result.MatchPartyStartResult;
+import com.nhn.gameanvilcore.connector.protocol.result.MatchRoomResult;
+import com.nhn.gameanvilcore.connector.protocol.result.MatchUserCancelResult;
+import com.nhn.gameanvilcore.connector.protocol.result.MatchUserStartResult;
+import com.nhn.gameanvilcore.connector.protocol.result.NamedRoomResult;
+import com.nhn.gameanvilcore.connector.tcp.ConnectorSession;
+import com.nhn.gameanvilcore.connector.tcp.ConnectorUser;
+import com.nhn.gameanvilcore.connector.tcp.GameAnvilConnector;
+import com.nhn.gameanvilcore.protocol.Base;
+import com.nhn.gameanvilcore.protocol.Base.ResultCodeMatchPartyCancel;
+import com.nhn.gameanvilcore.protocol.Base.ResultCodeMatchPartyStart;
+import com.nhn.gameanvilcore.protocol.Base.ResultCodeMatchRoom;
+import com.nhn.gameanvilcore.protocol.Base.ResultCodeMatchUserDone;
+import com.nhn.gameanvilcore.protocol.Base.ResultCodeNamedRoom;
 import com.nhnent.tardis.sample.protocol.Sample;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -47,7 +47,7 @@ public class GameTest {
     public static String RoomType_MatchParty = "GameRoom_MatchParty";
     public static String RoomType_Party = "PartyRoom";
 
-    private static GameflexConnector connector;
+    private static GameAnvilConnector connector;
     private List<ConnectorUser> users = new ArrayList<>();
 
     @BeforeClass
@@ -58,7 +58,7 @@ public class GameTest {
         Config.WAIT_RECV_TIMEOUT_MSEC = 5000;
 
         // 커넥터와, Base 프로토콜 사용 편의를 위해 Helper 를 생성합니다.
-        connector = GameflexConnector.getInstance();
+        connector = GameAnvilConnector.getInstance();
 
         // 컨텐츠 프로토콜 등록.
         connector.addProtoBufClass(0, Sample.class);
