@@ -1,8 +1,8 @@
 package stress_test.Cmd;
 
-import com.nhn.gameflexcore.connector.callback.parent.IDispatchPacket;
-import com.nhn.gameflexcore.connector.protocol.Packet;
-import com.nhn.gameflexcore.connector.protocol.result.LoginResult;
+import com.nhn.gameanvilcore.connector.callback.parent.IDispatchPacket;
+import com.nhn.gameanvilcore.connector.protocol.Packet;
+import com.nhn.gameanvilcore.connector.protocol.result.LoginResult;
 import com.nhnent.tardis.sample.protocol.Sample;
 import stress_test.SampleUserClass;
 

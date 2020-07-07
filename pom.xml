@@ -24,16 +24,16 @@
     <dependencies>
         <!-- tardis -->
         <dependency>
-            <groupId>com.nhn.gameflex</groupId>
-            <artifactId>gameflex</artifactId>
-            <version>1.0.0-EA</version>
+            <groupId>com.nhn.gameanvil</groupId>
+            <artifactId>gameanvil</artifactId>
+            <version>1.0.0-EA-2</version>
         </dependency>
 
         <!-- java connector -->
         <dependency>
-            <groupId>com.nhn.gameflex</groupId>
-            <artifactId>gameflex-test-agent</artifactId>
-            <version>1.0.0-EA</version>
+            <groupId>com.nhn.gameanvil</groupId>
+            <artifactId>gameanvil-test-agent</artifactId>
+            <version>1.0.0-EA-2</version>
         </dependency>
 
         <!-- junit -->

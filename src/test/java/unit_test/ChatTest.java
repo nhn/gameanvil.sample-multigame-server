@@ -1,13 +1,13 @@
 package unit_test;
 
-import com.nhn.gameflexcore.connector.common.Config;
-import com.nhn.gameflexcore.connector.protocol.Packet;
-import com.nhn.gameflexcore.connector.protocol.result.AuthenticationResult;
-import com.nhn.gameflexcore.connector.protocol.result.LoginResult;
-import com.nhn.gameflexcore.connector.protocol.result.NamedRoomResult;
-import com.nhn.gameflexcore.connector.tcp.ConnectorSession;
-import com.nhn.gameflexcore.connector.tcp.ConnectorUser;
-import com.nhn.gameflexcore.connector.tcp.GameflexConnector;
+import com.nhn.gameanvilcore.connector.common.Config;
+import com.nhn.gameanvilcore.connector.protocol.Packet;
+import com.nhn.gameanvilcore.connector.protocol.result.AuthenticationResult;
+import com.nhn.gameanvilcore.connector.protocol.result.LoginResult;
+import com.nhn.gameanvilcore.connector.protocol.result.NamedRoomResult;
+import com.nhn.gameanvilcore.connector.tcp.ConnectorSession;
+import com.nhn.gameanvilcore.connector.tcp.ConnectorUser;
+import com.nhn.gameanvilcore.connector.tcp.GameAnvilConnector;
 import com.nhnent.tardis.sample.protocol.Sample;
 import org.junit.After;
 import org.junit.Before;
@@ -29,7 +29,7 @@ public class ChatTest {
     public static String UserType = "ChatUser";
     public static String RoomType = "ChatRoom";
 
-    private static GameflexConnector connector;
+    private static GameAnvilConnector connector;
     private List<ConnectorUser> users = new ArrayList<>();
 
     @BeforeClass
@@ -40,7 +40,7 @@ public class ChatTest {
         Config.WAIT_RECV_TIMEOUT_MSEC = 5000;
 
         // 커넥터와, Base 프로토콜 사용 편의를 위해 Helper 를 생성합니다.
-        connector = GameflexConnector.getInstance();
+        connector = GameAnvilConnector.getInstance();
 
         // 컨텐츠 프로토콜 등록.
         connector.addProtoBufClass(0, Sample.class);

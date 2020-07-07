@@ -1,8 +1,8 @@
 package com.nhnent.tardis.sample.service;
 
 import co.paralleluniverse.fibers.SuspendExecution;
-import com.nhn.gameflex.packet.Packet;
-import com.nhn.gameflex.packet.PacketHandler;
+import com.nhn.gameanvil.packet.Packet;
+import com.nhn.gameanvil.packet.PacketHandler;
 import com.nhnent.tardis.sample.protocol.Sample;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

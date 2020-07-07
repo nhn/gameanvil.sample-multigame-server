@@ -3,12 +3,12 @@ package com.nhnent.tardis.sample.space.game.room;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import co.paralleluniverse.fibers.SuspendExecution;
-import com.nhn.gameflex.node.game.BaseRoom;
-import com.nhn.gameflex.node.game.RoomPacketDispatcher;
-import com.nhn.gameflex.packet.Packet;
-import com.nhn.gameflex.packet.Payload;
-import com.nhn.gameflex.timer.Timer;
-import com.nhn.gameflex.timer.TimerHandler;
+import com.nhn.gameanvil.node.game.BaseRoom;
+import com.nhn.gameanvil.node.game.RoomPacketDispatcher;
+import com.nhn.gameanvil.packet.Packet;
+import com.nhn.gameanvil.packet.Payload;
+import com.nhn.gameanvil.timer.Timer;
+import com.nhn.gameanvil.timer.TimerHandler;
 import com.nhnent.tardis.sample.protocol.Sample;
 import com.nhnent.tardis.sample.space.game.user.GameUser;
 import java.util.Collection;

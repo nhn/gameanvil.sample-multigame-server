@@ -1,6 +1,6 @@
 package com.nhnent.tardis.sample.space.game.match;
 
-import com.nhn.gameflex.node.match.RoomMatchInfo;
+import com.nhn.gameanvil.node.match.RoomMatchInfo;
 import java.io.Serializable;
 
 public class GameRoomMatchInfo implements Serializable, RoomMatchInfo {

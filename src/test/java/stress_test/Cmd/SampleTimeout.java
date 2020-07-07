@@ -1,7 +1,7 @@
 package stress_test.Cmd;
 
-import com.nhn.gameflexcore.connector.callback.parent.IDispatchPacketTimeout;
-import com.nhn.gameflexcore.connector.tcp.agent.parent.IAsyncConnectorUser;
+import com.nhn.gameanvilcore.connector.callback.parent.IDispatchPacketTimeout;
+import com.nhn.gameanvilcore.connector.tcp.agent.parent.IAsyncConnectorUser;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

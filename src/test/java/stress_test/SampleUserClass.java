@@ -1,6 +1,6 @@
 package stress_test;
 
-import com.nhn.gameflexcore.connector.tcp.AsyncConnectorUser;
+import com.nhn.gameanvilcore.connector.tcp.AsyncConnectorUser;
 
 public class SampleUserClass extends AsyncConnectorUser {
 

@@ -2,7 +2,7 @@ package com.nhnent.tardis.sample.space.game.match;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
-import com.nhn.gameflex.node.match.RoomMatchMaker;
+import com.nhn.gameanvil.node.match.RoomMatchMaker;
 import java.util.Comparator;
 import java.util.List;
 import org.slf4j.Logger;

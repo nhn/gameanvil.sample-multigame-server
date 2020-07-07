@@ -1,9 +1,9 @@
 package stress_test;
 
-import com.nhn.gameflexcore.connector.common.Config;
-import com.nhn.gameflexcore.connector.tcp.ConnectorSession;
-import com.nhn.gameflexcore.connector.tcp.GameflexConnector;
-import com.nhn.gameflexcore.connector.tcp.agent.parent.IAsyncConnectorUser;
+import com.nhn.gameanvilcore.connector.common.Config;
+import com.nhn.gameanvilcore.connector.tcp.ConnectorSession;
+import com.nhn.gameanvilcore.connector.tcp.GameAnvilConnector;
+import com.nhn.gameanvilcore.connector.tcp.agent.parent.IAsyncConnectorUser;
 import com.nhnent.tardis.sample.protocol.Sample;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -18,7 +18,7 @@ public class Stress {
     public static String UserType = "ChatUser";
     public static String RoomType = "ChatRoom";
 
-    private static GameflexConnector connector;
+    private static GameAnvilConnector connector;
 
     @BeforeClass
     public static void configuration() {
@@ -43,7 +43,7 @@ public class Stress {
         //Config.RAMP_UP_DELAY_MSEC = 5; // [default 0]
 
         // 커넥터를 생성합니다.
-        connector = GameflexConnector.getInstance();
+        connector = GameAnvilConnector.getInstance();
 
         // 컨텐츠 프로토콜 등록.
         connector.addProtoBufClass(0, Sample.class);
@@ -81,7 +81,7 @@ public class Stress {
         }
 
         //connector.repeatByEntire(/* ... */);
-        connector.repeatByIndividual(new GameflexConnector.InitialProtocol() {
+        connector.repeatByIndividual(new GameAnvilConnector.InitialProtocol() {
             @Override
             public void send(IAsyncConnectorUser iUser) {
                 iUser.authentication(iUser.getAccountId());

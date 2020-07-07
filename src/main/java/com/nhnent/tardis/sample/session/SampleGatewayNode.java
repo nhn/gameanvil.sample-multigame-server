@@ -3,12 +3,12 @@ package com.nhnent.tardis.sample.session;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import co.paralleluniverse.fibers.SuspendExecution;
-import com.nhn.gameflex.define.PauseType;
-import com.nhn.gameflex.packet.Packet;
-import com.nhn.gameflex.packet.Payload;
-import com.nhn.gameflex.timer.TimerHandler;
-import com.nhn.gameflex.timer.Timer;
-import com.nhn.gameflex.node.gateway.BaseGatewayNode;
+import com.nhn.gameanvil.define.PauseType;
+import com.nhn.gameanvil.packet.Packet;
+import com.nhn.gameanvil.packet.Payload;
+import com.nhn.gameanvil.timer.TimerHandler;
+import com.nhn.gameanvil.timer.Timer;
+import com.nhn.gameanvil.node.gateway.BaseGatewayNode;
 import com.nhnent.tardis.sample.protocol.Sample;
 import java.util.LinkedList;
 import java.util.List;

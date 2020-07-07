@@ -1,6 +1,6 @@
 package com.nhnent.tardis.sample;
 
-import com.nhn.gameflex.GameflexBootstrap;
+import com.nhn.gameanvil.GameAnvilBootstrap;
 import com.nhnent.tardis.sample.Defines.StringValues;
 import com.nhnent.tardis.sample.protocol.Sample;
 import com.nhnent.tardis.sample.service.SampleServiceNode;
@@ -27,7 +27,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        GameflexBootstrap bootstrap = GameflexBootstrap.getInstance();
+        GameAnvilBootstrap bootstrap = GameAnvilBootstrap.getInstance();
 
         bootstrap.addProtoBufClass(0, Sample.getDescriptor());
 
