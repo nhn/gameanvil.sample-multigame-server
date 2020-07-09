@@ -1,4 +1,4 @@
-Tardis Server Sample
+Reference GameAnvil Server Sample
 
 VM Option :
 
