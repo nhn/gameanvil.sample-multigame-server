@@ -119,7 +119,7 @@ public class PartyRoom extends BaseRoom<GameUser> {
         logger.info("PartyRoom.onMatchParty - RoomId : {}, roomType : {}", getId(), roomType);
         try {
 
-            String matchingGroup = getRoomType();
+            String matchingGroup = roomType;
             GameUserMatchInfo term = new GameUserMatchInfo(getId(), 100, users.size());
             if (matchParty(matchingGroup, roomType, term, payload)) {
                 logger.info("PartyRoom.onMatchParty - {} start Party Match for RoomType {}", user.getUserId(), roomType);

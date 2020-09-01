@@ -80,7 +80,7 @@ public class SampleGatewayNode extends BaseGatewayNode implements TimerHandler {
     }
 
     @Override
-    public void onPause(PauseType type, Payload payload) throws SuspendExecution {
+    public void onPause(Payload payload) throws SuspendExecution {
         logger.info("SampleSessionNode.onPause");
     }
 

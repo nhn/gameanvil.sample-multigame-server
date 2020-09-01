@@ -18,18 +18,17 @@
     //    ("3") UNPOOLED_DIRECT_BUFFER,
     //    ("4") UNPOOLED_HEAP_BUFFER,
 	
-	"gameNodeSelectionMode": 0, // 0: Round-Robin, 1: Idle
-    "nodeInfoUpdateTime": 10,
-    "nodeInfoUpdateBusyTime": 12,
-    "nodeInfoManagerRefreshTime": 4,
+	"gameNodeSelectionMode": 1, // 0: Round-Robin, 1: Idle
+    "nodeInfoUpdateTime": 100,
+    "nodeInfoUpdateBusyTime": 200,
+    "nodeInfoManagerRefreshTime": 100,
 
     "loopInfoSamplingCount": 5,
     "maxLoopTime" : 10,
     "enableLoopInfoMonitor" : true,
 
     "maxUserCount" : 2500,
-    "addLocWeight": 16,
-    
+
     "httpClientOption": {
       "keepAlive": true,
       "connTimeout": 5000,

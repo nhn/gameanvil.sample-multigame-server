@@ -11,6 +11,7 @@ import com.nhn.gameanvil.packet.Packet;
 import com.nhn.gameanvil.packet.PacketDispatcher;
 import com.nhn.gameanvil.packet.Payload;
 import com.nhn.gameanvil.serializer.KryoSerializer;
+import com.nhn.gameanvil.serializer.TransferPack;
 import com.nhn.gameanvil.timer.Timer;
 import com.nhn.gameanvil.timer.TimerHandler;
 import com.nhnent.tardis.sample.Defines.StringValues;
@@ -64,7 +65,7 @@ public class GameUser extends BaseUser implements TimerHandler {
     }
 
     @Override
-    public void onPause(PauseType pauseType) throws SuspendExecution {
+    public void onPause() throws SuspendExecution {
         logger.info("GameUser.onPause - UserId : {}", getUserId());
     }
 
@@ -104,6 +105,7 @@ public class GameUser extends BaseUser implements TimerHandler {
             // 따라서 이동하기 전 방금 나온 room 을 구분하기 위해 getRoomIdBeforeMove()로 roomId를 얻어와 terms 에 넣어준다.
             // 원래 있던 room에 다시 join 하는것을 허용하거나, moveRoom 옵션이 false 일 경우에는 하지 않아도 된다.
             terms.setRoomId(getRoomIdBeforeMove());
+            logger.warn("GameUser::onMatchRoom() - getRoomIdBeforeMove() : {}", getRoomIdBeforeMove());
             String matchingGroup = getServiceName();
             return matchRoom(matchingGroup, roomType, terms);
 
@@ -124,10 +126,10 @@ public class GameUser extends BaseUser implements TimerHandler {
      */
     @Override
     public boolean onMatchUser(final String roomType, final Payload payload, Payload outPayload) throws SuspendExecution {
-        logger.info("GameUser.onMatchUser - UserId : {}", getUserId());
+        logger.info("GameUser.onMatchUser - UserId : {}, RoomType : {}", getUserId(), roomType);
         try {
 
-            String matchingGroup = getServiceName();
+            String matchingGroup = roomType;
             GameUserMatchInfo term = new GameUserMatchInfo(getUserId(), 100, 0);
             return matchUser(matchingGroup, roomType, term, payload);
 
@@ -155,18 +157,23 @@ public class GameUser extends BaseUser implements TimerHandler {
     }
 
     @Override
-    public ByteBuffer onTransferOut() throws SuspendExecution {
+    public void onTransferOut(TransferPack transferPack) throws SuspendExecution {
         logger.info("GameUser.onTransferOut - UserId : {}", getUserId());
-        return KryoSerializer.write(nickName);
+        transferPack.put("nickName", nickName);
     }
 
     @Override
-    public void onTransferIn(final InputStream inputStream) throws SuspendExecution {
+    public void onTransferIn(TransferPack transferPack) throws SuspendExecution {
         logger.info("GameUser.onTransferIn - UserId : {}", getUserId());
         try {
-            nickName = (String) KryoSerializer.read(inputStream);
+            nickName = (String) transferPack.getToString("nickName");
         } catch (Exception e) {
             logger.error("GameUser::onTransferIn()", e);
         }
+    }
+
+    @Override
+    public void onPostTransferIn() throws SuspendExecution {
+        logger.info("GameUser.onPostTransferIn - UserId : {}", getUserId());
     }
 }

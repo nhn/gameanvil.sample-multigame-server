@@ -43,8 +43,8 @@ public class SampleSpot extends BaseSpot {
     }
 
     @Override
-    public void onPause(PauseType type) throws SuspendExecution {
-        logger.info("SampleSpot.onPause - type :", type);
+    public void onPause() throws SuspendExecution {
+        logger.info("SampleSpot.onPause");
     }
 
     @Override

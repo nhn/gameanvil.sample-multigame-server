@@ -30,7 +30,6 @@ public class GamePartyMatchMaker extends UserMatchMaker<GameUserMatchInfo> {
         // leastAmount : 매칭 계산에 필요한 최소 요청 수.
         int partySize = 2;
         int leastAmount = matchSize / partySize * currentMatchPoolFactor;
-        logger.info("GamePartyMatchMaker.match() - leastAmount: {}", leastAmount);
         List<GameUserMatchInfo> matchRequests = getMatchRequests(leastAmount);
         if (matchRequests == null) {
             // getMatchRequests : 매칭 요청자의 총 수가 leastAmount보다 적을 경우 null을 리턴한다.
@@ -44,6 +43,8 @@ public class GamePartyMatchMaker extends UserMatchMaker<GameUserMatchInfo> {
             }
             return;
         }
+
+        logger.info("GamePartyMatchMaker.match() - leastAmount: {}", leastAmount);
 
         // 조건에 맞는 요청들을 모아 매칭시킨다.
         // 여기에서는 rating을 100 단위 그룹으로 묶어 매칭을 시킨다.
@@ -73,6 +74,8 @@ public class GamePartyMatchMaker extends UserMatchMaker<GameUserMatchInfo> {
                 }
             }
 
+            logger.info("entries1 : {}, entries2 : {}", entries1.size(), entries2.size());
+
             while (entries2.size() >= 2) {
                 LinkedList<GameUserMatchInfo> roomEntries = new LinkedList<>();
                 roomEntries.add(entries2.removeFirst());
@@ -94,7 +97,6 @@ public class GamePartyMatchMaker extends UserMatchMaker<GameUserMatchInfo> {
                 totalMatchCount += matchSingles(entries1);
             }
         }
-        ;
 
         if (totalMatchCount > 0) {
             logger.info("{} match(s) made", totalMatchCount);
@@ -119,7 +121,7 @@ public class GamePartyMatchMaker extends UserMatchMaker<GameUserMatchInfo> {
             int ratingGroup = req.getRating() / 100;
             for (GameUserMatchInfo refillInfo : refillRequests) {
                 // ratingGroup 값이 같은 경우 리필
-                if (req.getPartySize() == refillInfo.getPartySize() && ratingGroup == refillInfo.getRating() / 100) {
+                if (ratingGroup == refillInfo.getRating() / 100) {
                     if (refillRoom(req, refillInfo)) { // 해당 매칭 요청을 리필이 필요한 방으로 매칭
                         logger.info("GamePartyMatchMaker.refill() - Refill success: {}", refillInfo.getId());
                         return true;
