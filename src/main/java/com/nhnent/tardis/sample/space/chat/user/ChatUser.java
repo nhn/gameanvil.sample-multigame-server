@@ -9,6 +9,7 @@ import com.nhn.gameanvil.packet.Packet;
 import com.nhn.gameanvil.packet.PacketDispatcher;
 import com.nhn.gameanvil.packet.Payload;
 import com.nhn.gameanvil.serializer.KryoSerializer;
+import com.nhn.gameanvil.serializer.TransferPack;
 import com.nhn.gameanvil.timer.Timer;
 import com.nhn.gameanvil.timer.TimerHandler;
 import com.nhnent.tardis.sample.Defines.StringValues;
@@ -62,7 +63,7 @@ public class ChatUser extends BaseUser implements TimerHandler {
     }
 
     @Override
-    public void onPause(PauseType pauseType) throws SuspendExecution {
+    public void onPause() throws SuspendExecution {
         logger.info("ChatUser.onPause - UserId : {}", getUserId());
     }
 
@@ -94,19 +95,24 @@ public class ChatUser extends BaseUser implements TimerHandler {
     }
 
     @Override
-    public ByteBuffer onTransferOut() throws SuspendExecution {
+    public void onTransferOut(TransferPack transferPack) throws SuspendExecution {
         logger.info("ChatUser.onTransferOut - UserId : {}", getUserId());
-        return KryoSerializer.write(nickName);
+        transferPack.put("nickName", nickName);
     }
 
     @Override
-    public void onTransferIn(final InputStream inputStream) throws SuspendExecution {
+    public void onTransferIn(TransferPack transferPack) throws SuspendExecution {
         logger.info("ChatUser.onTransferIn - UserId : {}", getUserId());
         try {
-            nickName = (String) KryoSerializer.read(inputStream);
+            nickName = transferPack.getToString("nickName");
         } catch (Exception e) {
             logger.error("ChatUser::onTransferIn()", e);
         }
+    }
+
+    @Override
+    public void onPostTransferIn() throws SuspendExecution {
+        logger.info("ChatUser.onPostTransferIn - UserId : {}", getUserId());
     }
 
     public void setNickName(String nickName) {

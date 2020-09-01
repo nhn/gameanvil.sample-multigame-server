@@ -11,8 +11,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: com.nhn.gameanvil:quasar-core:jdk8:0.7.10" level="project" />
-    <orderEntry type="library" name="Maven: com.nhn.gameanvil:gameanvil:1.0.0-EA-2" level="project" />
+    <orderEntry type="library" name="Maven: com.nhn.gameanvil:gameanvil:1.0.0" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-codec-socks:4.1.50.Final" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-common:4.1.50.Final" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-buffer:4.1.50.Final" level="project" />
@@ -103,7 +102,10 @@
     <orderEntry type="library" name="Maven: org.apache.commons:commons-collections4:4.4" level="project" />
     <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.14" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.11.0" level="project" />
-    <orderEntry type="library" name="Maven: com.nhn.gameanvil:gameanvil-test-agent:1.0.0-EA-2" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.maven:maven-model:3.6.3" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.plexus:plexus-utils:3.2.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-pool2:2.8.0" level="project" />
+    <orderEntry type="library" name="Maven: com.nhn.gameanvil:gameanvil-test-agent:1.0.0" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-all:4.1.37.Final" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient:4.5.3" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore:4.4.6" level="project" />

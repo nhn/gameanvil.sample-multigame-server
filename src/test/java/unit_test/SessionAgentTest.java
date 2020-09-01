@@ -45,7 +45,7 @@ public class SessionAgentTest {
         connector.addProtoBufClass(0, Sample.class);
 
         // 컨텐츠 서비스 등록.
-        connector.addService(0, ServiceName);
+        connector.addService(1, ServiceName);
     }
 
     @Before

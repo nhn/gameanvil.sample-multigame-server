@@ -44,7 +44,7 @@ public class SampleServiceNode extends BaseSupportNode {
     }
 
     @Override
-    public void onPause(PauseType type, Payload payload) throws SuspendExecution {
+    public void onPause(Payload payload) throws SuspendExecution {
         logger.info("SampleServiceNode.onPause");
     }
 

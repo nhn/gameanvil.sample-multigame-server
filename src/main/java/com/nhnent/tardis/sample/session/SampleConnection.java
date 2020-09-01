@@ -101,8 +101,8 @@ public class SampleConnection extends BaseConnection<SampleSessionUser> {
     }
 
     @Override
-    public void onPause(PauseType type) throws SuspendExecution {
-        logger.info("SampleSession.onPause : {}", type);
+    public void onPause() throws SuspendExecution {
+        logger.info("SampleSession.onPause");
     }
 
     @Override

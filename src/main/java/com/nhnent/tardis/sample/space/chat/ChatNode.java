@@ -38,7 +38,7 @@ public class ChatNode extends BaseGameNode {
     }
 
     @Override
-    public void onPause(PauseType type, Payload payload) throws SuspendExecution {
+    public void onPause(Payload payload) throws SuspendExecution {
         logger.info("ChatNode.onPause");
     }
 
@@ -50,6 +50,36 @@ public class ChatNode extends BaseGameNode {
     @Override
     public void onShutdown() throws SuspendExecution {
         logger.info("ChatNode.onShutdown");
+    }
+
+    @Override
+    public boolean onNonStopPatchSrcStart() throws SuspendExecution {
+        return true;
+    }
+
+    @Override
+    public boolean onNonStopPatchSrcEnd() throws SuspendExecution {
+        return true;
+    }
+
+    @Override
+    public boolean canNonStopPatchSrcEnd() throws SuspendExecution {
+        return true;
+    }
+
+    @Override
+    public boolean onNonStopPatchDstStart() throws SuspendExecution {
+        return true;
+    }
+
+    @Override
+    public boolean onNonStopPatchDstEnd() throws SuspendExecution {
+        return true;
+    }
+
+    @Override
+    public boolean canNonStopPatchDstEnd() throws SuspendExecution {
+        return true;
     }
 
     @Override

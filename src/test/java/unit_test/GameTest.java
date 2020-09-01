@@ -6,6 +6,12 @@ import static org.junit.Assert.assertTrue;
 
 import com.nhn.gameanvilcore.connector.common.Config;
 import com.nhn.gameanvilcore.connector.protocol.Packet;
+import com.nhn.gameanvilcore.connector.protocol.noti.MatchPartyCancelNoti;
+import com.nhn.gameanvilcore.connector.protocol.noti.MatchPartyCancelNoti.ResultCodeMatchPartyCancel;
+import com.nhn.gameanvilcore.connector.protocol.noti.MatchPartyStartNoti;
+import com.nhn.gameanvilcore.connector.protocol.noti.MatchPartyStartNoti.ResultCodeMatchPartyStart;
+import com.nhn.gameanvilcore.connector.protocol.noti.MatchUserDone;
+import com.nhn.gameanvilcore.connector.protocol.noti.MatchUserDone.ResultCodeMatchUserDone;
 import com.nhn.gameanvilcore.connector.protocol.result.AuthenticationResult;
 import com.nhn.gameanvilcore.connector.protocol.result.LeaveRoomResult;
 import com.nhn.gameanvilcore.connector.protocol.result.LoginResult;
@@ -19,11 +25,7 @@ import com.nhn.gameanvilcore.connector.tcp.ConnectorSession;
 import com.nhn.gameanvilcore.connector.tcp.ConnectorUser;
 import com.nhn.gameanvilcore.connector.tcp.GameAnvilConnector;
 import com.nhn.gameanvilcore.protocol.Base;
-import com.nhn.gameanvilcore.protocol.Base.ResultCodeMatchPartyCancel;
-import com.nhn.gameanvilcore.protocol.Base.ResultCodeMatchPartyStart;
-import com.nhn.gameanvilcore.protocol.Base.ResultCodeMatchRoom;
-import com.nhn.gameanvilcore.protocol.Base.ResultCodeMatchUserDone;
-import com.nhn.gameanvilcore.protocol.Base.ResultCodeNamedRoom;
+import com.nhn.gameanvilcore.protocol.Error.ErrorCode;
 import com.nhnent.tardis.sample.protocol.Sample;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -64,8 +66,8 @@ public class GameTest {
         connector.addProtoBufClass(0, Sample.class);
 
         // 컨텐츠 서비스 등록.
-        connector.addService(0, "ChatService");
-        connector.addService(1, ServiceName);
+        connector.addService(1, "ChatService");
+        connector.addService(2, ServiceName);
     }
 
     @Before
@@ -106,7 +108,7 @@ public class GameTest {
         List<ConnectorUser> members = new ArrayList<>();
         for (ConnectorUser user : users) {
             MatchRoomResult matchRoomResult = user.matchRoom(RoomType_MatchRoom);
-            assertEquals(ResultCodeMatchRoom.MATCH_ROOM_SUCCESS, ResultCodeMatchRoom.forNumber(matchRoomResult.getResultCode()));
+            assertEquals(ErrorCode.MATCH_ROOM_SUCCESS, ErrorCode.forNumber(matchRoomResult.getResultCode()));
             assertEquals(members.isEmpty(), matchRoomResult.isMatchRoomCreated());
             assertNotEquals(members.isEmpty(), matchRoomResult.isMatchRoomJoined());
             for (ConnectorUser member : members) {
@@ -156,7 +158,7 @@ public class GameTest {
         int roomId = matchRoom(members);
 
         MatchRoomResult matchRoomMoveResult = account1.matchRoom(true, RoomType_MatchRoom, true);
-        assertEquals(ResultCodeMatchRoom.MATCH_ROOM_SUCCESS, ResultCodeMatchRoom.forNumber(matchRoomMoveResult.getResultCode()));
+        assertEquals(ErrorCode.MATCH_ROOM_SUCCESS, ErrorCode.forNumber(matchRoomMoveResult.getResultCode()));
         assertNotEquals(roomId, matchRoomMoveResult.getRoomId());
 
         LeaveRoomResult leaveRoomResult = account2.leaveRoom();
@@ -226,7 +228,7 @@ public class GameTest {
         MatchUserStartResult matchUserStartResult = account2.matchUserStart(RoomType_MatchUser);
         assertTrue(matchUserStartResult.isSuccess());
 
-        Base.MatchUserDone matchUserDone = account2.waitProtoPacket(5, TimeUnit.SECONDS, Base.MatchUserDone.class);
+        MatchUserDone matchUserDone = account2.waitMatchUserDone();
         assertTrue(matchUserDone.getResultCode() == ResultCodeMatchUserDone.MATCH_USER_DONE_SUCCESS);
 
         Sample.GameMessageToC joinMsg = account1.waitProtoPacket(5, TimeUnit.SECONDS, Sample.GameMessageToC.class);
@@ -258,7 +260,7 @@ public class GameTest {
         List<ConnectorUser> members = new ArrayList<>();
         for (ConnectorUser user : users) {
             NamedRoomResult namedRoomResult1 = user.namedRoom(RoomType_Party, roomId, true);
-            assertEquals(ResultCodeNamedRoom.NAMED_ROOM_SUCCESS, ResultCodeNamedRoom.forNumber(namedRoomResult1.getResultCode()));
+            assertEquals(ErrorCode.NAMED_ROOM_SUCCESS, ErrorCode.forNumber(namedRoomResult1.getResultCode()));
             System.out.println("NAMED_ROOM_SUCCESS : " + user.getUserId());
             for (ConnectorUser member : members) {
                 Sample.GameMessageToC message = member.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Sample.GameMessageToC.class);
@@ -275,11 +277,11 @@ public class GameTest {
             if (first) {
                 MatchPartyStartResult matchPartyStartResult = user.matchPartyStart(
                     RoomType_MatchParty);
-                assertEquals(ResultCodeMatchPartyStart.MATCH_PARTY_START_SUCCESS, ResultCodeMatchPartyStart.forNumber(matchPartyStartResult.getResultCode()));
+                assertEquals(ErrorCode.MATCH_PARTY_START_SUCCESS, ErrorCode.forNumber(matchPartyStartResult.getResultCode()));
                 first = false;
             } else {
-                Base.MatchPartyStartResOrNoti matchPartyStartResOrNoti = user.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Base.MatchPartyStartResOrNoti.class);
-                assertEquals(ResultCodeMatchPartyStart.MATCH_PARTY_START_SUCCESS, matchPartyStartResOrNoti.getResultCode());
+                MatchPartyStartNoti matchPartyStartNoti = user.waitMatchPartyStartNoti(10, TimeUnit.SECONDS);
+                assertEquals(ResultCodeMatchPartyStart.MATCH_PARTY_START_SUCCESS, matchPartyStartNoti.getResultCode());
             }
         }
     }
@@ -290,18 +292,18 @@ public class GameTest {
             if (first) {
                 MatchPartyCancelResult matchPartyCancelResult = user.matchPartyCancel(
                     RoomType_MatchParty);
-                assertEquals(ResultCodeMatchPartyCancel.MATCH_PARTY_CANCEL_SUCCESS, ResultCodeMatchPartyCancel.forNumber(matchPartyCancelResult.getResultCode()));
+                assertEquals(ErrorCode.MATCH_PARTY_CANCEL_SUCCESS, ErrorCode.forNumber(matchPartyCancelResult.getResultCode()));
                 first = false;
             } else {
-                Base.MatchPartyCancelResOrNoti matchPartyCancelResOrNoti = user.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Base.MatchPartyCancelResOrNoti.class);
-                assertEquals(ResultCodeMatchPartyCancel.MATCH_PARTY_CANCEL_SUCCESS, matchPartyCancelResOrNoti.getResultCode());
+                MatchPartyCancelNoti matchPartyCancelNoti = user.waitMatchPartyCancelNoti();
+                assertEquals(ResultCodeMatchPartyCancel.MATCH_PARTY_CANCEL_SUCCESS, matchPartyCancelNoti.getResultCode());
             }
         }
     }
 
-    private void checkMatchUserDone(Collection<ConnectorUser> users) {
+    private void checkMatchUserDone(Collection<ConnectorUser> users) throws TimeoutException {
         for (ConnectorUser user : users) {
-            Base.MatchUserDone matchUserDone = user.waitProtoPacketByFirstReceived(5, TimeUnit.SECONDS, Base.MatchUserDone.class);
+            MatchUserDone matchUserDone = user.waitMatchUserDone(10, TimeUnit.SECONDS);
             assertEquals(ResultCodeMatchUserDone.MATCH_USER_DONE_SUCCESS, matchUserDone.getResultCode());
         }
     }
@@ -364,12 +366,10 @@ public class GameTest {
         // StartMatchParty
         startMatchParty(party);
 
-        MatchUserStartResult matchUserStartResult1 = users.get(2).matchUserStart(
-            RoomType_MatchParty);
+        MatchUserStartResult matchUserStartResult1 = users.get(2).matchUserStart(RoomType_MatchParty);
         assertTrue(matchUserStartResult1.isSuccess());
 
-        MatchUserStartResult matchUserStartResult2 = users.get(3).matchUserStart(
-            RoomType_MatchParty);
+        MatchUserStartResult matchUserStartResult2 = users.get(3).matchUserStart(RoomType_MatchParty);
         assertTrue(matchUserStartResult2.isSuccess());
 
         checkMatchUserDone(users);
@@ -407,7 +407,7 @@ public class GameTest {
         MatchUserStartResult matchUserStartResult1 = account3.matchUserStart(RoomType_MatchParty);
         assertTrue(matchUserStartResult1.isSuccess());
 
-        Base.MatchUserDone matchUserDone = account3.waitProtoPacket(5, TimeUnit.SECONDS, Base.MatchUserDone.class);
+        MatchUserDone matchUserDone = account3.waitMatchUserDone(10, TimeUnit.SECONDS);
         assertTrue(matchUserDone.getResultCode() == ResultCodeMatchUserDone.MATCH_USER_DONE_SUCCESS);
 
         for (int i = 0; i < 3; i++) {
