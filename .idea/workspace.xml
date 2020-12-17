@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="82209610-bc84-4d53-80ae-38d151eef988" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_nhn_gameanvil_gameanvil_1_1_0_jdk8.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_uuid_java_uuid_generator_3_1_5.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_code_gson_gson_2_7.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_guava_guava_28_2_jre.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_protobuf_protobuf_java_3_6_1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_nhn_gameanvil_gameanvil_1_1_0_jdk11.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_nhn_gameanvil_gamehammer_1_0_1_jdk8.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_nhn_gameanvil_quasar_core_jdk11_0_8_0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_nhn_gameanvil_quasar_core_jdk8_0_7_10.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__commons_codec_commons_codec_1_9.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_checkerframework_checker_qual_2_10_0.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_slf4j_api_1_7_26.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sample_multigame_server.iml" beforeDir="false" afterPath="$PROJECT_DIR$/sample_multigame_server.iml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CoverageViewManager">
+    <option name="myElementSize" value="108" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="importAutomatically" value="true" />
+        <option name="jdkForImporter" value="AdoptOpenJDK 11" />
+        <option name="vmOptionsForImporter" value="-Xmx768m" />
+      </MavenImportingSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="1eLdWbgxqA96uTg9L2ZHI5XxYho" />
+  <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../GameHammer/pom.xml" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="settings.editor.selected.configurable" value="reference.settings.project.maven.importing" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\Projects\GameAnvil\sample-multigame-server\src\main\resources_sample\META-INF" />
+      <recent name="E:\Projects\GameAnvil\sample-multigame-server\src\main" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JUnit.unit_test in sample_multigame_server">
+    <configuration name="Run/JDK11/AOT" type="Application" factoryName="Application">
+      <option name="ALTERNATIVE_JRE_PATH" value="AdoptOpenJDK 11" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="com.nhn.gameanvil.sample.Main" />
+      <module name="sample_multigame_server" />
+      <option name="VM_PARAMETERS" value="-Xms6g -Xmx6g -XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:+UseStringDeduplication --add-opens=java.base/java.lang=ALL-UNNAMED --illegal-access=deny" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Run/JDK8/AOT" type="Application" factoryName="Application">
+      <option name="ALTERNATIVE_JRE_PATH" value="AdoptOpenJDK 1.8" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="com.nhn.gameanvil.sample.Main" />
+      <module name="sample_multigame_server" />
+      <option name="VM_PARAMETERS" value="-Xms6g -Xmx6g -XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:+UseStringDeduplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="GameTest.MessageFromSpot" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="sample_multigame_server" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="unit_test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="unit_test" />
+      <option name="MAIN_CLASS_NAME" value="unit_test.GameTest" />
+      <option name="METHOD_NAME" value="MessageFromSpot" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SessionAgentTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="sample_multigame_server" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="unit_test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="unit_test" />
+      <option name="MAIN_CLASS_NAME" value="unit_test.SessionAgentTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SessionAgentTest.SampleReqToSession" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="sample_multigame_server" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="unit_test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="unit_test" />
+      <option name="MAIN_CLASS_NAME" value="unit_test.SessionAgentTest" />
+      <option name="METHOD_NAME" value="SampleReqToSession" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Stress" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="sample_multigame_server" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="stress_test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="stress_test" />
+      <option name="MAIN_CLASS_NAME" value="stress_test.Stress" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="unit_test in sample_multigame_server" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="sample_multigame_server" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="unit_test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="unit_test" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.Run/JDK8/JIT" />
+      <item itemvalue="Application.Run/JDK8/AOT" />
+      <item itemvalue="Application.Run/JDK11/JIT" />
+      <item itemvalue="Application.Run/JDK11/AOT" />
+      <item itemvalue="JUnit.SessionAgentTest" />
+      <item itemvalue="JUnit.SessionAgentTest.SampleReqToSession" />
+      <item itemvalue="JUnit.unit_test in sample_multigame_server" />
+      <item itemvalue="JUnit.GameTest.MessageFromSpot" />
+      <item itemvalue="JUnit.Stress" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.unit_test in sample_multigame_server" />
+        <item itemvalue="JUnit.Stress" />
+        <item itemvalue="JUnit.GameTest.MessageFromSpot" />
+        <item itemvalue="JUnit.SessionAgentTest" />
+        <item itemvalue="JUnit.SessionAgentTest.SampleReqToSession" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="82209610-bc84-4d53-80ae-38d151eef988" name="Default Changelist" comment="" />
+      <created>1594104839327</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1594104839327</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="385" y="179" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1608545760010">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="385" y="179" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.2560.1040@0.0.2560.1040" timestamp="1608545760010" />
+    <state x="100" y="113" width="1947" height="824" key="#com.intellij.execution.junit2.states.ComparisonFailureState$DiffDialog" timestamp="1608546006087">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="100" y="113" width="1947" height="824" key="#com.intellij.execution.junit2.states.ComparisonFailureState$DiffDialog/0.0.2560.1040@0.0.2560.1040" timestamp="1608546006087" />
+    <state x="815" y="234" key="#com.intellij.ide.util.MemberChooser" timestamp="1608205720903">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="815" y="234" key="#com.intellij.ide.util.MemberChooser/0.0.2560.1040@0.0.2560.1040" timestamp="1608205720903" />
+    <state x="660" y="307" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1608545757632">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="660" y="307" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.2560.1040@0.0.2560.1040" timestamp="1608545757632" />
+    <state x="617" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1608205780578">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="617" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.2560.1040@0.0.2560.1040" timestamp="1608205780578" />
+    <state x="803" y="271" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog" timestamp="1608540038759">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="803" y="271" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.2560.1040@0.0.2560.1040" timestamp="1608540038759" />
+    <state x="740" y="279" key="FileChooserDialogImpl" timestamp="1608712046646">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="740" y="279" key="FileChooserDialogImpl/0.0.2560.1040@0.0.2560.1040" timestamp="1608712046646" />
+    <state width="1874" height="387" key="GridCell.Tab.0.bottom" timestamp="1609148859392">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state width="1874" height="387" key="GridCell.Tab.0.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1609148859392" />
+    <state width="1874" height="387" key="GridCell.Tab.0.center" timestamp="1609148859391">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state width="1874" height="387" key="GridCell.Tab.0.center/0.0.2560.1040@0.0.2560.1040" timestamp="1609148859391" />
+    <state width="1874" height="387" key="GridCell.Tab.0.left" timestamp="1609148859391">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state width="1874" height="387" key="GridCell.Tab.0.left/0.0.2560.1040@0.0.2560.1040" timestamp="1609148859391" />
+    <state width="1874" height="387" key="GridCell.Tab.0.right" timestamp="1609148859391">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state width="1874" height="387" key="GridCell.Tab.0.right/0.0.2560.1040@0.0.2560.1040" timestamp="1609148859391" />
+    <state width="1874" height="244" key="GridCell.Tab.1.bottom" timestamp="1608716240673">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state width="1874" height="244" key="GridCell.Tab.1.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1608716240673" />
+    <state width="1874" height="244" key="GridCell.Tab.1.center" timestamp="1608716240673">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state width="1874" height="244" key="GridCell.Tab.1.center/0.0.2560.1040@0.0.2560.1040" timestamp="1608716240673" />
+    <state width="1874" height="244" key="GridCell.Tab.1.left" timestamp="1608716240673">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state width="1874" height="244" key="GridCell.Tab.1.left/0.0.2560.1040@0.0.2560.1040" timestamp="1608716240673" />
+    <state width="1874" height="244" key="GridCell.Tab.1.right" timestamp="1608716240673">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state width="1874" height="244" key="GridCell.Tab.1.right/0.0.2560.1040@0.0.2560.1040" timestamp="1608716240673" />
+    <state x="432" y="166" key="SettingsEditor" timestamp="1608520432993">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="432" y="166" key="SettingsEditor/0.0.2560.1040@0.0.2560.1040" timestamp="1608520432993" />
+    <state x="692" y="261" width="918" height="746" key="find.popup" timestamp="1608728822667">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="692" y="261" width="918" height="746" key="find.popup/0.0.2560.1040@0.0.2560.1040" timestamp="1608728822667" />
+    <state x="666" y="245" width="672" height="677" key="run.anything.popup" timestamp="1608220475553">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="666" y="245" width="672" height="677" key="run.anything.popup/0.0.2560.1040@0.0.2560.1040" timestamp="1608220475553" />
+    <state x="623" y="238" width="672" height="678" key="search.everywhere.popup" timestamp="1608693210155">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="623" y="238" width="672" height="678" key="search.everywhere.popup/0.0.2560.1040@0.0.2560.1040" timestamp="1608693210155" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$MAVEN_REPOSITORY$/com/nhn/gameanvil/gameanvil-test-agent/DEV-1.0.0/gameanvil-test-agent-DEV-1.0.0-sources.jar!/com/nhn/gameanvilcore/connector/protocol/result/ChannelListResult.java</url>
+          <line>20</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$MAVEN_REPOSITORY$/com/nhn/gameanvil/gameanvil-test-agent/DEV-1.0.0/gameanvil-test-agent-DEV-1.0.0-sources.jar!/com/nhn/gameanvilcore/connector/tcp/GameAnvilConnectorHelper.java</url>
+          <line>538</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../gameanvil/src/main/java/com/nhn/gameanvilcore/node/game/user/_handler/_NamedRoomReq.java</url>
+          <line>43</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../gameanvil/src/main/java/com/nhn/gameanvilcore/node/game/user/_handler/_NamedRoomReq.java</url>
+          <line>36</line>
+          <option name="timeStamp" value="13" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/nhn/gameanvil/sample/space/chat/user/ChatUser.java</url>
+          <line>30</line>
+          <option name="timeStamp" value="60" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="JUnit">
+        <watch expression="futuresJoinMsg.get(user)" language="JAVA" />
+        <watch expression="((PacketResult) result).getPacketResultCode()" language="JAVA" />
+        <watch expression="((PacketResult) result).internalPacket.getName()" language="JAVA" />
+        <watch expression="internalPacket.getName()" language="JAVA" />
+        <watch expression="internalPacket.getMsgId()" language="JAVA" />
+        <watch expression="connection.getProtocolIndexer().getMsgName(internalPacket.getMsgId())" language="JAVA" />
+      </configuration>
+      <configuration name="Application">
+        <watch expression="gameAnvilPacket.getMsgName()" language="JAVA" />
+        <watch expression="getRoomIdBeforeMove()" language="JAVA" />
+      </configuration>
+    </watches-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/sample_multigame_server$GameTest_MatchPartyAndRefill.ic" NAME="GameTest.MatchPartyAndRefill Coverage Results" MODIFIED="1598931509365" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>unit_test.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/sample_multigame_server$GameTest_MessageFromSpot.ic" NAME="GameTest.MessageFromSpot Coverage Results" MODIFIED="1608726814313" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>unit_test.*</FILTER>
+    </SUITE>
+  </component>
+</project>

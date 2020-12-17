@@ -1,183 +1,171 @@
 package unit_test;
 
-import com.nhn.gameanvilcore.connector.common.Config;
-import com.nhn.gameanvilcore.connector.protocol.Packet;
-import com.nhn.gameanvilcore.connector.protocol.result.AuthenticationResult;
-import com.nhn.gameanvilcore.connector.protocol.result.ChannelListResult;
-import com.nhn.gameanvilcore.connector.protocol.result.LoginResult;
-import com.nhn.gameanvilcore.connector.tcp.ConnectorSession;
-import com.nhn.gameanvilcore.connector.tcp.ConnectorUser;
-import com.nhn.gameanvilcore.connector.tcp.GameAnvilConnector;
-import com.nhnent.tardis.sample.Defines.StringValues;
-import com.nhnent.tardis.sample.protocol.Sample;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
+import com.nhn.gameanvil.gamehammer.tester.Connection;
+import com.nhn.gameanvil.gamehammer.tester.Packet;
+import com.nhn.gameanvil.gamehammer.tester.PacketResult;
+import com.nhn.gameanvil.gamehammer.tester.RemoteInfo;
+import com.nhn.gameanvil.gamehammer.tester.ResultAuthentication;
+import com.nhn.gameanvil.gamehammer.tester.ResultAuthentication.ResultCodeAuthentication;
+import com.nhn.gameanvil.gamehammer.tester.ResultChannelList;
+import com.nhn.gameanvil.gamehammer.tester.ResultLogin;
+import com.nhn.gameanvil.gamehammer.tester.Tester;
+import com.nhn.gameanvil.gamehammer.tester.User;
+import com.nhn.gameanvil.sample.Defines.StringValues;
+import com.nhn.gameanvil.sample.protocol.Sample;
+import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.io.IOException;
-import java.util.concurrent.TimeoutException;
-
-import static org.junit.Assert.*;
-
 public class SessionAgentTest {
 
-    public static String ServiceName = "ChatService";
-    public static String UserType = "ChatUser";
-    public static String RoomType = "ChatRoom";
+    static final String[] ChannelId = {"1", "2", "3", "4"};
+    static final String AccountId = "AccountId";
+    static final String Password = "AccountId";
+    static final String DeviceId = "DeviceId";
 
-    private static GameAnvilConnector connector;
-    private ConnectorSession session = null;
+    static final int Timeout = 3000;
+
+    private static Tester tester;
+    private static Connection connection;
 
     @BeforeClass
     public static void configuration() {
 
-        // 테스트 하려는 서버의 IP 와 Port 를 지정합니다.
-        Config.addRemoteInfo("127.0.0.1", 11200);
-        Config.WAIT_RECV_TIMEOUT_MSEC = 3000;
-
-        // 커넥터와, Base 프로토콜 사용 편의를 위해 Helper 를 생성합니다.
-        connector = GameAnvilConnector.getInstance();
-
-        // 컨텐츠 프로토콜 등록.
-        connector.addProtoBufClass(0, Sample.class);
-
-        // 컨텐츠 서비스 등록.
-        connector.addService(1, ServiceName);
+        tester = Tester.newBuilder()
+            .addRemoteInfo("127.0.0.1", 11200) // 테스트 하려는 서버의 IP 와 Port 를 지정합니다.
+            .setDefaultPacketTimeoutSeconds(3)
+            .addProtoBufClass(0, Sample.getDescriptor())// 컨텐츠 프로토콜 등록.
+            .addServiceInfo(1, "ChatService", ChannelId)// 컨텐츠 서비스 등록.
+            .addServiceInfo(2, StringValues.GameServiceName, ChannelId)// 컨텐츠 서비스 등록.
+            .Build();
     }
 
     @Before
-    public void setUp() throws TimeoutException {
-
-        session = connector.addSession(connector.getIncrementedValue("account_"), connector.makeUniqueId());
+    public void setUp() throws TimeoutException, ExecutionException, InterruptedException {
+        connection = tester.createConnection(1);
+        connection.connect(new RemoteInfo("127.0.0.1", 11200)).get(Timeout, TimeUnit.MILLISECONDS);
     }
 
     @After
-    public void tearDown() throws TimeoutException {
+    public void tearDown() throws TimeoutException, ExecutionException, InterruptedException {
 
-        session.disconnect();
+        connection.close().get(Timeout, TimeUnit.MILLISECONDS);
     }
 
     @Test
-    public void authenticateSuccess() throws IOException, TimeoutException {
+    public void authenticateSuccess() throws TimeoutException, ExecutionException, InterruptedException {
         // accountId와 password가 일치할 때 성공
-        AuthenticationResult authResult = session.authentication(session.getAccountId());
-        assertTrue(authResult.isSuccess());
-        assertNull(authResult.getPayload(Sample.SampleData.class));
+        ResultAuthentication resultAuthentication = connection.authentication(AccountId, Password, DeviceId).get(Timeout, TimeUnit.MILLISECONDS);
+        assertTrue(resultAuthentication.isSuccess());
+        assertNull(resultAuthentication.getPacketFromPayload(Sample.SampleData.getDescriptor()));
     }
 
     @Test
-    public void authenticateSuccessWithPayload() throws IOException, TimeoutException {
+    public void authenticateSuccessWithPayload() throws TimeoutException, IOException, ExecutionException, InterruptedException {
         // payload를 보낼 경우, 보낸 값을 그대로 되돌려 받아야함.
         Sample.SampleData.Builder payloadSnd = Sample.SampleData.newBuilder();
         payloadSnd.setMessage(StringValues.AuthenticatePayload);
 
-        AuthenticationResult authResult = session.authentication(session.getAccountId(), payloadSnd);
-        assertTrue(authResult.isSuccess());
+        ResultAuthentication resultAuthentication = connection.authentication(AccountId, Password, DeviceId, payloadSnd).get(Timeout, TimeUnit.MILLISECONDS);
+        assertTrue(resultAuthentication.isSuccess());
 
-        Packet packet = authResult.getPayload(Sample.SampleData.class);
-        if (null != packet) {
-            try {
-                Sample.SampleData payloadRcv = Sample.SampleData.parseFrom(packet.getStream());
-                assertEquals(StringValues.AuthenticatePayload, payloadRcv.getMessage());
-            } catch (IOException e) {
-                fail(e.getMessage());
-            }
-        } else {
-            fail("Payload contains no Sample.SampleData.");
-        }
+        Packet packet = resultAuthentication.getPacketFromPayload(Sample.SampleData.getDescriptor());
+        assertNotNull(packet);
+        Sample.SampleData payloadRcv = Sample.SampleData.parseFrom(packet.getStream());
+        assertEquals(StringValues.AuthenticatePayload, payloadRcv.getMessage());
     }
 
     @Test
-    public void authenticateFail() throws IOException, TimeoutException {
+    public void authenticateFail() throws IOException, TimeoutException, ExecutionException, InterruptedException {
         // accountId와 password가 일치하지 않으면 실패.
-        AuthenticationResult authResult = session.authentication();
-        assertTrue(authResult.isFailure());
-        Packet packet = authResult.getPayload(Sample.SampleData.class);
-        if (null != packet) {
-            try {
-                // 실패일 경우 payload에 실패 메시지를 보냄
-                Sample.SampleData msg = Sample.SampleData.parseFrom(packet.getStream());
-                assertEquals(msg.getMessage(), StringValues.AuthenticateFail);
-            } catch (IOException e) {
-                fail(e.getMessage());
-            }
-        } else {
-            fail("Payload contains no Sample.SampleData.");
-        }
+        ResultAuthentication resultAuthentication = connection.authentication(AccountId, Password + "fail", DeviceId).get(Timeout, TimeUnit.MILLISECONDS);
+        assertFalse(resultAuthentication.isSuccess());
+        assertEquals(ResultCodeAuthentication.AUTH_FAIL_CONTENT, resultAuthentication.getResultCode());
+        Packet packet = resultAuthentication.getPacketFromPayload(Sample.SampleData.getDescriptor());
+        assertNotNull(packet);
+        Sample.SampleData msg = Sample.SampleData.parseFrom(packet.getStream());
+        assertEquals(msg.getMessage(), StringValues.AuthenticateFail);
     }
 
     @Test
-    public void SampleReqToSession() throws IOException, TimeoutException {
+    public void SampleReqToConnection() throws IOException, TimeoutException, ExecutionException, InterruptedException {
 
         authenticateSuccess();
 
         String message = "SampleReq";
-        try {
-            //SampleReq 를 보낼 경우 보낸 값을 그대로 돌려 받음.
-            Packet packetRes = session.requestToSession(new Packet(Sample.SampleReq.newBuilder().setMessage(message)), Sample.SampleRes.class);
-            Sample.SampleRes msg = Sample.SampleRes.parseFrom(packetRes.getStream());
-            assertEquals(msg.getMessage(), message);
-        } catch (Exception e) {
-            fail(e.toString());
-        }
+        //SampleReq 를 보낼 경우 보낸 값을 그대로 돌려 받음.
+        PacketResult packetResult = connection.request(Sample.SampleReq.newBuilder().setMessage(message).build()).get(Timeout, TimeUnit.MILLISECONDS);
+        Sample.SampleRes msg = Sample.SampleRes.parseFrom(packetResult.getStream());
+        assertEquals(msg.getMessage(), message);
     }
 
     @Test
-    public void SampleToSToSession() throws IOException, TimeoutException {
+    public void SampleToSToConnection() throws IOException, TimeoutException, ExecutionException, InterruptedException {
 
         authenticateSuccess();
 
         String message = "SampleToS";
-        try {
-            //SampleToS 를 보낼 경우 보낸 값을 그대로 돌려 받음.
-            session.sendToSession(new Packet(Sample.SampleToS.newBuilder().setMessage(message)));
-            Packet packetSampleToC = session.waitPacket(1, TimeUnit.SECONDS, Sample.SampleToC.class);
-            Sample.SampleToC msg = Sample.SampleToC.parseFrom(packetSampleToC.getStream());
-            assertEquals(msg.getMessage(), message);
-        } catch (Exception e) {
-            fail(e.toString());
-        }
+        //SampleToS 를 보낼 경우 보낸 값을 그대로 돌려 받음.
+        Future<PacketResult> future= connection.waitFor(Sample.SampleToC.getDescriptor());
+        System.out.println("test1");
+        connection.send(Sample.SampleToS.newBuilder().setMessage(message).build());
+        System.out.println("test2");
+        PacketResult packetResult = future.get(Timeout, TimeUnit.MILLISECONDS);
+        System.out.println("test3");
+        Sample.SampleToC msg = Sample.SampleToC.parseFrom(packetResult.getStream());
+        assertEquals(msg.getMessage(), message);
     }
 
     @Test
-    public void SampleReqToSessionUser() throws IOException, TimeoutException {
+    public void SampleReqToSession() throws IOException, TimeoutException, ExecutionException, InterruptedException {
 
         authenticateSuccess();
-        ConnectorUser user = session.addUser(ServiceName);
-        LoginResult result = user.login(UserType, "1");
-        assertTrue(result.isSuccess());
+        User user = connection.createUser(StringValues.GameServiceName, 1);
+        ResultLogin resultLoginFuture = user.login(StringValues.GameUserType, "1").get(Timeout, TimeUnit.MILLISECONDS);
+        assertTrue(resultLoginFuture.isSuccess());
 
         String message = "SampleReqToSessionUser";
-        try {
-            //SampleReq 를 보낼 경우 보낸 값을 그대로 돌려 받음.
-            Packet packetRes = user.requestToSessionActor(new Packet(Sample.SampleReq.newBuilder().setMessage(message)), Sample.SampleRes.class);
-            Sample.SampleRes msg = Sample.SampleRes.parseFrom(packetRes.getStream());
-            assertEquals(msg.getMessage(), message);
-        } catch (Exception e) {
-            fail(e.toString());
-        }
+        //SampleReq 를 보낼 경우 보낸 값을 그대로 돌려 받음.
+        PacketResult packetResult = user.requestToSession(Sample.SampleReq.newBuilder().setMessage(message).build()).get(Timeout, TimeUnit.MILLISECONDS);
+        Sample.SampleRes msg = Sample.SampleRes.parseFrom(packetResult.getStream());
+        assertEquals(msg.getMessage(), message);
+
+//        user.waitFor(Sample.SampleToC.getDescriptor()).get(Timeout, TimeUnit.MILLISECONDS);
+
+        user.logout().get(Timeout, TimeUnit.MILLISECONDS);
     }
 
     @Test
-    public void getChannelList() throws IOException, TimeoutException {
+    public void getChannelList() throws IOException, TimeoutException, ExecutionException, InterruptedException {
 
         authenticateSuccess();
 
-        ChannelListResult result = session.channelList(ServiceName);
-        assertTrue(result.isSuccess());
+        ResultChannelList resultChannelList = connection.getChannelList(StringValues.GameServiceName).get(Timeout, TimeUnit.MILLISECONDS);
+        assertTrue(resultChannelList.isSuccess());
 
-        // TardisConfig에 설정된 체널 정보는 ["1","1","2","2","3","3","4","4"]
+        // GameAnvilConfig에 설정된 체널 정보는 ["1","1","2","2","3","3","4","4"]
         // 응답에서는 중복제거, 정렬된 ["1", "2", "3", "4"]로 내려와야함.
-        List<String> list = result.getChannelList();
+        List<String> list = resultChannelList.getChannelList();
         assertEquals(4, list.size());
         assertEquals("1", list.get(0));
     }
 
     @Test
-    public void getChannelInfo() throws IOException, TimeoutException {
+    public void getChannelInfo() throws IOException, TimeoutException, ExecutionException, InterruptedException {
 
         authenticateSuccess();
 
@@ -185,30 +173,26 @@ public class SessionAgentTest {
     }
 
     @Test
-    public void SetRemoveTimerToSession() throws IOException, TimeoutException {
+    public void SetRemoveTimerToSession() throws IOException, TimeoutException, ExecutionException, InterruptedException {
 
         authenticateSuccess();
 
         String message = "SetTimer";
-        try {
-            //SetTimer 를 보낼 경우 SampleSessionNode에 Timer가 동작.
-            session.sendToSession(new Packet(Sample.SetTimer.newBuilder().setInterval(1).setMessage(message)));
-            Packet packet = session.waitPacket(2, TimeUnit.SECONDS, Sample.SampleToC.class);
-            Sample.SampleToC msg = Sample.SampleToC.parseFrom(packet.getStream());
-            assertEquals(msg.getMessage(), message);
-        } catch (Exception e) {
-            fail(e.toString());
-        }
+        Future<PacketResult> future = connection.waitFor(Sample.SampleToC.getDescriptor());
+        connection.send(Sample.SetTimer.newBuilder().setInterval(1).setMessage(message).build());
+        PacketResult packetResult = future.get(Timeout, TimeUnit.MILLISECONDS);
+        Sample.SampleToC msg = Sample.SampleToC.parseFrom(packetResult.getStream());
+        assertEquals(msg.getMessage(), message);
 
         try {
             //RemoveTimer 를 보낼 경우 SampleSessionNode에 Timer가 해제.
-            session.sendToSession(new Packet(Sample.RemoveTimer.newBuilder()));
-            session.waitPacket(2, TimeUnit.SECONDS, Sample.SampleToC.class);
-            fail("RemoveTimer fail");
+            future = connection.waitFor(Sample.SampleToC.getDescriptor());
+            connection.send(Sample.RemoveTimer.newBuilder().build());
+            future.get(Timeout, TimeUnit.MILLISECONDS);
+            Assert.fail("RemoveTimer fail");
         } catch (TimeoutException e) {
             // Timer가 해제 되었기 때문에 SampleToC가 오지 않는다.
-        } catch (Exception e) {
-            fail(e.toString());
+            System.out.println("Timeout!!");
         }
     }
 }
