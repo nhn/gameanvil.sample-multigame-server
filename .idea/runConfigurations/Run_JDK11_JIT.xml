@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Run/JDK11/JIT" type="Application" factoryName="Application">
+    <option name="ALTERNATIVE_JRE_PATH" value="AdoptOpenJDK 11" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+    <option name="MAIN_CLASS_NAME" value="com.nhn.gameanvil.sample.Main" />
+    <module name="sample_multigame_server" />
+    <option name="VM_PARAMETERS" value="-javaagent:.\src\main\resources\META-INF\quasar-core-0.8.0-jdk11.jar=bm -Xms6g -Xmx6g -XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:+UseStringDeduplication --add-opens=java.base/java.lang=ALL-UNNAMED --illegal-access=deny" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

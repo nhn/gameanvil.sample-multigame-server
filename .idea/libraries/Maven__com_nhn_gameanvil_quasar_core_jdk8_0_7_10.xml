@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.nhn.gameanvil:quasar-core:jdk8:0.7.10">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/nhn/gameanvil/quasar-core/0.7.10/quasar-core-0.7.10-jdk8.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/nhn/gameanvil/quasar-core/0.7.10/quasar-core-0.7.10-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/nhn/gameanvil/quasar-core/0.7.10/quasar-core-0.7.10-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
