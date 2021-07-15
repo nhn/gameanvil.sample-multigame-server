@@ -1,4 +1,4 @@
-# Reference GameAnvil Server Sample
+# (Official) [Type B] Reference GameAnvil client for multi-player game using Cocos
 
 VM Option :
 
